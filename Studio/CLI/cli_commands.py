@@ -122,11 +122,11 @@ def run_resumo(zip_filename):
     with zipfile.ZipFile(zip_path, 'r') as zip_ref:
         zip_ref.extractall(base_dir)
     
-    # Run npm install
+    # Run npm install (stream output in real-time)
     print(f"Running npm install in {base_dir}")
-    result = subprocess.run(["npm", "install"], cwd=base_dir, capture_output=True, text=True)
+    result = subprocess.run(["npm", "install"], cwd=base_dir)
     if result.returncode != 0:
-        print(f"Error running 'npm install': {result.stderr}")
+        print(f"Error: npm install failed with exit code {result.returncode}")
         return 1
     
     # Update config_temp.json with absolute paths
@@ -150,20 +150,18 @@ def run_resumo(zip_filename):
     # Run ReSuMo commands
     print(f"Running ReSuMo in {RESUMO_BASE_DIR}")
     
-    # Clean sumo
+    # Clean sumo (stream output in real-time)
     print("Running: npm run sumo cleanSumo")
-    result = subprocess.run(["npm", "run", "sumo", "cleanSumo"], 
-                          cwd=RESUMO_BASE_DIR, capture_output=True, text=True)
+    result = subprocess.run(["npm", "run", "sumo", "cleanSumo"], cwd=RESUMO_BASE_DIR)
     if result.returncode != 0:
-        print(f"Error running 'npm run sumo cleanSumo': {result.stderr}")
+        print(f"Error: npm run sumo cleanSumo failed with exit code {result.returncode}")
         return 1
     
-    # Run sumo test
+    # Run sumo test (stream output in real-time)
     print("Running: npm run sumo test")
-    result = subprocess.run(["npm", "run", "sumo", "test"], 
-                          cwd=RESUMO_BASE_DIR, capture_output=True, text=True)
+    result = subprocess.run(["npm", "run", "sumo", "test"], cwd=RESUMO_BASE_DIR)
     if result.returncode != 0:
-        print(f"Error running 'npm run sumo test': {result.stderr}")
+        print(f"Error: npm run sumo test failed with exit code {result.returncode}")
         return 1
     
     # Check if results were generated
@@ -204,11 +202,11 @@ def run_test(zip_filename, command="test"):
     with zipfile.ZipFile(zip_path, 'r') as zip_ref:
         zip_ref.extractall(base_dir)
     
-    # Run npm install
+    # Run npm install (stream output in real-time)
     print(f"Running npm install in {base_dir}")
-    result = subprocess.run(["npm", "install"], cwd=base_dir, capture_output=True, text=True)
+    result = subprocess.run(["npm", "install"], cwd=base_dir)
     if result.returncode != 0:
-        print(f"Error running 'npm install': {result.stderr}")
+        print(f"Error: npm install failed with exit code {result.returncode}")
         return 1
     
     # Run the requested hardhat command

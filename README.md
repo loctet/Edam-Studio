@@ -173,6 +173,10 @@ source venv/bin/activate  # On Windows: venv\Scripts\activate
 python3 CLI/cli.py <model1> <model2> ... --mode <1|2|3|4> [options]
 ```
 
+The CLI accepts both:
+- **Model names** (predefined models from `edams-models/`)
+- **`.edam` file paths** (text-based EDAM specifications)
+
 #### Examples
 
 **Single model with default settings:**
@@ -180,9 +184,14 @@ python3 CLI/cli.py <model1> <model2> ... --mode <1|2|3|4> [options]
 python3 CLI/cli.py assettransfer --mode 2
 ```
 
-**Multiple models:**
+**Using a .edam file:**
 ```bash
-python3 CLI/cli.py assettransfer basicprovenance defectivecounter --mode 2
+python3 CLI/cli.py my_model.edam --mode 2
+```
+
+**Multiple models (mix of names and files):**
+```bash
+python3 CLI/cli.py assettransfer basicprovenance my_custom.edam --mode 2
 ```
 
 **Custom trace generation:**
@@ -199,6 +208,32 @@ python3 CLI/cli.py erc20token1 erc20token2 amm --mode 3 \
   --number_transition_per_trace 100 \
   --probability_new_participant 0.35 \
   --z3_check_enabled
+```
+
+#### .edam File Format
+
+The `.edam` file format is a text-based representation of EDAM models:
+
+```
+ModelName
+Role1,Role2,Role3
+variable1:type1, variable2:type2
+[from_state] {userVar:role:mode}, guard, [external_calls] callerVar:operation(params){assignments} {user:role:mode} [to_state]
+```
+
+**Example .edam file:**
+```
+SimpleCounter
+
+O,R
+
+counter:int, max:int
+
+[_] {}, max>x, [] p:start(x:int, max:int){counter=x} {p:O:Top} [q1]
+
+[q1] {p1:O:Bottom, p1:B:Bottom}, counter<max, [C2.test(counter+1)] p1:inc() {counter = counter +1} {p1:B:Top} [q1]
+
+[q1] {p:O:Top}, counter >= max, [] p1:close() {} {} [q2]
 ```
 
 #### Generation Modes

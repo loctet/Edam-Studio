@@ -78,11 +78,13 @@ class ContractCodeGenerator(BaseCodeGenerator):
 
         try:
             with open(test_file_tmp, 'w', encoding='utf-8') as output_file:
+                # Run script from base_dir since the script uses relative paths (cd ./temp/temp_{uid})
                 subprocess.run(
                     ["bash", file_path],
                     stdout=output_file,
                     stderr=subprocess.PIPE,
-                    check=True
+                    check=True,
+                    cwd=self.base_dir  # Run from base_dir so ./temp/ path in script works
                 )
             
             with open(test_file_tmp, 'r', encoding='utf-8') as f:

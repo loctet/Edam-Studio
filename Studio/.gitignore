@@ -7,3 +7,5 @@ GUI/node_modules/*
 GUI/dist/*
 GUI/build/*
 Generated-code/*
+*.pyc
+__pycache__/

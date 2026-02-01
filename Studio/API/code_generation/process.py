@@ -103,6 +103,12 @@ class CodeGenerationProcess:
             for thread in threads:
                 thread.join()
 
+            if not results:
+                error_msg = "No results generated. All model processing failed."
+                if with_response:
+                    return JsonResponse({"error": error_msg}, status=500)
+                raise Exception(error_msg)
+            
             return JsonResponse(results[-1]) if with_response else results[-1]
 
         except Exception as e:

@@ -50,7 +50,8 @@ class OCamlCodeGenerator(BaseCodeGenerator):
                     ["ocaml", ocaml_file],
                     stdout=output_file,
                     stderr=subprocess.PIPE,
-                    check=True
+                    check=True,
+                    cwd=dirs["local_temp"]
                 )
         except subprocess.CalledProcessError as e:
             raise Exception(f"\n\nOCaml execution failed for {edam_name}: {e.stderr.decode()} \n\n")
@@ -111,6 +112,6 @@ class OCamlCodeGenerator(BaseCodeGenerator):
             "name": edam_name,
             "test_files": {
                 "full_trace_test": full_trace_test_tmp,
-                "cmd_run": f"./temp/temp_{uid}/" + os.path.basename(cmd_run_tmp)
+                "cmd_run": cmd_run_tmp  # Use absolute path instead of relative path
             }
         } 

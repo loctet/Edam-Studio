@@ -93,7 +93,8 @@ def process_execute_edam_trace(body):
                 ["bash", cmd_script_path],
                 stdout=output_file,
                 stderr=subprocess.PIPE,
-                check=True
+                check=True,
+                cwd=dirs["local_temp"]
             )
         
         # Read and process the output file

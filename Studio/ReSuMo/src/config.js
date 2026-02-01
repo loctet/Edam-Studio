@@ -1,4 +1,4 @@
-const config = require('../config.json');
+const config = require('../../config.json');
 // Load main config
 const mainConfig = {
     absoluteArtifactsDir: config.sumo.absolute_sumo_dir + '/.sumo/artifacts',

@@ -1,0 +1,23 @@
+services:
+  edam-studio:
+    build:
+      context: ..
+      dockerfile: Docker/Dockerfile
+    container_name: edam-studio
+    ports:
+      - "3000:3000"  # GUI
+      - "5000:5000"  # API
+    volumes:
+      # Mount Generated-code directory to persist generated files
+      - edam-generated-code:/app/Studio/Generated-code
+      # Uncomment below for development (mounts Studio directory, but excludes venv and node_modules)
+      # - ../Studio:/app/Studio
+      # Note: If you mount Studio for development, the venv and node_modules in the container will be overwritten
+    environment:
+      - NODE_ENV=development
+    restart: unless-stopped
+    stdin_open: true
+    tty: true
+
+volumes:
+  edam-generated-code:

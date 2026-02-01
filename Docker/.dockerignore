@@ -1,0 +1,67 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+**/venv/
+**/node_modules/
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+Studio/node_modules/
+Studio/dist/
+Studio/build/
+Studio/*.egg-info/
+Studio/Generated-code/
+Studio/temp/
+Studio/output/
+Studio/uploads/
+Studio/logs/
+Studio/errors/
+Studio/warnings/
+Studio/info/
+Studio/debug/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Git
+.git/
+.gitignore
+
+# Docker
+Docker/
+*.tar.gz
+
+# Temporary files
+*.tmp
+*.log
+temp/
+*.zip
+
+# Database
+*.sqlite3
+*.db
+
+# Build artifacts
+dist/
+build/
+*.egg-info/
+
+# Generated code
+Generated-code/

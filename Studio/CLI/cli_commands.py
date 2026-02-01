@@ -14,7 +14,6 @@ import subprocess
 import json
 import zipfile
 import shutil
-import tempfile
 from pathlib import Path
 
 
@@ -185,37 +184,42 @@ def run_test(zip_filename, command="test"):
         print(f"Error: File is not a ZIP file: {zip_filename}")
         return 1
     
-    # Create a temporary directory for extraction
-    with tempfile.TemporaryDirectory() as temp_dir:
-        base_dir = Path(temp_dir) / zip_path.stem
-        
-        print(f"Processing: {zip_filename}")
-        print(f"Extracting {zip_filename} to {base_dir}")
-        
-        # Extract zip file
-        with zipfile.ZipFile(zip_path, 'r') as zip_ref:
-            zip_ref.extractall(base_dir)
-        
-        # Run npm install
-        print(f"Running npm install in {base_dir}")
-        result = subprocess.run(["npm", "install"], cwd=base_dir, capture_output=True, text=True)
-        if result.returncode != 0:
-            print(f"Error running 'npm install': {result.stderr}")
-            return 1
-        
-        # Run the requested hardhat command
-        if command == "test":
-            hardhat_cmd = ["npx", "hardhat", "test"]
-        elif command == "coverage":
-            hardhat_cmd = ["npx", "hardhat", "coverage"]
-        else:
-            # Allow custom commands like "test --grep 'specific test'"
-            hardhat_cmd = ["npx", "hardhat"] + command.split()
-        
-        print(f"Running: {' '.join(hardhat_cmd)} in {base_dir}")
-        result = subprocess.run(hardhat_cmd, cwd=base_dir)
-        
-        return result.returncode
+    # Extract to a directory next to the zip file (same directory as zip)
+    base_dir = GENERATED_CODE_DIR / zip_path.stem
+    
+    print(f"Processing: {zip_filename}")
+    
+    # Remove existing directory if it exists to avoid conflicts
+    if base_dir.exists():
+        print(f"Removing existing directory: {base_dir}")
+        shutil.rmtree(base_dir)
+    
+    print(f"Extracting {zip_filename} to {base_dir}")
+    
+    # Extract zip file
+    with zipfile.ZipFile(zip_path, 'r') as zip_ref:
+        zip_ref.extractall(base_dir)
+    
+    # Run npm install
+    print(f"Running npm install in {base_dir}")
+    result = subprocess.run(["npm", "install"], cwd=base_dir, capture_output=True, text=True)
+    if result.returncode != 0:
+        print(f"Error running 'npm install': {result.stderr}")
+        return 1
+    
+    # Run the requested hardhat command
+    if command == "test":
+        hardhat_cmd = ["npx", "hardhat", "test"]
+    elif command == "coverage":
+        hardhat_cmd = ["npx", "hardhat", "coverage"]
+    else:
+        # Allow custom commands like "test --grep 'specific test'"
+        hardhat_cmd = ["npx", "hardhat"] + command.split()
+    
+    print(f"Running: {' '.join(hardhat_cmd)} in {base_dir}")
+    result = subprocess.run(hardhat_cmd, cwd=base_dir)
+    
+    return result.returncode
 
 
 def main():

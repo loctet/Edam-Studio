@@ -166,6 +166,6 @@ export const edam_c3: EDAMModel = {
   variables: {
     "f1": "int",
     "y": "int",
-    "C2": "C2Contract"
+    "C2": "C2"
   }
 };

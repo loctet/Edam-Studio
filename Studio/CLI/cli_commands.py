@@ -35,10 +35,14 @@ RESUMO_CONFIG_FILE = RESUMO_BASE_DIR / "src" / "config_temp.json"
 
 
 def generate_edams(args):
-    """Call cli.py to generate EDAMs"""
+    """Call cli.py to generate EDAMs
+    
+    Supports both model names and .edam file paths.
+    """
     cli_path = BASE_DIR / "CLI" / "cli.py"
     
     # Build command arguments
+    # Models can be either names or .edam file paths
     cmd = [sys.executable, str(cli_path)] + args.models
     
     # Add mode

@@ -225,6 +225,92 @@ docker run -d -p 3000:3000 -p 5000:5000 --name edam-studio edam-studio
 
 **Note**: The `http+docker` scheme error is caused by incompatibility between docker-compose v1.29.2 and urllib3 2.x. The Docker-only script (`run-docker.sh`) completely bypasses docker-compose and avoids this issue.
 
+## Pushing the Image to a Registry
+
+To push the Docker image to an online registry (Docker Hub, GitHub Container Registry, etc.):
+
+### Using the Push Script (Recommended)
+
+```bash
+cd Docker
+./push-image.sh -r <registry> -u <username> -i <image-name> [options]
+```
+
+**Examples:**
+
+1. **Push to Docker Hub:**
+   ```bash
+   ./push-image.sh -r docker.io -u yourusername -i edam-studio
+   ```
+
+2. **Push to GitHub Container Registry (ghcr.io):**
+   ```bash
+   ./push-image.sh -r ghcr.io -u yourusername -i edam-studio
+   ```
+   Note: For GitHub, you'll need a Personal Access Token (PAT) with `write:packages` scope.
+   Create one at: https://github.com/settings/tokens
+
+3. **Push with version tag:**
+   ```bash
+   ./push-image.sh -r docker.io -u yourusername -i edam-studio -v 1.0.0
+   ```
+   This creates both `latest` and `1.0.0` tags.
+
+4. **Push to custom registry:**
+   ```bash
+   ./push-image.sh -r registry.example.com -u yourusername -i edam-studio
+   ```
+
+### Manual Push Commands
+
+**For Docker Hub:**
+```bash
+# Build and tag
+docker build -f Docker/Dockerfile -t yourusername/edam-studio:latest ..
+docker tag yourusername/edam-studio:latest yourusername/edam-studio:1.0.0
+
+# Login and push
+docker login -u yourusername
+docker push yourusername/edam-studio:latest
+docker push yourusername/edam-studio:1.0.0
+```
+
+**For GitHub Container Registry:**
+```bash
+# Build and tag
+docker build -f Docker/Dockerfile -t ghcr.io/yourusername/edam-studio:latest ..
+docker tag ghcr.io/yourusername/edam-studio:latest ghcr.io/yourusername/edam-studio:1.0.0
+
+# Login (use GitHub Personal Access Token as password)
+echo $GITHUB_TOKEN | docker login ghcr.io -u yourusername --password-stdin
+docker push ghcr.io/yourusername/edam-studio:latest
+docker push ghcr.io/yourusername/edam-studio:1.0.0
+```
+
+**For other registries:**
+```bash
+# Build and tag
+docker build -f Docker/Dockerfile -t registry.example.com/yourusername/edam-studio:latest ..
+docker tag registry.example.com/yourusername/edam-studio:latest registry.example.com/yourusername/edam-studio:1.0.0
+
+# Login and push
+docker login registry.example.com -u yourusername
+docker push registry.example.com/yourusername/edam-studio:latest
+docker push registry.example.com/yourusername/edam-studio:1.0.0
+```
+
+### Pulling and Running from Registry
+
+Once pushed, others can pull and run your image:
+
+```bash
+# Pull the image
+docker pull yourusername/edam-studio:latest
+
+# Run the container
+docker run -d -p 3000:3000 -p 5000:5000 --name edam-studio yourusername/edam-studio:latest
+```
+
 ## Notes
 
 - The container runs both GUI and API services simultaneously

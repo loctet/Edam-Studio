@@ -1,0 +1,11 @@
+[package]
+name = "{module_name}"
+edition = "2024.beta" # edition = "legacy" to use legacy (pre-2024) Move
+license = "MIT" 
+
+[dependencies]
+Iota = {{ local = "/home/elvisk/Documents/GitHub/iota/crates/iota-framework/packages/iota-framework"}}
+
+[addresses]
+{module_name} = "0x0"
+iota =  "0000000000000000000000000000000000000000000000000000000000000002"

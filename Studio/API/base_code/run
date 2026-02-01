@@ -1,0 +1,11 @@
+#!/bin/bash
+set -e  # Exit on error
+
+# Install dependencies
+echo "Installing npm dependencies..."
+npm install 
+
+
+# Run Truffle tests
+echo "Running Hardhat tests..."
+npm run test

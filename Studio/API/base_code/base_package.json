@@ -1,0 +1,19 @@
+{
+    "name": "test-hardhat",
+    "version": "1.0.0",
+    "main": "index.js",
+    "scripts": {
+        "compile": "hardhat compile",
+        "test": "hardhat test --bail",
+        "coverage": "hardhat coverage"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "description": "",
+    "devDependencies": {
+      "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+      "hardhat": "^2.22.17"
+    }
+  }
+  

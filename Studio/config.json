@@ -1,0 +1,15 @@
+{
+  "api": {
+    "default_port": 5000,
+    "host": "127.0.0.1"
+  },
+  "gui": {
+    "default_port": 3000
+  },
+  "generated_code": {
+    "default_directory": "Generated-code"
+  },
+  "sumo": {
+    "absolute_sumo_dir": "/home/elvisk/Documents/GitHub/Edam Studio/Studio/ReSuMo"
+  }
+}

@@ -1,0 +1,11 @@
+{
+    "targetDir": "",
+    "excludedFunctions": ["roleSatisf", "_roles"],
+    "contractsDir": "",
+    "testDir": "",
+    "buildDir": "",
+    "sumoDir": "",
+    "resultsDir": "",
+    "artifactsDir": "",
+    "baselineDir": ""
+}

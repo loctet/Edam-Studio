@@ -16,29 +16,27 @@ export const validateModel = (model: EDAMModel): string[] => {
   if (!model.initialState) errors.push("Initial state is required");
   if (!model.transitions) errors.push("Transitions array is required");
   
-  const states = ["_", ...model.states]; // add initial state to the list of states
+  // Create states array for validation - include "_" only for transition validation
+  // "_" is allowed in transitions but should not be in the model.states list
+  // "_" is always the initial state
+  const statesForValidation = ["_", ...model.states];
   
-  // Check that initial state exists
+  // Check that initial state is always "_"
   if (model.initialState && model.initialState !== "_") {
-    errors.push(`Initial state '${model.initialState}' is not equal to '_'`);
-  }
-
-  // Check that initial state exists
-  if (model.initialState && states && !states.includes(model.initialState)) {
-    errors.push(`Initial state '${model.initialState}' is not in the states list`);
+    errors.push(`Initial state must always be "_", found '${model.initialState}'`);
   }
   
   // Check that final states exist
-  if (model.finalStates && states) {
+  if (model.finalStates) {
     model.finalStates.forEach(finalState => {
-      if (!states.includes(finalState)) {
+      if (finalState !== "_" && !model.states.includes(finalState)) {
         errors.push(`Final state '${finalState}' is not in the states list`);
       }
     });
   }
   
-  // Check transitions
-  if (model.transitions && states) {
+  // Check transitions (use statesForValidation to allow "_" in transitions)
+  if (model.transitions && statesForValidation) {
     // Separate start transitions from other transitions
     const startTransitions = model.transitions.filter(t => t.operation === "start");
     const otherTransitions = model.transitions.filter(t => t.operation !== "start");
@@ -65,18 +63,22 @@ export const validateModel = (model: EDAMModel): string[] => {
 
     // Original transition validation
     model.transitions.forEach((transition, index) => {
-      // Check from state
+      // Check from state (allow "_" for start transitions)
       if (!transition.from) {
         errors.push(`Transition ${index}: 'from' state is required`);
-      } else if (!states.includes(transition.from)) {
+      } else if (transition.from !== "_" && !model.states.includes(transition.from)) {
         errors.push(`Transition ${index}: 'from' state '${transition.from}' is not in the states list`);
+      } else if (!statesForValidation.includes(transition.from)) {
+        errors.push(`Transition ${index}: 'from' state '${transition.from}' is invalid`);
       }
       
-      // Check to state
+      // Check to state (allow "_" only for special cases, but generally not recommended)
       if (!transition.to) {
         errors.push(`Transition ${index}: 'to' state is required`);
-      } else if (!states.includes(transition.to)) {
+      } else if (transition.to !== "_" && !model.states.includes(transition.to)) {
         errors.push(`Transition ${index}: 'to' state '${transition.to}' is not in the states list`);
+      } else if (!statesForValidation.includes(transition.to)) {
+        errors.push(`Transition ${index}: 'to' state '${transition.to}' is invalid`);
       }
       
       // Check operation

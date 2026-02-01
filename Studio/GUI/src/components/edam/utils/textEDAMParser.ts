@@ -41,6 +41,7 @@ export function parseTextEDAM(text: string): EDAMModel {
   // Parse transitions (remaining lines)
   const transitions: EDAMTransition[] = [];
   const states = new Set<string>();
+  const externalContracts = new Set<string>();
   
   for (let i = 3; i < lines.length; i++) {
     const line = lines[i];
@@ -51,15 +52,32 @@ export function parseTextEDAM(text: string): EDAMModel {
       transitions.push(transition);
       states.add(transition.from);
       states.add(transition.to);
+      
+      // Collect external contract names from external calls
+      const externalCalls = transition.guard?.[1] || [];
+      externalCalls.forEach((call: ExternalCall) => {
+        if (call.modelName) {
+          externalContracts.add(call.modelName);
+        }
+      });
     } catch (error) {
       console.error(`Error parsing transition at line ${i + 1}:`, error);
       throw new Error(`Error parsing transition at line ${i + 1}: ${error instanceof Error ? error.message : String(error)}`);
     }
   }
 
-  // Determine initial state (first state found, or first transition's from state)
-  const statesArray = Array.from(states);
-  const initialState = statesArray.length > 0 ? statesArray[0] : transitions[0]?.from || "_";
+  // Add external contracts as variables with the same type as the contract name
+  externalContracts.forEach(contractName => {
+    if (!variables[contractName]) {
+      variables[contractName] = contractName;
+      variablesList.push(contractName);
+    }
+  });
+
+  // Filter out "_" from states - "_" is always the initial state but not in the states list
+  const statesArray = Array.from(states).filter(state => state !== "_");
+  // "_" is always the initial state
+  const initialState = "_";
 
   return {
     name,

@@ -59,7 +59,9 @@ export const EDAMGraph: React.FC<EDAMGraphProps> = ({
       return;
     }
     
-    const nodeCount = model.states.length + 1;
+    // Check if "_" is used in any transitions (for start transitions)
+    const hasUnderscoreState = model.transitions.some(t => t.from === "_" || t.to === "_");
+    const nodeCount = model.states.length + (hasUnderscoreState ? 1 : 0);
     const radius = Math.max(150, nodeCount * 30);
     const newNodes: Node[] = model.states.map((state, index) => {
       const angle = (index / nodeCount) * 2 * Math.PI;
@@ -76,19 +78,22 @@ export const EDAMGraph: React.FC<EDAMGraphProps> = ({
         },
       };
     });
-    const angle = ((nodeCount -1) / nodeCount) * 2 * Math.PI;
-    newNodes.push({
-      id: "_",
-      position: {
-        x: 300 + radius * Math.cos(angle),
-        y: 200 + radius * Math.sin(angle),
-      },
-      data: {
-        label: "_",
-        isInitial: true,
-        isFinal: false,
-      },
-    })
+    // Only add "_" node if it's actually used in transitions
+    if (hasUnderscoreState) {
+      const angle = ((nodeCount - 1) / nodeCount) * 2 * Math.PI;
+      newNodes.push({
+        id: "_",
+        position: {
+          x: 300 + radius * Math.cos(angle),
+          y: 200 + radius * Math.sin(angle),
+        },
+        data: {
+          label: "_",
+          isInitial: model.initialState === "_",
+          isFinal: false,
+        },
+      });
+    }
     
     const newEdges: Edge[] = model.transitions.map((transition, index) => ({
       id: `edge-${index}`,

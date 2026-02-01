@@ -29,8 +29,11 @@ RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
     rm -rf /var/lib/apt/lists/*
 
 # Install opam and OCaml
-RUN curl -fsSL https://raw.githubusercontent.com/ocaml/opam/master/shell/install.sh | sh -s /usr/local/bin || true && \
-    opam --version || (echo "Opam installation may have failed, but continuing..." && true)
+# Install opam from Ubuntu repository (more reliable than script)
+RUN apt-get update && apt-get install -y \
+    opam \
+    bubblewrap \
+    && rm -rf /var/lib/apt/lists/*
 
 # Set working directory
 WORKDIR /app
@@ -42,13 +45,23 @@ COPY Studio /app/Studio
 WORKDIR /app/Studio
 
 # Initialize opam and install OCaml packages
-# Note: opam installation may take time and can be optional for basic functionality
-RUN if command -v opam >/dev/null 2>&1; then \
-    opam init --yes --disable-sandboxing || true; \
-    eval $(opam env) || true; \
-    opam install ocamlfind z3 ocaml-base-compiler --yes || echo "OCaml packages installation completed with warnings"; \
-    else \
-    echo "Opam not available, skipping OCaml setup"; \
+# This must be done in a single RUN to preserve the opam environment
+RUN opam init --yes --disable-sandboxing && \
+    eval $(opam env) && \
+    opam install ocamlfind z3 ocaml-base-compiler --yes && \
+    opam exec -- ocaml --version && \
+    opam exec -- ocamlopt --version && \
+    opam exec -- which ocamlfind && \
+    opam exec -- ocamlfind list | head -1
+
+# Create symlinks to make ocaml commands available system-wide
+# This ensures Python subprocess calls can find ocaml
+RUN eval $(opam env) && \
+    if [ -d "$HOME/.opam/default/bin" ]; then \
+        ln -sf $HOME/.opam/default/bin/ocaml /usr/local/bin/ocaml || true; \
+        ln -sf $HOME/.opam/default/bin/ocamlopt /usr/local/bin/ocamlopt || true; \
+        ln -sf $HOME/.opam/default/bin/ocamlfind /usr/local/bin/ocamlfind || true; \
+        ln -sf $HOME/.opam/default/bin/ocamlc /usr/local/bin/ocamlc || true; \
     fi
 
 # Install root npm dependencies
@@ -105,9 +118,12 @@ set -e
 
 cd /app/Studio
 
-# Activate opam environment (optional, continue if it fails)
+# Activate opam environment (required for OCaml)
+export PATH="/usr/local/bin:$PATH"
 if command -v opam >/dev/null 2>&1; then
     eval $(opam env) || true
+    # Ensure ocaml, ocamlopt, and ocamlfind are in PATH
+    export PATH="$HOME/.opam/default/bin:$PATH"
 fi
 
 # Activate Python virtual environment
@@ -173,7 +189,11 @@ RUN cat > /usr/local/bin/edam-cli << 'CLI_EOF'
 #!/bin/bash
 cd /app/Studio
 source venv/bin/activate
-eval $(opam env) || true
+export PATH="/usr/local/bin:$PATH"
+if command -v opam >/dev/null 2>&1; then
+    eval $(opam env) || true
+    export PATH="$HOME/.opam/default/bin:$PATH"
+fi
 python3 /app/Studio/CLI/cli.py "$@"
 CLI_EOF
 

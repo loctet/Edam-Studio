@@ -16,7 +16,7 @@ require("ts-node").register({
 
 const generatorPath = path.resolve(
   __dirname,
-  "../../shared/edam/modelGenerator.ts"
+  "../edams-models/edam/modelGenerator.ts"
 );
 
 const { generateEDAM } = require(generatorPath);

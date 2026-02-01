@@ -1,0 +1,11 @@
+SimpleCounter 
+
+O,R
+
+counter:int, max:int
+
+[_] {}, max>x, [] p:start(x:int, max:int){counter=x} {p:O:Top} [q1]
+
+[q1] {p1:O:Bottom, p1:B:Bottom}, counter<max, [C2.test(counter+1)] p1:inc() {counter = counter +1} {p1:B:Top} [q1]
+
+[q1] {p:O:Top}, counter >= max, [] p1:close() {} {} [q2]

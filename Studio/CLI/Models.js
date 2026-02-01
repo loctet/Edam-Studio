@@ -14,7 +14,7 @@ require("ts-node").register({
   }
 });
 
-const modelsPath = path.resolve(__dirname, "../../shared/edam/index.ts");
+const modelsPath = path.resolve(__dirname, "../edams-models/edam/index.ts");
 
 const { edam_models } = require(modelsPath);
 

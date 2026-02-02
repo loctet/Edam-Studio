@@ -1,0 +1,178 @@
+
+\section{GUI Usage}
+
+The EDAM Studio GUI (available at \url{http://localhost:3000} when running via Docker) 
+supports editing EDAM models, generating Solidity code, and verifying model behavior.
+
+\textbf{Editing the model.}
+The model can be edited in three ways:
+\begin{itemize}
+  \item \textbf{Force-Directed Graph} or \textbf{GraphViz}: 
+    The model is displayed as a graph. 
+    Edit by dragging nodes and edges, or use the sidebar to add transitions and states.
+  \item \textbf{Manual Editor}: 
+    Enter the EDAM specification as text in the \texttt{Manual Editor} tab, 
+    then click \texttt{View EDAM} to load it into the editor. 
+    The text format uses a compact syntax (states, roles, variables, and transitions).
+    If a model is saved in a .edam file, it can be loaded by clicking \texttt{Load EDAM File} 
+    and selecting the file, conversaly, the model can be saved by clicking \texttt{Save EDAM File} 
+    and selecting the file.
+    The following is the format of a .edam file:
+    \begin{lstlisting}
+ModelName
+Role1,Role2,Role3
+variable1:type1, variable2:type2
+[from_state] {userVar:role:mode}, guard, [external_calls] \
+callerVar:operation(params){assignments} {user:role:mode} [to_state]
+    \end{lstlisting}
+    First line is the model name, second line is the roles, third line is the variables, 
+    and the following lines are the transitions.
+    The transitions are formatted as follows:
+    \begin{lstlisting}
+[from_state] {userVar:role:mode}, guard, [external_calls] \
+callerVar:operation(params){assignments} {user:role:mode} [to_state]
+    \end{lstlisting}
+    The \texttt{from\_state} is the source state, the \texttt{userVar:role:mode} is the user and role and mode, 
+    the \texttt{guard} is the guard expression, the \texttt{external\_calls} are the external calls, 
+    the \texttt{callerVar:operation(params)} is the caller variable and operation and parameters, 
+    the \texttt{assignments} are the assignments, and the \texttt{to\_state} is the target state.
+
+  \item \textbf{JSON Editor}: 
+  The bottom panel provides a JSON editor for direct structural editing. 
+  Changes are reflected in the graph.
+\end{itemize}
+
+\textbf{Generating code.}
+Add the desired model(s) to the \texttt{Generation List} via \texttt{Add to Generation List}, then click \texttt{Generate Code} in the header. After generation, the results appear with two tabs:
+\begin{itemize}
+\item \textbf{Generated Code}: View the generated Solidity contracts. Use \texttt{Download Generated ZIP} to save the code (contracts, tests, and configuration) locally.
+\item \textbf{Run Solidity Test}: Execute the generated tests on the server and view pass/fail results.
+\end{itemize}
+
+\textbf{Running a trace test.}
+To verify model behavior without generating full code, click \texttt{Run A Trace Test} (bottom-right). Enter trace commands in the text area (e.g., \texttt{p1>Token1.deploy [] [10]}) and click \texttt{Test Trace} to execute. The tool simulates the trace against the model and reports the outcome.
+
+
+\section{Reproduction of Experimental Claims}
+
+For each experimental claim in the paper, 
+the following commands and procedures enable reproduction:
+
+\subsection{Code Generation}
+
+\textbf{Claim}: EDAM Studio generates Solidity smart contracts from EDAM models.
+
+\noindent\textbf{Reproduction}: Using the Docker container:
+\begin{lstlisting}
+docker exec -it edam-studio edam-cli \
+  assettransfer c20 basicprovenance --mode 2
+\end{lstlisting}
+Generated code (a ZIP file named \texttt{<ModelName>\_<new participant probability>\_<id>.zip} containing the generated code, tests, and configuration files) appears in \texttt{/app/Studio/Generated-code/} in the Docker container. 
+For custom trace counts (as in the paper):
+\begin{lstlisting}
+docker exec -it edam-studio edam-cli c20 amm --mode 3 \
+  --number_symbolic_traces 1000 --number_transition_per_trace 40
+\end{lstlisting}
+
+\noindent\textbf{Command template}:
+\begin{lstlisting}
+docker exec -it edam-studio edam-cli <model1> [model2] ... \
+  --mode <1|2|3|4> [options]
+\end{lstlisting}
+
+Table~\ref{tab:cli-params} lists all optional parameters for code generation.
+\begin{table}[ht]
+\centering
+\caption{Full parameters for \texttt{edam-cli} code generation.}
+\label{tab:cli-params}
+\begin{tabular}{@{}llp{6.5cm}@{}}
+\hline
+\textbf{Parameter} & \textbf{Default} & \textbf{Description} \\
+\hline
+\multicolumn{3}{l}{\textit{Required}} \\
+\texttt{--mode} & --- & Generation mode: 1 (single trace), 2 (few traces), 3 (many traces), 4 (all models) \\
+\hline
+\multicolumn{3}{l}{\textit{Symbolic trace generation}} \\
+\texttt{--number\_symbolic\_traces} & 200 & Number of symbolic traces to generate per model \\
+\texttt{--number\_transition\_per\_trace} & 10 & Maximum transitions per symbolic trace \\
+\texttt{--number\_real\_traces} & 5 & Number of real traces for validation \\
+\texttt{--max\_fail\_try} & 2 & Maximum retries on trace generation failure \\
+\hline
+\multicolumn{3}{l}{\textit{Probability parameters}} \\
+\texttt{--probability\_new\_participant} & 0.35 & Probability of adding a new participant in a trace \\
+\texttt{--probability\_right\_participant} & 0.7 & Probability of selecting the correct participant \\
+\texttt{--probability\_true\_for\_bool} & 0.5 & Probability of \texttt{true} for boolean values \\
+\hline
+\multicolumn{3}{l}{\textit{Value bounds for generated data}} \\
+\texttt{--min\_int\_value} & 0 & Minimum integer value in generated tests \\
+\texttt{--max\_int\_value} & 100 & Maximum integer value in generated tests \\
+\texttt{--max\_gen\_array\_size} & 10 & Maximum size of generated arrays \\
+\texttt{--min\_gen\_string\_length} & 5 & Minimum length of generated strings \\
+\texttt{--max\_gen\_string\_length} & 10 & Maximum length of generated strings \\
+\hline
+\multicolumn{3}{l}{\textit{Test generation options}} \\
+\texttt{--add\_pi\_to\_test} & off & Add process invariants to generated tests \\
+\texttt{--add\_test\_of\_state} & on & Include state assertions in tests \\
+\texttt{--add\_test\_of\_variables} & on & Include variable assertions in tests \\
+\hline
+\texttt{--z3\_check\_enabled} & on & Enable Z3 SMT solver checks during trace generation \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsection{Pre-generated Code and Data}
+
+\textbf{Claim}: The data in \texttt{EXPERIMENT\_DATA/} 
+corresponds to the paper's experiments.
+
+\noindent\textbf{Reproduction}: 
+The archives \texttt{Generated Code.zip}, \texttt{Mutations.zip}, and \texttt{Excels Mutations Results.zip} contain the exact outputs used in the paper. No regeneration needed for verification. To regenerate:
+\begin{enumerate}
+  \item Generate code for all models: 
+  \texttt{edam-cli assettransfer c20 amm basicprovenance ... --mode 3}
+  \item Run ReSuMo on each generated ZIP: 
+  \texttt{.run resumo <zip\_filename>} (via \texttt{cli\_commands.py})
+  \item Merge results using \texttt{ReSuMo/scripts/merger\_to\_one\_excel\_recap.py}
+\end{enumerate}
+
+\subsection{Mutation Testing Results}
+
+\textbf{Claim}: Mutation scores and timing reported in tables/figures.
+
+\noindent\textbf{Reproduction}: Open \texttt{EXPERIMENT\_DATA/Mutation 
+result - Recaps.xlsx} for summary data. 
+Detailed per-operator results are in \texttt{Excels Mutations Results.zip}. 
+To reproduce mutation testing on a single model, 
+using the Docker container:
+
+\begin{lstlisting}
+docker exec -it edam-studio bash
+source venv/bin/activate
+export OPAMROOT=/root/.opam && eval $(opam env --root=/root/.opam)
+cd /app/Studio
+python3 CLI/cli_commands.py run resumo <ModelName>_<version>_<id>.zip
+\end{lstlisting}
+(Replace \texttt{<ModelName>\_<version>\_<id>.zip} 
+with an actual generated ZIP filename from \texttt{Generated-code/}.)
+
+\subsection{Test Execution}
+
+\textbf{Claim}: Generated tests execute successfully and achieve coverage.
+
+\noindent\textbf{Reproduction}:
+\begin{lstlisting}
+docker exec -it edam-studio python3 CLI/cli_commands.py run test <zip_file> test
+\end{lstlisting}
+For coverage: \texttt{run test <zip\_file> coverage}.
+
+\subsection{Timing Expectations}
+
+Results may differ from the paper due to:
+\begin{itemize}
+\item Machine speed (CPU, disk I/O)
+\item Non-deterministic symbolic trace generation (Z3 solver, random sampling)
+\item Node/npm version differences
+\end{itemize}
+Code generation: typically 5--20 min per model. 
+Testing: up to 20 min for 10k tests. 
+Mutation: less than 2 h for most models; AMM can take days.

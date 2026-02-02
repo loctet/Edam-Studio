@@ -31,7 +31,8 @@ charge on the Dagstuhl Research Online Publication Server (DROPS).}{}
 
 
 % Author macros::begin %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\title{Automatic Code and Test Generation of Smart Contracts from Coordination Models: Artifact Description} %TODO: Update with title of accepted paper
+\title{Automatic Code and Test Generation of Smart Contracts from Coordination Models
+(Artifact)} %TODO: Update with title of accepted paper
 
 \titlerunning{Paper \#61: Artifact Description}
 
@@ -53,7 +54,8 @@ symbolic execution, mutation testing}
 
 %TODO: Please provide information to the related scholarly article
 \RelatedArticle{E.~Konjoh Selabi, M.~Murgia, A.~Ravara, and E.~Tuosto, 
-``Automatic Code and Test Generation of Smart Contracts from Coordination Models'', in Proceedings of the Conference (Year).
+``Automatic Code and Test Generation of Smart Contracts from Coordination Models'', 
+in Proceedings of the ECOOP 2026 conference, 2026.
 \newline \url{https://doi.org/xxx}}
 
 \acknowledgements{}
@@ -64,29 +66,57 @@ symbolic execution, mutation testing}
 \Article{1}
 \RelatedConference{Conference Name, Year}
 % Editor-only macros::end %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%40th European Conference on Object-Oriented Programming (ECOOP 2026) June 29  - July 3, 2026, Brussels, Belgium
 
 \begin{document}
 
 \maketitle
 
 \begin{abstract}
-This artifact accompanies the paper on EDAM Studio, a toolchain for generating smart contract code from EDAM (Extended Data-Aware Machines) specifications. The artifact includes the complete source code, a Docker image for easy deployment, pre-generated experiment data (generated code, mutations, and mutation testing results), and reproduction scripts. Reviewers can verify the tool's functionality through the GUI, CLI, or API, and reproduce the experimental evaluation including code generation, test execution, and mutation testing. Results may vary slightly depending on the machine due to the non-deterministic nature of symbolic trace generation.
+This artifact accompanies the paper on EDAM Studio, 
+a toolchain for generating smart contract code from 
+EDAM (Extended Data-Aware Machines) specifications. 
+The artifact includes the complete source code, a Docker image for easy deployment, 
+pre-generated experiment data (generated code, mutations, and mutation testing results), 
+and reproduction scripts. 
+Reviewers can verify the tool's functionality through the 
+GUI, CLI, or API, and reproduce the experimental evaluation 
+including code generation, test execution, and mutation testing. 
+Results may vary slightly depending on the machine due 
+to the non-deterministic nature of symbolic trace generation.
 \end{abstract}
 
 % ARTIFACT: please stick to the structure of 7 sections provided below
 
 % ARTIFACT: section on the scope of the artifact (what claims of the paper are intended to be backed by this artifact?)
 \begin{scope}
-This artifact supports all experimental claims made in the companion paper. Specifically, it enables reproduction of:
+This artifact supports all experimental claims made in the companion paper. 
+Specifically, it enables reproduction of:
 
 \begin{itemize}
-\item \textbf{Code generation from EDAM models}: The tool generates Solidity smart contracts from EDAM specifications for various models (e.g., asset transfer, ERC-20 tokens, AMM, provenance tracking).
-\item \textbf{Automated test generation}: Symbolic execution-based generation of test cases from EDAM models.
-\item \textbf{Mutation testing evaluation}: Mutation scores and results obtained using ReSuMo on the generated code, including comparison across different models and configurations.
-\item \textbf{Performance metrics}: Code generation time (up to 20 minutes per model depending on test count), test execution time (up to 20 minutes for 10k tests), and mutation testing duration (less than 2 hours for most models; up to several days for the AMM model due to its complexity).
+\item \textbf{Code generation from EDAM models}: 
+  The tool generates Solidity smart contracts from EDAM 
+  specifications for various models 
+  (e.g., asset transfer, ERC-20 tokens, AMM, basic provenance tracking).
+\item \textbf{Automated test generation}: 
+  Symbolic execution-based generation of test cases from EDAM models using 
+  random exploration of the finite state space of the model.
+\item \textbf{Mutation testing evaluation}: 
+  Mutation scores and results obtained using ReSuMo on the generated code, 
+  including comparison across different models and configurations.
+\item \textbf{Performance metrics}: 
+  Code generation time (up to 20 minutes per model depending on test count), 
+  test execution time (up to 20 minutes for 10k tests), 
+  and mutation testing duration 
+  (less than 2 hours for most models; up to several days for the AMM model due to its complexity).
 \end{itemize}
 
-The artifact provides both pre-computed results (in \texttt{EXPERIMENT\_DATA/}) and the means to regenerate them. Note that regenerated results may not match the paper exactly due to machine-dependent factors and the probabilistic nature of symbolic trace generation.
+The artifact provides both pre-computed results 
+(in \texttt{EXPERIMENT\_DATA/}) 
+and the means to regenerate them. 
+Note that regenerated results may not match the paper exactly 
+due to machine-dependent factors and the non-deterministic 
+nature of symbolic trace generation.
 \end{scope}
 
 % ARTIFACT: section on the contents of the artifact (code, data, etc.)
@@ -96,12 +126,16 @@ The artifact package includes:
 \begin{itemize}
 \item \textbf{EDAM Studio source code} (type: software; format: Python, TypeScript, OCaml, JavaScript): The complete implementation in \texttt{Studio/}, comprising:
   \begin{itemize}
-  \item \texttt{API/}: Django backend for code generation
-  \item \texttt{GUI/}: React/Vite frontend for visual model editing
-  \item \texttt{CLI/}: Command-line interface for batch processing
-  \item \texttt{edams-models/}: Predefined EDAM models (assettransfer, c20, amm, basicprovenance, etc.)
-  \item \texttt{ReSuMo/}: Mutation testing tool for Solidity
-  \item \texttt{base\_code/}: OCaml templates for symbolic execution and Z3 integration
+  \item \texttt{API/}: Django backend for code generation.
+  \item \texttt{GUI/}: React/Vite frontend for visual model editing.
+  \item \texttt{CLI/}: Command-line interface for batch code generation, 
+    testing and mutation testing of the generated code.
+  \item \texttt{edams-models/}: Predefined EDAM models in the JSON format (TypeScript/TSX) 
+    (assettransfer, c20, amm, basicprovenance, etc.), 
+    used for code generation and mutation testing.
+  \item \texttt{ReSuMo/}: Mutation testing tool for Solidity smart contracts, 
+  used to evaluate the robustness of the generated code.
+  %\item \texttt{base\_code/}: OCaml templates for symbolic execution and Z3 integration
   \end{itemize}
 
 \item \textbf{Experiment data} (type: data; format: ZIP, XLSX): Located in \texttt{EXPERIMENT\_DATA/}:
@@ -112,64 +146,110 @@ The artifact package includes:
   \item \texttt{Mutation result - Recaps.xlsx}: Summary mutation scores and timing data
   \end{itemize}
 
-\item \textbf{Docker configuration} (type: software; format: Dockerfile, docker-compose): In \texttt{Docker/} for containerized deployment.
+\item \textbf{Docker configuration} (type: software; format: Dockerfile, docker-compose): 
+In \texttt{Docker/} for containerized deployment.
 
-\item \textbf{Documentation}: \texttt{README.md}, \texttt{SETUP\_README.md}, \texttt{ARTIFACT\_SUBMISSION.md}, and \texttt{Docker/README.md} with installation and usage instructions.
+\item \textbf{Documentation}: \texttt{README.md}, \texttt{SETUP\_README.md} and 
+\texttt{ARTIFACT\_SUBMISSION.md} with installation and usage instructions.
 \end{itemize}
 
-\textbf{Reusability}: The implementation is open-source (GPL-3.0). To recompile: follow \texttt{Studio/install.sh} (Linux/macOS) or \texttt{Studio/install.bat} (Windows). The EDAM models and benchmarks are public and included in the repository. The artifact can be reused to: (1) generate smart contracts from custom EDAM models via the GUI or CLI; (2) integrate the code generation pipeline into other tools via the API; (3) extend the mutation operators in ReSuMo; (4) add new EDAM models by implementing the model interface in \texttt{edams-models/edam/types.ts}.
+\textbf{Reusability}: 
+%This artifact can be used to model, generate code, and test smart contracts from EDAM models.
+The implementation is open-source (GPL-3.0). 
+To recompile: follow \texttt{Studio/install.sh} (Linux/macOS) or \texttt{Studio/install.bat} (Windows). 
+The EDAM models and benchmarks are public and included in the repository. 
+The artifact can be reused to: 
+(1) generate smart contracts from custom EDAM models via the GUI or CLI; 
+(2) integrate the code generation pipeline into other tools via the API; 
+(3) extend the mutation operators in ReSuMo; 
+(4) add new EDAM models by implementing the model interface in \texttt{edams-models/edam/types.ts}.
 \end{content}
 
 % ARTIFACT: section containing links to sites holding the
 % latest version of the code/data, if any
 \begin{getting}
-The artifact is available from two sources:
+  The artifact is available from two sources:
 
-\textbf{Docker Hub} (recommended for quick evaluation):
-\begin{verbatim}
+ \noindent \textbf{Docker Hub} (recommended for quick evaluation):
+  \begin{lstlisting}
 docker pull loctet/edam-studio:latest
-docker run -d -p 3000:3000 -p 5000:5000 --name edam-studio loctet/edam-studio:latest
-\end{verbatim}
-Access: GUI at \url{http://localhost:3000}, API at \url{http://localhost:5000}.
+docker run -d -p 3000:3000 -p 5000:5000 \
+--name edam-studio loctet/edam-studio:latest
+  \end{lstlisting}
+  %
+  Access: GUI at \url{http://localhost:3000}, API at \url{http://localhost:5000}.
 
-\textbf{GitHub} (source code and manual setup):
-\url{https://github.com/loctet/Edam-Studio}
+  \noindent \textbf{GitHub} (source code and manual setup):
+  \url{https://github.com/loctet/Edam-Studio}
 
-For manual installation, see \texttt{README.md} and \texttt{SETUP\_README.md} in the repository.
+  For manual installation, see \texttt{README.md} and \texttt{SETUP\_README.md} in the repository.
+  Or generate the Docker image from the source code:
+  \begin{lstlisting}
+cd Docker
+./build-docker.sh
+  \end{lstlisting}
 
-\textbf{Quick-start (kick-the-tires)}:
-\begin{enumerate}
-\item Pull and run the Docker image (commands above).
-\item Open \url{http://localhost:3000} and verify the GUI loads.
-\item Generate code via CLI:
-\begin{verbatim}
-docker exec -it edam-studio edam-cli assettransfer --mode 2
-\end{verbatim}
-\item Check generated output in the container: \texttt{/app/Studio/Generated-code/}
-\end{enumerate}
+  \noindent \textbf{Quick-start (kick-the-tires)}:
+  \begin{enumerate}
+    \item Pull and run the Docker image (commands above) or start the frontend and backend services manually.
+    \item Open \url{http://127.0.0.1:3000} and verify the GUI loads.
+    \item Generate code via CLI:
+      \begin{lstlisting}
+docker exec -it edam-studio edam-cli <model1> <model2> \ 
+  ... --mode <1|2|3|4> [options]
+      \end{lstlisting}
+      Explained later in the documentation.
+  \item Check generated output in the container: \texttt{/app/Studio/Generated-code/}
+  \end{enumerate}
 \end{getting}
 
 % ARTIFACT: section specifying the platforms on which the artifact is known to
 % work, including requirements beyond the operating system such as large
 % amounts of memory or many processor cores
 \begin{platforms}
-\textbf{OS and resources used by the authors}: Linux (Ubuntu 22.04); CPU: 8+ cores recommended; Memory: 8GB RAM minimum, 16GB recommended; Disk: 10GB free space; GPU: not required.
+\textbf{OS and resources used by the authors}: 
+Linux (Ubuntu 22.04). CPU: 8+ cores recommended. 
+Memory: 8GB RAM minimum, 16GB recommended. 
+Disk: 10GB free space. 
+GPU: not required.
 
 \textbf{Required hardware for evaluation}:
 \begin{itemize}
-\item \textbf{Code generation}: 4GB RAM, 2 CPU cores. Each model takes up to 20 minutes depending on \texttt{--number\_symbolic\_traces} and \texttt{--number\_transition\_per\_trace}.
-\item \textbf{Test execution}: 4GB RAM. Up to 20 minutes for 10k tests.
-\item \textbf{Mutation testing}: 8GB RAM recommended. Most models: less than 2 hours; AMM model: up to several days (scaled-down evaluation possible with fewer traces).
+  \item \textbf{Code generation}: 4GB RAM, 2 CPU cores. 
+    Each model takes up to 20 minutes depending on 
+    the number of symbolic traces and the number of transitions per trace.
+  \item \textbf{Test execution}: 4GB RAM. 
+    Up to 20 minutes for 10000 tests using the generated code (using the generated tests).
+  \item \textbf{Mutation testing}: 8GB RAM recommended. 
+    Most models: less than 2 hours. 
+    AMM model: up to several days (scaled-down evaluation possible with fewer traces).
 \end{itemize}
 
-\textbf{Scaled-down evaluation}: For time-constrained review, use \texttt{--number\_symbolic\_traces 50 --number\_transition\_per\_trace 5} to reduce generation time. Run mutation testing on a single model (e.g., \texttt{assettransfer}) instead of all models.
+\textbf{Scaled-down evaluation}: 
+For time-constrained review, 
+use \texttt{--number\_symbolic\_traces 50 --number\_transition\_per\_trace 5} 
+to reduce generation time. 
+Run mutation testing on a single model (e.g., \texttt{assettransfer}) instead of all models.
 
-\textbf{Known compatibility}: The Docker image is built for Linux/amd64. Windows and macOS users can run via Docker Desktop. opam/OCaml may require WSL on Windows for native installation.
+\textbf{Known compatibility}: 
+The Docker image is built for Linux/amd64. 
+Windows and macOS users can run via Docker Desktop. 
+opam/OCaml may require WSL on Windows for native installation.
 \end{platforms}
 
 % ARTIFACT: section specifying the license under which the artifact is
 % made available
-\license{The artifact is available under the GNU General Public License v3.0 (GPL-3.0). See the \texttt{LICENSE} file in the repository.}
+\license{
+  The artifact is available under the GNU General Public License v3.0 (GPL-3.0). 
+  See the \texttt{LICENSE} file in the repository.
+  The EDAM models and benchmarks are public and included in the repository.
+  %The artifact can be reused to: 
+  %(1) generate smart contracts from custom EDAM models via the GUI or CLI; 
+  %(2) integrate the code generation pipeline into other tools via the API; 
+  %(3) extend the mutation operators in ReSuMo; 
+  %(4) add new EDAM models by implementing the model interface in 
+  %\texttt{edams-models/edam/types.ts}.
+}
 
 % ARTIFACT: section specifying the md5 sum of the artifact master file
 % uploaded to the Dagstuhl Research Online Publication Server, enabling
@@ -181,68 +261,10 @@ docker exec -it edam-studio edam-cli assettransfer --mode 2
 % to the Dagstuhl Research Online Publication Server
 \artifactsize{To be provided upon submission to DROPS.}
 
+\bibliography{darts-v2021-sample-article}
+
 % ARTIFACT: optional appendix
 \appendix
-\section{Reproduction of Experimental Claims}
+\input{apendix}
 
-For each experimental claim in the paper, the following commands and procedures enable reproduction.
-
-\subsection{Code Generation}
-
-\textbf{Claim}: EDAM Studio generates Solidity smart contracts from EDAM models.
-
-\textbf{Reproduction}: Using the Docker container:
-\begin{verbatim}
-docker exec -it edam-studio edam-cli assettransfer c20 basicprovenance --mode 2
-\end{verbatim}
-Generated code appears in \texttt{/app/Studio/Generated-code/}. For custom trace counts (as in the paper):
-\begin{verbatim}
-docker exec -it edam-studio edam-cli c20 amm --mode 3 \
-  --number_symbolic_traces 1000 --number_transition_per_trace 40
-\end{verbatim}
-
-\subsection{Pre-generated Code and Data}
-
-\textbf{Claim}: The data in \texttt{EXPERIMENT\_DATA/} corresponds to the paper's experiments.
-
-\textbf{Reproduction}: The archives \texttt{Generated Code.zip}, \texttt{Mutations.zip}, and \texttt{Excels Mutations Results.zip} contain the exact outputs used in the paper. No regeneration needed for verification. To regenerate:
-\begin{enumerate}
-\item Generate code for all models: \texttt{edam-cli assettransfer c20 amm basicprovenance ... --mode 3}
-\item Run ReSuMo on each generated ZIP: \texttt{.run resumo <zip\_filename>} (via \texttt{cli\_commands.py})
-\item Merge results using \texttt{ReSuMo/scripts/merger\_to\_one\_excel\_recap.py}
-\end{enumerate}
-
-\subsection{Mutation Testing Results}
-
-\textbf{Claim}: Mutation scores and timing reported in tables/figures.
-
-\textbf{Reproduction}: Open \texttt{EXPERIMENT\_DATA/Mutation result - Recaps.xlsx} for summary data. Detailed per-operator results are in \texttt{Excels Mutations Results.zip}. To reproduce mutation testing on a single model:
-\begin{verbatim}
-docker exec -it edam-studio bash
-source venv/bin/activate
-export OPAMROOT=/root/.opam && eval $(opam env --root=/root/.opam)
-cd /app/Studio
-python3 CLI/cli_commands.py run resumo <ModelName>_<version>_<id>.zip
-\end{verbatim}
-(Replace \texttt{<ModelName>\_<version>\_<id>.zip} with an actual generated ZIP filename from \texttt{Generated-code/}.)
-
-\subsection{Test Execution}
-
-\textbf{Claim}: Generated tests execute successfully and achieve coverage.
-
-\textbf{Reproduction}:
-\begin{verbatim}
-docker exec -it edam-studio python3 CLI/cli_commands.py run test <zip_file> test
-\end{verbatim}
-For coverage: \texttt{run test <zip\_file> coverage}.
-
-\subsection{Timing Expectations}
-
-Results may differ from the paper due to:
-\begin{itemize}
-\item Machine speed (CPU, disk I/O)
-\item Non-deterministic symbolic trace generation (Z3 solver, random sampling)
-\item Node/npm version differences
-\end{itemize}
-Code generation: typically 5--20 min per model. Testing: up to 20 min for 10k tests. Mutation: less than 2 h for most models; AMM can take days.
 \end{document}

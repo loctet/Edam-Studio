@@ -1,7 +1,7 @@
 temp/*
 API/temp/*
 venv/
-*.zip
+#*.zip
 node_modules/
 GUI/node_modules/*
 GUI/dist/*

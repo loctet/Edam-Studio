@@ -1,12 +1,12 @@
 \documentclass[a4paper,UKenglish]{darts-v2021}
-%This is a template for producing DARTS artifact descriptions. 
+%This is a template for producing DARTS artifact descriptions.
 %for A4 paper format use option "a4paper", for US-letter use option "letterpaper"
 %for british hyphenation rules use option "UKenglish", for american hyphenation rules use option "USenglish"
 % for section-numbered lemmas etc., use "numberwithinsect"
 %for anonymousing the authors (e.g. for double-blind review), add "anonymous"
 %for enabling a two-column layout for the author/affilation part (only applicable for > 6 authors), use "authorcolumns"
 %for producing a PDF according the PDF/A standard, add "pdfa"
- 
+
 \usepackage{microtype}%if unwanted, comment out or use option "draft"
 
 %\graphicspath{{./graphics/}}%helpful if your graphic files are in another directory
@@ -21,8 +21,8 @@
 
 \newenvironment{scope}{\section{Scope}}{}
 \newenvironment{content}{\section{Content}}{}
-\newenvironment{getting}{\section{Getting the artifact} The artifact 
-endorsed by the Artifact Evaluation Committee is available free of 
+\newenvironment{getting}{\section{Getting the artifact} The artifact
+endorsed by the Artifact Evaluation Committee is available free of
 charge on the Dagstuhl Research Online Publication Server (DROPS).}{}
 \newenvironment{platforms}{\section{Tested platforms}}{}
 \newcommand{\license}[1]{{\section{License}#1}}
@@ -31,39 +31,38 @@ charge on the Dagstuhl Research Online Publication Server (DROPS).}{}
 
 
 % Author macros::begin %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\title{A Sample Research Description for the DARTS series (Artifact)} %TODO Please add
+\title{Automatic Code and Test Generation of Smart Contracts from Coordination Models: Artifact Description} %TODO: Update with title of accepted paper
 
-\titlerunning{A Sample DARTS Research Description (Artifact)} %optional, in case that the title is too long; the running title should fit into the top page column
+\titlerunning{Paper \#61: Artifact Description}
 
-% ARTIFACT: Authors may not be exactly the same as the related scholarly paper, e.g., you may want to include authors who contributed to the preparation of the artifact, but not to the companion paper
+% ARTIFACT: Authors may not be exactly the same as the related scholarly paper
+\author{Elvis Konjoh Selabi}{Universit\`a di Camerino and Gran Sasso Science Institute, Italy}{}{https://orcid.org/0009-0002-8372-8015}{}
+\author{Maurizio Murgia}{Gran Sasso Science Institute, Italy}{}{https://orcid.org/0000-0001-7613-621X}{}
+\author{Ant\'onio Ravara}{NOVA School of Science and Technology, Portugal}{}{https://orcid.org/0000-0001-8074-0380}{}
+\author{Emilio Tuosto}{Gran Sasso Science Institute, Italy}{}{https://orcid.org/0000-0002-7032-3281}{}
 
-\author{John Q. Public}{Dummy University Computing Laboratory, [optional: Address], Country \and My second affiliation, Country \and \url{http://www.myhomepage.edu} }{johnqpublic@dummyuni.org}{https://orcid.org/0000-0002-1825-0097}{(Optional) author-specific funding acknowledgements}%TODO mandatory, please use full name; only 1 author per \author macro; first two parameters are mandatory, other parameters can be empty. Please provide at least the name of the affiliation and the country. The full address is optional
+\authorrunning{E.~Konjoh Selabi \and M.~Murgia \and A.~Ravara \and E.~Tuosto}
 
-\author{Joan R. Public\footnote{Optional footnote, e.g. to mark corresponding author}}{Department of Informatics, Dummy College, [optional: Address], Country}{joanrpublic@dummycollege.org}{[orcid]}{[funding]}
+\Copyright{E.~Konjoh Selabi \and M.~Murgia \and A.~Ravara \and E.~Tuosto}
 
-\authorrunning{J.\,Q. Public and J.\,R. Public}%TODO mandatory. First: Use abbreviated first/middle names. Second (only in severe cases): Use first author plus 'et al.'
+\ccsdesc[100]{Software and its engineering~Software verification and validation}
+\ccsdesc[100]{Software and its engineering~Formal methods}
 
-\Copyright{John Q. Public and Joan R. Public}%TODO mandatory, please use full first names. LIPIcs license is "CC-BY";  http://creativecommons.org/licenses/by/3.0/
+\keywords{EDAM, smart contracts, Solidity, code generation, 
+symbolic execution, mutation testing}
 
-\ccsdesc[100]{General and reference~General literature}
-\ccsdesc[100]{General and reference}%TODO mandatory: Please choose ACM 2012 classifications from https://dl.acm.org/ccs/ccs_flat.cfm 
+%TODO: Please provide information to the related scholarly article
+\RelatedArticle{E.~Konjoh Selabi, M.~Murgia, A.~Ravara, and E.~Tuosto, 
+``Automatic Code and Test Generation of Smart Contracts from Coordination Models'', in Proceedings of the Conference (Year).
+\newline \url{https://doi.org/xxx}}
 
-\keywords{Dummy keyword}%TODO mandatory; please add comma-separated list of keywords
-
-%TODO Please provide information to the related scholarly article
-\RelatedArticle{John Q. Open and Joan R. Access, ``A very nice paper'', in Proceedings of the 30th Conference on Very Important Topics (CVIT 2016), LIPIcs, Vol.~0, pp.~0:1--0:2, 2016.\newline \url{https://doi.org/10.4230/LIPIcs.xxx.xxx.xxx}}
-
-\acknowledgements{I want to thank \dots}%optional
-
-%\funding{(Optional) general funding statement \dots}%optional, to capture a funding statement, which applies to all authors. Please enter author specific funding statements as fifth argument of the \author macro.
-
-%\nolinenumbers %uncomment to disable line numbering
+\acknowledgements{}
 
 %Editor-only macros:: begin (do not touch as author)%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \Volume{3}
 \Issue{2}
 \Article{1}
-\RelatedConference{42nd Conference on Very Important Topics (CVIT 2016), December 24--27, 2016, Little Whinging, United Kingdom}
+\RelatedConference{Conference Name, Year}
 % Editor-only macros::end %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{document}
@@ -71,75 +70,179 @@ charge on the Dagstuhl Research Online Publication Server (DROPS).}{}
 \maketitle
 
 \begin{abstract}
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent convallis orci arcu, eu mollis dolor. Aliquam eleifend suscipit lacinia. Maecenas quam mi, porta ut lacinia sed, convallis ac dui. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse potenti. 
- \end{abstract}
+This artifact accompanies the paper on EDAM Studio, a toolchain for generating smart contract code from EDAM (Extended Data-Aware Machines) specifications. The artifact includes the complete source code, a Docker image for easy deployment, pre-generated experiment data (generated code, mutations, and mutation testing results), and reproduction scripts. Reviewers can verify the tool's functionality through the GUI, CLI, or API, and reproduce the experimental evaluation including code generation, test execution, and mutation testing. Results may vary slightly depending on the machine due to the non-deterministic nature of symbolic trace generation.
+\end{abstract}
 
 % ARTIFACT: please stick to the structure of 7 sections provided below
 
 % ARTIFACT: section on the scope of the artifact (what claims of the paper are intended to be backed by this artifact?)
 \begin{scope}
-What is the scope of the artifact? What claims of the related scholarly paper are intended to be backed by this artifact?
+This artifact supports all experimental claims made in the companion paper. Specifically, it enables reproduction of:
+
+\begin{itemize}
+\item \textbf{Code generation from EDAM models}: The tool generates Solidity smart contracts from EDAM specifications for various models (e.g., asset transfer, ERC-20 tokens, AMM, provenance tracking).
+\item \textbf{Automated test generation}: Symbolic execution-based generation of test cases from EDAM models.
+\item \textbf{Mutation testing evaluation}: Mutation scores and results obtained using ReSuMo on the generated code, including comparison across different models and configurations.
+\item \textbf{Performance metrics}: Code generation time (up to 20 minutes per model depending on test count), test execution time (up to 20 minutes for 10k tests), and mutation testing duration (less than 2 hours for most models; up to several days for the AMM model due to its complexity).
+\end{itemize}
+
+The artifact provides both pre-computed results (in \texttt{EXPERIMENT\_DATA/}) and the means to regenerate them. Note that regenerated results may not match the paper exactly due to machine-dependent factors and the probabilistic nature of symbolic trace generation.
 \end{scope}
 
 % ARTIFACT: section on the contents of the artifact (code, data, etc.)
 \begin{content}
 The artifact package includes:
+
 \begin{itemize}
-\item \dots
+\item \textbf{EDAM Studio source code} (type: software; format: Python, TypeScript, OCaml, JavaScript): The complete implementation in \texttt{Studio/}, comprising:
+  \begin{itemize}
+  \item \texttt{API/}: Django backend for code generation
+  \item \texttt{GUI/}: React/Vite frontend for visual model editing
+  \item \texttt{CLI/}: Command-line interface for batch processing
+  \item \texttt{edams-models/}: Predefined EDAM models (assettransfer, c20, amm, basicprovenance, etc.)
+  \item \texttt{ReSuMo/}: Mutation testing tool for Solidity
+  \item \texttt{base\_code/}: OCaml templates for symbolic execution and Z3 integration
+  \end{itemize}
+
+\item \textbf{Experiment data} (type: data; format: ZIP, XLSX): Located in \texttt{EXPERIMENT\_DATA/}:
+  \begin{itemize}
+  \item \texttt{Generated Code.zip}: Pre-generated Solidity contracts and tests for the paper's models
+  \item \texttt{Mutations.zip}: Generated mutations from ReSuMo
+  \item \texttt{Excels Mutations Results.zip}: Detailed mutation testing results per operator
+  \item \texttt{Mutation result - Recaps.xlsx}: Summary mutation scores and timing data
+  \end{itemize}
+
+\item \textbf{Docker configuration} (type: software; format: Dockerfile, docker-compose): In \texttt{Docker/} for containerized deployment.
+
+\item \textbf{Documentation}: \texttt{README.md}, \texttt{SETUP\_README.md}, \texttt{ARTIFACT\_SUBMISSION.md}, and \texttt{Docker/README.md} with installation and usage instructions.
 \end{itemize}
+
+\textbf{Reusability}: The implementation is open-source (GPL-3.0). To recompile: follow \texttt{Studio/install.sh} (Linux/macOS) or \texttt{Studio/install.bat} (Windows). The EDAM models and benchmarks are public and included in the repository. The artifact can be reused to: (1) generate smart contracts from custom EDAM models via the GUI or CLI; (2) integrate the code generation pipeline into other tools via the API; (3) extend the mutation operators in ReSuMo; (4) add new EDAM models by implementing the model interface in \texttt{edams-models/edam/types.ts}.
 \end{content}
 
 % ARTIFACT: section containing links to sites holding the
 % latest version of the code/data, if any
 \begin{getting}
-% leave empty if the artifact is only available on the DROPS server.
-% otherwise, provide links to the latest version of the artifact (e.g., on github)
-In addition, the artifact is also available at:
-\url{https://to.be.specified}.
+The artifact is available from two sources:
+
+\textbf{Docker Hub} (recommended for quick evaluation):
+\begin{verbatim}
+docker pull loctet/edam-studio:latest
+docker run -d -p 3000:3000 -p 5000:5000 --name edam-studio loctet/edam-studio:latest
+\end{verbatim}
+Access: GUI at \url{http://localhost:3000}, API at \url{http://localhost:5000}.
+
+\textbf{GitHub} (source code and manual setup):
+\url{https://github.com/loctet/Edam-Studio}
+
+For manual installation, see \texttt{README.md} and \texttt{SETUP\_README.md} in the repository.
+
+\textbf{Quick-start (kick-the-tires)}:
+\begin{enumerate}
+\item Pull and run the Docker image (commands above).
+\item Open \url{http://localhost:3000} and verify the GUI loads.
+\item Generate code via CLI:
+\begin{verbatim}
+docker exec -it edam-studio edam-cli assettransfer --mode 2
+\end{verbatim}
+\item Check generated output in the container: \texttt{/app/Studio/Generated-code/}
+\end{enumerate}
 \end{getting}
 
 % ARTIFACT: section specifying the platforms on which the artifact is known to
 % work, including requirements beyond the operating system such as large
 % amounts of memory or many processor cores
 \begin{platforms}
-Please specify the platforms on which the artifact is known to
-work, including requirements beyond the operating system such as large
-amounts of memory or many processor cores.
+\textbf{OS and resources used by the authors}: Linux (Ubuntu 22.04); CPU: 8+ cores recommended; Memory: 8GB RAM minimum, 16GB recommended; Disk: 10GB free space; GPU: not required.
+
+\textbf{Required hardware for evaluation}:
+\begin{itemize}
+\item \textbf{Code generation}: 4GB RAM, 2 CPU cores. Each model takes up to 20 minutes depending on \texttt{--number\_symbolic\_traces} and \texttt{--number\_transition\_per\_trace}.
+\item \textbf{Test execution}: 4GB RAM. Up to 20 minutes for 10k tests.
+\item \textbf{Mutation testing}: 8GB RAM recommended. Most models: less than 2 hours; AMM model: up to several days (scaled-down evaluation possible with fewer traces).
+\end{itemize}
+
+\textbf{Scaled-down evaluation}: For time-constrained review, use \texttt{--number\_symbolic\_traces 50 --number\_transition\_per\_trace 5} to reduce generation time. Run mutation testing on a single model (e.g., \texttt{assettransfer}) instead of all models.
+
+\textbf{Known compatibility}: The Docker image is built for Linux/amd64. Windows and macOS users can run via Docker Desktop. opam/OCaml may require WSL on Windows for native installation.
 \end{platforms}
 
 % ARTIFACT: section specifying the license under which the artifact is
 % made available
-\license{The artifact is available under license \dots.}
+\license{The artifact is available under the GNU General Public License v3.0 (GPL-3.0). See the \texttt{LICENSE} file in the repository.}
 
 % ARTIFACT: section specifying the md5 sum of the artifact master file
-% uploaded to the Dagstuhl Research Online Publication Server, enabling 
-% downloaders to check that the file is the expected version and suffered 
+% uploaded to the Dagstuhl Research Online Publication Server, enabling
+% downloaders to check that the file is the expected version and suffered
 % no damage during download.
-\mdsum{xxx}
+\mdsum{To be provided upon submission to DROPS.}
 
 % ARTIFACT: section specifying the size of the artifact master file uploaded
 % to the Dagstuhl Research Online Publication Server
-\artifactsize{x.xx GiB}
+\artifactsize{To be provided upon submission to DROPS.}
 
 % ARTIFACT: optional appendix
 \appendix
-\section{Morbi eros magna}
+\section{Reproduction of Experimental Claims}
 
-Morbi eros magna, vestibulum non posuere non, porta eu quam. Maecenas vitae orci risus, eget imperdiet mauris. Donec massa mauris, pellentesque vel lobortis eu, molestie ac turpis. Sed condimentum convallis dolor, a dignissim est ultrices eu. Donec consectetur volutpat eros, et ornare dui ultricies id. Vivamus eu augue eget dolor euismod ultrices et sit amet nisi. Vivamus malesuada leo ac leo ullamcorper tempor. Donec justo mi, tempor vitae aliquet non, faucibus eu lacus. Donec dictum gravida neque, non porta turpis imperdiet eget. Curabitur quis euismod ligula \cite{DBLP:books/mk/GrayR93,DBLP:conf/focs/FOCS16,DBLP:conf/focs/HopcroftPV75,DBLP:journals/cacm/Dijkstra68a,DBLP:journals/cacm/Knuth74}. 
+For each experimental claim in the paper, the following commands and procedures enable reproduction.
 
+\subsection{Code Generation}
 
-% ARTIFACT: include here any additional references, if needed...
+\textbf{Claim}: EDAM Studio generates Solidity smart contracts from EDAM models.
 
-%%
-%% Bibliography
-%%
+\textbf{Reproduction}: Using the Docker container:
+\begin{verbatim}
+docker exec -it edam-studio edam-cli assettransfer c20 basicprovenance --mode 2
+\end{verbatim}
+Generated code appears in \texttt{/app/Studio/Generated-code/}. For custom trace counts (as in the paper):
+\begin{verbatim}
+docker exec -it edam-studio edam-cli c20 amm --mode 3 \
+  --number_symbolic_traces 1000 --number_transition_per_trace 40
+\end{verbatim}
 
-%% Either use bibtex (recommended), 
+\subsection{Pre-generated Code and Data}
 
-\bibliography{darts-v2021-sample-article}
+\textbf{Claim}: The data in \texttt{EXPERIMENT\_DATA/} corresponds to the paper's experiments.
 
-%% .. or use the thebibliography environment explicitely
+\textbf{Reproduction}: The archives \texttt{Generated Code.zip}, \texttt{Mutations.zip}, and \texttt{Excels Mutations Results.zip} contain the exact outputs used in the paper. No regeneration needed for verification. To regenerate:
+\begin{enumerate}
+\item Generate code for all models: \texttt{edam-cli assettransfer c20 amm basicprovenance ... --mode 3}
+\item Run ReSuMo on each generated ZIP: \texttt{.run resumo <zip\_filename>} (via \texttt{cli\_commands.py})
+\item Merge results using \texttt{ReSuMo/scripts/merger\_to\_one\_excel\_recap.py}
+\end{enumerate}
 
+\subsection{Mutation Testing Results}
 
+\textbf{Claim}: Mutation scores and timing reported in tables/figures.
 
+\textbf{Reproduction}: Open \texttt{EXPERIMENT\_DATA/Mutation result - Recaps.xlsx} for summary data. Detailed per-operator results are in \texttt{Excels Mutations Results.zip}. To reproduce mutation testing on a single model:
+\begin{verbatim}
+docker exec -it edam-studio bash
+source venv/bin/activate
+export OPAMROOT=/root/.opam && eval $(opam env --root=/root/.opam)
+cd /app/Studio
+python3 CLI/cli_commands.py run resumo <ModelName>_<version>_<id>.zip
+\end{verbatim}
+(Replace \texttt{<ModelName>\_<version>\_<id>.zip} with an actual generated ZIP filename from \texttt{Generated-code/}.)
+
+\subsection{Test Execution}
+
+\textbf{Claim}: Generated tests execute successfully and achieve coverage.
+
+\textbf{Reproduction}:
+\begin{verbatim}
+docker exec -it edam-studio python3 CLI/cli_commands.py run test <zip_file> test
+\end{verbatim}
+For coverage: \texttt{run test <zip\_file> coverage}.
+
+\subsection{Timing Expectations}
+
+Results may differ from the paper due to:
+\begin{itemize}
+\item Machine speed (CPU, disk I/O)
+\item Non-deterministic symbolic trace generation (Z3 solver, random sampling)
+\item Node/npm version differences
+\end{itemize}
+Code generation: typically 5--20 min per model. Testing: up to 20 min for 10k tests. Mutation: less than 2 h for most models; AMM can take days.
 \end{document}

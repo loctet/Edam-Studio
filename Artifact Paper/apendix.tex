@@ -126,7 +126,34 @@ Table~\ref{tab:cli-params} lists all optional parameters for code generation.
 corresponds to the paper's experiments.
 
 \noindent\textbf{Reproduction}: 
-The archives \texttt{Generated Code.zip}, \texttt{Mutations.zip}, and \texttt{Excels Mutations Results.zip} contain the exact outputs used in the paper. No regeneration needed for verification. To regenerate:
+The archives \texttt{Generated Code.zip}, \texttt{Mutations.zip}, and \texttt{Excels Mutations Results.zip} contain the exact outputs used in the paper. No regeneration needed for verification. 
+
+\noindent\textbf{Running tests and mutation on pre-generated data}:
+To run tests and coverage for all pre-generated zip files in \texttt{EXPERIMENT\_DATA/Generated Code.zip}, use:
+\begin{lstlisting}
+docker exec -it edam-studio bash -c "cd /app/Studio && CLI/cli.sh .run experiment_data"
+\end{lstlisting}
+This command will:
+\begin{enumerate}
+  \item Extract \texttt{EXPERIMENT\_DATA/Generated Code.zip}
+  \item For each zip file found:
+  \begin{itemize}
+    \item Extract the zip file
+    \item Run \texttt{npm install}
+    \item Run \texttt{npx hardhat test}
+    \item Run \texttt{npx hardhat coverage}
+  \end{itemize}
+  \item Display a summary of results for all processed files
+\end{enumerate}
+
+\noindent\textbf{Running mutation testing on a specific pre-generated zip}:
+To run mutation testing (ReSuMo) on a specific zip file from the pre-generated data:
+\begin{lstlisting}
+docker exec -it edam-studio bash -c "cd /app/Studio && CLI/cli.sh .run experiment_data --mutation <zip_filename>"
+\end{lstlisting}
+Replace \texttt{<zip\_filename>} with the name of the zip file (e.g., \texttt{assettransfer\_0.35\_1.zip}). The command will copy the zip to the Generated-code directory, run ReSuMo mutation testing, and clean up afterward.
+
+\noindent\textbf{To regenerate from scratch}:
 \begin{enumerate}
   \item Generate code for all models: 
   \texttt{edam-cli assettransfer c20 amm basicprovenance ... --mode 3}

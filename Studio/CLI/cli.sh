@@ -5,6 +5,7 @@
 #   .generate edams <models> [options] -> calls cli.py
 #   .run resumo <zip_file> -> runs ReSuMo on a specific zip file
 #   .run test <zip_file> [command] -> runs test/coverage on a zip file
+#   .run experiment_data [--mutation <zip_file>] -> processes all zips in EXPERIMENT_DATA
 #
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -17,12 +18,15 @@ usage() {
     echo "  .generate edams <model1> <model2> ... --mode <1|2|3|4> [options]"
     echo "  .run resumo <zip_file>"
     echo "  .run test <zip_file> [test|coverage|custom_command]"
+    echo "  .run experiment_data [--mutation <zip_file>]"
     echo ""
     echo "Examples:"
     echo "  .generate edams Model1 Model2 --mode 1"
     echo "  .run resumo myfile.zip"
     echo "  .run test myfile.zip test"
     echo "  .run test myfile.zip coverage"
+    echo "  .run experiment_data"
+    echo "  .run experiment_data --mutation myfile.zip"
     exit 1
 }
 
@@ -61,8 +65,20 @@ elif [ "$1" = ".run" ]; then
         shift
         COMMAND="${1:-test}"
         python3 "$CLI_COMMANDS" run test "$ZIP_FILE" "$COMMAND"
+    elif [ "$1" = "experiment_data" ]; then
+        shift
+        if [ "$1" = "--mutation" ]; then
+            shift
+            if [ -z "$1" ]; then
+                echo "Error: ZIP file name required for mutation"
+                usage
+            fi
+            python3 "$CLI_COMMANDS" run experiment_data --mutation "$1"
+        else
+            python3 "$CLI_COMMANDS" run experiment_data
+        fi
     else
-        echo "Error: Unknown run action. Use 'resumo' or 'test'"
+        echo "Error: Unknown run action. Use 'resumo', 'test', or 'experiment_data'"
         usage
     fi
 else

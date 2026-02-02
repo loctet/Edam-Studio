@@ -5,6 +5,7 @@ Supports:
 - .generate edams -> calls cli.py
 - .run resumo <zip_file> -> runs ReSuMo on a specific zip file
 - .run test <zip_file> <command> -> runs test/coverage on a zip file
+- .run experiment_data [--mutation <zip_file>] -> processes all zips in EXPERIMENT_DATA
 """
 
 import argparse
@@ -224,6 +225,144 @@ def run_test(zip_filename, command="test"):
     return result.returncode
 
 
+def run_experiment_data(mutation_zip=None):
+    """Process all zip files in EXPERIMENT_DATA/Generated Code directory
+    
+    For each zip:
+    1. Unzip it
+    2. Run npm install
+    3. Run test and coverage
+    
+    If mutation_zip is provided, run mutation testing for that specific zip file.
+    """
+    EXPERIMENT_DATA_DIR = ROOT_DIR / "EXPERIMENT_DATA"
+    GENERATED_CODE_ZIP = EXPERIMENT_DATA_DIR / "Generated Code.zip"
+    
+    if not EXPERIMENT_DATA_DIR.exists():
+        print(f"Error: EXPERIMENT_DATA directory not found: {EXPERIMENT_DATA_DIR}")
+        return 1
+    
+    if not GENERATED_CODE_ZIP.exists():
+        print(f"Error: Generated Code.zip not found: {GENERATED_CODE_ZIP}")
+        return 1
+    
+    # Unzip Generated Code.zip
+    extracted_dir = EXPERIMENT_DATA_DIR / "Generated Code"
+    print(f"Extracting {GENERATED_CODE_ZIP} to {extracted_dir}")
+    
+    # Remove existing directory if it exists
+    if extracted_dir.exists():
+        print(f"Removing existing directory: {extracted_dir}")
+        shutil.rmtree(extracted_dir)
+    
+    with zipfile.ZipFile(GENERATED_CODE_ZIP, 'r') as zip_ref:
+        zip_ref.extractall(extracted_dir)
+    
+    # Find all zip files in the extracted directory
+    zip_files = list(extracted_dir.glob("*.zip"))
+    
+    if not zip_files:
+        print(f"Warning: No zip files found in {extracted_dir}")
+        return 0
+    
+    print(f"\nFound {len(zip_files)} zip file(s) to process\n")
+    
+    # If mutation_zip is specified, only process that one for mutation
+    if mutation_zip:
+        # Find the specific zip file
+        target_zip = None
+        for zip_file in zip_files:
+            if zip_file.name == mutation_zip or zip_file.stem == mutation_zip.replace('.zip', ''):
+                target_zip = zip_file
+                break
+        
+        if not target_zip:
+            print(f"Error: Zip file '{mutation_zip}' not found in {extracted_dir}")
+            print(f"Available zip files:")
+            for zip_file in zip_files:
+                print(f"  - {zip_file.name}")
+            return 1
+        
+        print(f"Running mutation testing for: {target_zip.name}")
+        
+        # Copy the zip to Generated-code directory
+        target_dest = GENERATED_CODE_DIR / target_zip.name
+        print(f"Copying {target_zip.name} to {GENERATED_CODE_DIR}")
+        shutil.copy2(target_zip, target_dest)
+        
+        # Run mutation testing
+        result = run_resumo(target_zip.name)
+        
+        # Clean up the copied file
+        if target_dest.exists():
+            target_dest.unlink()
+        
+        return result
+    
+    # Process all zip files: unzip, npm install, test, coverage
+    results = []
+    for zip_file in zip_files:
+        print(f"\n{'='*60}")
+        print(f"Processing: {zip_file.name}")
+        print(f"{'='*60}\n")
+        
+        # Extract zip file
+        base_dir = extracted_dir / zip_file.stem
+        
+        # Remove existing directory if it exists
+        if base_dir.exists():
+            print(f"Removing existing directory: {base_dir}")
+            shutil.rmtree(base_dir)
+        
+        print(f"Extracting {zip_file.name} to {base_dir}")
+        with zipfile.ZipFile(zip_file, 'r') as zip_ref:
+            zip_ref.extractall(base_dir)
+        
+        # Run npm install
+        print(f"Running npm install in {base_dir}")
+        result = subprocess.run(["npm", "install"], cwd=base_dir)
+        if result.returncode != 0:
+            print(f"Error: npm install failed for {zip_file.name} with exit code {result.returncode}")
+            results.append((zip_file.name, "FAILED", "npm install failed"))
+            continue
+        
+        # Run test
+        print(f"Running tests for {zip_file.name}")
+        test_result = subprocess.run(["npx", "hardhat", "test"], cwd=base_dir)
+        test_success = test_result.returncode == 0
+        
+        # Run coverage
+        print(f"Running coverage for {zip_file.name}")
+        coverage_result = subprocess.run(["npx", "hardhat", "coverage"], cwd=base_dir)
+        coverage_success = coverage_result.returncode == 0
+        
+        if test_success and coverage_success:
+            status = "SUCCESS"
+        elif test_success:
+            status = "PARTIAL (test passed, coverage failed)"
+        elif coverage_success:
+            status = "PARTIAL (test failed, coverage passed)"
+        else:
+            status = "FAILED"
+        
+        results.append((zip_file.name, status, ""))
+        print(f"Completed: {zip_file.name} - {status}\n")
+    
+    # Print summary
+    print(f"\n{'='*60}")
+    print("SUMMARY")
+    print(f"{'='*60}")
+    for zip_name, status, error in results:
+        print(f"{zip_name}: {status}")
+        if error:
+            print(f"  Error: {error}")
+    print(f"{'='*60}\n")
+    
+    # Return 0 if all succeeded, 1 otherwise
+    failed = any(status != "SUCCESS" for _, status, _ in results)
+    return 1 if failed else 0
+
+
 def main():
     parser = argparse.ArgumentParser(
         description="Edam Studio CLI Commands",
@@ -234,6 +373,8 @@ Examples:
   .run resumo myfile.zip
   .run test myfile.zip test
   .run test myfile.zip coverage
+  .run experiment_data
+  .run experiment_data --mutation myfile.zip
         """
     )
     
@@ -278,6 +419,12 @@ Examples:
     test_parser.add_argument('test_command', nargs='?', default='test', 
                             help='Command to run: test, coverage, or custom hardhat command')
     
+    # Experiment data subcommand
+    experiment_parser = run_subparsers.add_parser('experiment_data', 
+                                                   help='Process all zip files in EXPERIMENT_DATA')
+    experiment_parser.add_argument('--mutation', metavar='ZIP_FILE', 
+                                   help='Run mutation testing for a specific zip file')
+    
     args = parser.parse_args()
     
     if args.command == 'generate':
@@ -288,6 +435,8 @@ Examples:
             return run_resumo(args.zip_file)
         elif args.run_action == 'test':
             return run_test(args.zip_file, args.test_command)
+        elif args.run_action == 'experiment_data':
+            return run_experiment_data(args.mutation)
     
     parser.print_help()
     return 1

@@ -334,21 +334,6 @@ let dependencies_map : dependencies_map =
   tbl
 
 
-
-(* let calls_list = [
-  ("Token1", (PID "p1", Operation "start", [], [IntVal 80]), (generate_iota_from_label "Token1" (PID "p1", Operation "start", [], [IntVal 46]) configurations));
-  ("Token2", (PID "p1", Operation "start", [], [IntVal 63]), (generate_iota_from_label "Token2" (PID "p1", Operation "start", [], [IntVal 90]) configurations));
-  ("AMM", (PID "p1", Operation "start", [], []), (generate_iota_from_label "AMM" (PID "p1", Operation "start", [], []) configurations));
-
-  (* ("Token1", (PID "p1", Operation "mint", [PID "p1"], [IntVal 20]), (generate_iota_from_label "Token1" (PID "p1", Operation "mint", [PID "p1"], [IntVal 20]) configurations));
-  ("Token1", (PID "p1", Operation "mint", [PID "AMM"], [IntVal 20]), (generate_iota_from_label "Token1" (PID "p1", Operation "mint", [PID "AMM"], [IntVal 20]) configurations));
-   *)
-   ("Token1", (PID "p1", Operation "approve", [PID "AMM"], [IntVal 59]), (generate_iota_from_label "Token1" (PID "p1", Operation "approve", [PID "AMM"], [IntVal 20]) configurations));
-  ("Token2", (PID "p1", Operation "approve", [PID "AMM"], [IntVal 97]), (generate_iota_from_label "Token2" (PID "p1", Operation "approve", [PID "AMM"], [IntVal 10]) configurations));
-  ("AMM", (PID "p1", Operation "addLiquidity", [], [IntVal 47; IntVal 38]), (generate_iota_from_label "AMM" (PID "p1", Operation "addLiquidity", [], [IntVal 10; IntVal 10]) configurations));
-  ("AMM", (PID "p1", Operation "removeLiquidity", [], [IntVal 85]), (generate_iota_from_label "AMM" (PID "p1", Operation "removeLiquidity", [], [IntVal 10]) configurations))
-  (* ("AMM", (PID "p1", Operation "swapBForA", [], [IntVal 5]), (generate_iota_from_label "AMM" (PID "p1", Operation "swapBForA", [], [IntVal 10]) configurations))
-  *)] *)
 let user = PID "user"
 let alice = PID "alice"
 let bob = PID "bob"
@@ -366,50 +351,3 @@ let () =
   let (evaluated_trace, conf) = Core_functions.evaluate_trace calls_list configurations in
   Printer.print_trace evaluated_trace;
   Printer.print_all_sigmas conf;
-
-  (* Random.self_init ();
-
-  (* Define the EDAM (including name and roles list) *)
-  let server_configs: server_config_type = {
-    probability_new_participant = 0.001;
-    probability_true_for_bool = 0.5;
-    probability_right_participant = 0.9999;
-    min_int_value = 10;
-    max_int_value = 100;
-    max_gen_array_size = 10;
-    min_gen_string_length = 5;
-    max_gen_string_length = 10;
-    z3_check_enabled = true;
-    latest_transitions = Hashtbl.create 10;
-    executed_operations_log = Hashtbl.create 0;
-    max_fail_try = 1;
-    add_pi_to_test  = true;
-    add_test_of_state  = true;
-    add_test_of_variables = true;
-  } in 
-  print_endline "++++++++++++++++++++++++";
-  (* Generate traces *)
-  let traces = 
-    List.init 1 (fun trace_idx ->
-      let multi_cfg_copy = copy_multi_config configurations in
-      let new_server_configs = {server_configs with latest_transitions = Hashtbl.create 10; executed_operations_log = Hashtbl.create 0} in
-      let (symbolic_trace, generated_trace) = generate_random_trace multi_cfg_copy dependencies_map new_server_configs 1 2 (trace_idx +1) in
-      let evaluated_traces = 
-        List.map (fun trace -> 
-          let evaluated_trace, _ = evaluate_trace (List.rev trace) (copy_multi_config configurations) in
-          evaluated_trace
-        ) generated_trace 
-      in 
-      Printer.print_symbolic_trace symbolic_trace (trace_idx + 1);
-      print_endline "++++++++++++++++++++++++";
-      evaluated_traces
-    )
-  |> List.concat in
-
-  print_endline "________";
-
-  (* Generate and print migration and test scripts for all traces *)
-  let migration_code, test_code = generate_hardhat_tests configurations traces server_configs  in
-  print_endline test_code;
-  print_endline "________";
-  print_endline migration_code; *)

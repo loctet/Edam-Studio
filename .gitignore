@@ -10,3 +10,4 @@ Generated-code/*
 *.pyc
 __pycache__/
 output.json
+Main Paper/

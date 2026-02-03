@@ -311,6 +311,62 @@ docker pull yourusername/edam-studio:latest
 docker run -d -p 3000:3000 -p 5000:5000 --name edam-studio yourusername/edam-studio:latest
 ```
 
+## Exporting the Image to a File
+
+To save the Docker image as a compressed archive file (useful for sharing or offline distribution):
+
+### Using the Export Script (Recommended)
+
+```bash
+cd Docker
+./export-image.sh
+```
+
+This will:
+- Build the image if it doesn't exist (default: `edam-studio:latest`)
+- Export it to `edam-studio.tar.gz` in the Docker directory
+
+**Options:**
+```bash
+# Custom output filename
+./export-image.sh -o my-edam-image.tar.gz
+
+# Export a specific image
+./export-image.sh -i my-custom-image:tag -o my-image.tar.gz
+
+# Don't build if image is missing (will error instead)
+./export-image.sh --no-build
+```
+
+### Manual Export Commands
+
+```bash
+# Build the image first (if not already built)
+cd Docker
+docker build -f Dockerfile -t edam-studio:latest ..
+
+# Export the image to a tar.gz file
+docker save edam-studio:latest | gzip > edam-studio.tar.gz
+```
+
+### Loading the Exported Image
+
+On another machine, load the exported image:
+
+```bash
+# Method 1: Using docker load directly
+gunzip -c edam-studio.tar.gz | docker load
+
+# Method 2: Using the load script (if available)
+cd Docker
+./load-docker.sh
+```
+
+After loading, you can run the container:
+```bash
+docker run -d -p 3000:3000 -p 5000:5000 --name edam-studio edam-studio:latest
+```
+
 ## Notes
 
 - The container runs both GUI and API services simultaneously

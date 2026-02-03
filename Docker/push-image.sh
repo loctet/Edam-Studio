@@ -13,6 +13,8 @@ USERNAME=""
 IMAGE_NAME="edam-studio"
 TAG="latest"
 VERSION=""
+SOURCE_IMAGE="edam-studio:latest"  # Default source image name (matches build.sh)
+FORCE_REBUILD=false
 
 # Colors for output
 RED='\033[0;31m'
@@ -32,6 +34,8 @@ usage() {
     echo "  -i, --image IMAGE_NAME     Image name (default: edam-studio)"
     echo "  -t, --tag TAG              Tag for the image (default: latest)"
     echo "  -v, --version VERSION      Version tag (creates both 'latest' and version tags)"
+    echo "  -s, --source SOURCE        Source image to push (default: edam-studio:latest)"
+    echo "  -f, --force-rebuild        Force rebuild before pushing"
     echo "  -h, --help                 Show this help message"
     echo ""
     echo "Examples:"
@@ -72,6 +76,14 @@ while [[ $# -gt 0 ]]; do
             VERSION="$2"
             shift 2
             ;;
+        -s|--source)
+            SOURCE_IMAGE="$2"
+            shift 2
+            ;;
+        -f|--force-rebuild)
+            FORCE_REBUILD=true
+            shift
+            ;;
         -h|--help)
             usage
             ;;
@@ -91,10 +103,23 @@ fi
 
 cd "$SCRIPT_DIR"
 
-# Build the image first if it doesn't exist
-if ! docker images | grep -q "^${IMAGE_NAME}"; then
-    echo -e "${YELLOW}Image not found locally. Building...${NC}"
-    docker build -f Dockerfile -t ${IMAGE_NAME}:${TAG} "$PROJECT_ROOT"
+# Check if source image exists
+SOURCE_EXISTS=$(docker images --format "{{.Repository}}:{{.Tag}}" | grep -Fx "${SOURCE_IMAGE}" || echo "")
+
+# Build the image if it doesn't exist or if force rebuild is requested
+if [ -z "$SOURCE_EXISTS" ] || [ "$FORCE_REBUILD" = true ]; then
+    if [ "$FORCE_REBUILD" = true ]; then
+        echo -e "${YELLOW}Force rebuild requested. Building image...${NC}"
+    else
+        echo -e "${YELLOW}Source image '${SOURCE_IMAGE}' not found. Building...${NC}"
+    fi
+    docker build -f Dockerfile -t ${SOURCE_IMAGE} "$PROJECT_ROOT"
+    echo -e "${GREEN}Build completed.${NC}"
+else
+    echo -e "${GREEN}Using existing image: ${SOURCE_IMAGE}${NC}"
+    # Show image details to confirm it's the right one
+    echo -e "${YELLOW}Image details:${NC}"
+    docker images "${SOURCE_IMAGE}" --format "table {{.Repository}}\t{{.Tag}}\t{{.ID}}\t{{.CreatedAt}}"
 fi
 
 # Construct full image name
@@ -109,6 +134,7 @@ fi
 echo "========================================="
 echo "Pushing EDAM Studio Docker Image"
 echo "========================================="
+echo "Source image: $SOURCE_IMAGE"
 echo "Registry: $REGISTRY"
 echo "Username: $USERNAME"
 echo "Image: $IMAGE_NAME"
@@ -116,15 +142,15 @@ echo "Tag: $TAG"
 echo "Full name: $FULL_IMAGE_NAME"
 echo ""
 
-# Tag the image
-echo -e "${YELLOW}Tagging image...${NC}"
-docker tag ${IMAGE_NAME}:${TAG} ${FULL_IMAGE_NAME}
+# Tag the image (use SOURCE_IMAGE instead of assuming IMAGE_NAME:TAG)
+echo -e "${YELLOW}Tagging image from ${SOURCE_IMAGE} to ${FULL_IMAGE_NAME}...${NC}"
+docker tag ${SOURCE_IMAGE} ${FULL_IMAGE_NAME}
 
 # If version is provided, also tag with version
 if [ -n "$VERSION" ]; then
     VERSION_IMAGE_NAME="${REGISTRY}/${USERNAME}/${IMAGE_NAME}:${VERSION}"
     echo -e "${YELLOW}Tagging with version: ${VERSION}...${NC}"
-    docker tag ${IMAGE_NAME}:${TAG} ${VERSION_IMAGE_NAME}
+    docker tag ${SOURCE_IMAGE} ${VERSION_IMAGE_NAME}
 fi
 
 # Login to registry if needed

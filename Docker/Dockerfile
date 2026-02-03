@@ -43,6 +43,8 @@ WORKDIR /app
 COPY Studio /app/Studio
 #Copy the Experiment Data
 COPY EXPERIMENT_DATA /app/EXPERIMENT_DATA
+#Copy Documentation
+COPY Documentation /app/Documentation
 
 # Set working directory to Studio
 WORKDIR /app/Studio

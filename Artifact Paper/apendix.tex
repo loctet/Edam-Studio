@@ -144,6 +144,19 @@ for CM, we have to pass the network of C20 and CM.
 
 For each experimental claim in the paper, 
 the following commands and procedures enable reproduction:
+\section{Running the Case Study}
+The case study is run on the model \texttt{cm} with the following command:
+\begin{lstlisting}
+docker exec -it edam-studio edam-cli cm --mode 4
+\end{lstlisting}
+That will generate the code and the tests for the model \texttt{cm}.
+To run the semantic on the model \texttt{cm}, we can use the following command:
+\begin{lstlisting}
+docker exec -it edam-studio bash -c \
+  "cd /app/Studio/API/base_code && bash cmd_test_run_cm_c20.sh"
+\end{lstlisting}
+This will run the semantic on the model \texttt{cm} and the 
+result will be the screenshot seen the case study section of the paper.
 
 \subsection{Code Generation}
 

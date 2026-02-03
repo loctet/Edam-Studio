@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EDAM → Code → Test — EDAM Studio Docs</title>
+  <link rel="stylesheet" href="doc-style.css" />
+  <link rel="stylesheet" href="doc-nav.css" />
+</head>
+<body class="docs-layout">
+  <aside class="docs-sidebar">
+    <nav>
+      <h3>Flow</h3>
+<a href="index.html">Overview</a>
+<a href="ocaml.html">OCaml</a>
+<a href="python.html">Python</a>
+<a href="frontend.html">Frontend</a>
+    </nav>
+  </aside>
+  <main class="docs-main">
+    <div class="docs-header">
+      <a href="index.html">← EDAM Studio</a>
+      <h1>EDAM → Code → Test</h1>
+    </div>
+    
+    <section class="file-section">
+    <h2>Complete Flow: EDAM → Code → Test</h2>
+    <pre style="background:var(--bg-code);padding:1rem;border-radius:8px;overflow-x:auto;">
+┌─────────────────┐     ┌──────────────────┐     ┌─────────────────┐
+│  EDAM Input     │     │  Python/Node     │     │  OCaml Engine   │
+│  (GUI/CLI/API)  │────▶│  Payload/Process │────▶│  (base_code/)   │
+└─────────────────┘     └──────────────────┘     └────────┬────────┘
+        │                           │                      │
+        │                           ▼                      ▼
+        │                  ┌──────────────────┐    ┌──────────────────┐
+        │                  │  Solidity        │    │  Python EDAM     │
+        │                  │  Contract Gen    │◀───│  (intermediate)  │
+        │                  └────────┬────────┘    └──────────────────┘
+        │                            │
+        ▼                            ▼
+┌─────────────────────────────────────────────────────────────────────┐
+│  Output: contracts/*.sol + test/*.js + run script + ZIP              │
+└─────────────────────────────────────────────────────────────────────┘
+    </pre>
+    <h3>Step 1: EDAM Input</h3>
+    <p>GUI, CLI (payload_generator.js), or API receives models. CLI writes output.json.</p>
+    <h3>Step 2: Python Process</h3>
+    <p>CodeGenerationProcess._process_models() → ocaml_generator.generate_code() → contract_generator.generate_code()</p>
+    <h3>Step 3: OCaml → Python EDAM</h3>
+    <p>ocaml_base_code.ml + EDAM → ocaml run → Python EDAM string</p>
+    <h3>Step 4: OCaml Test Generation</h3>
+    <p>ocaml_test_code.ml template → compile with cmd_run.sh → generate_random_trace → Z3 → generate_hardhat_tests</p>
+    <h3>Step 5: Solidity Generation</h3>
+    <p>ContractCodeGenerator + SolidityGenerator (code_generators/solidity/) → .sol files</p>
+    <h3>Step 6: Output</h3>
+    <p>create_zip_file() bundles contracts, tests, run script.</p>
+    </section>
+    
+  </main>
+</body>
+</html>

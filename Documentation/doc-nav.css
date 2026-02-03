@@ -1,0 +1,138 @@
+/* Multi-page documentation navigation */
+
+:root {
+  --nav-width: 280px;
+  --header-height: 56px;
+}
+
+.doc-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.doc-sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: var(--nav-width);
+  height: 100vh;
+  overflow-y: auto;
+  background: var(--bg-secondary);
+  border-right: 1px solid var(--border);
+  padding: 1rem 0;
+}
+
+.doc-sidebar nav {
+  padding: 0 1rem;
+}
+
+.doc-sidebar h3 {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin: 1rem 0 0.5rem;
+  padding: 0;
+  border: none;
+}
+
+.doc-sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.doc-sidebar li {
+  margin: 0.15rem 0;
+}
+
+.doc-sidebar a {
+  display: block;
+  padding: 0.4rem 0.6rem;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+.doc-sidebar a:hover {
+  background: rgba(56, 189, 248, 0.1);
+}
+
+.doc-sidebar .sub-nav {
+  padding-left: 0.75rem;
+  font-size: 0.85rem;
+}
+
+.doc-content {
+  margin-left: var(--nav-width);
+  flex: 1;
+  padding: 2rem 3rem 4rem;
+  max-width: 900px;
+}
+
+.doc-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--bg-primary);
+  border-bottom: 1px solid var(--border);
+  padding: 1rem 0;
+  margin: -2rem -3rem 2rem -3rem;
+  padding: 1rem 3rem;
+}
+
+.doc-header a {
+  margin-right: 1.5rem;
+  font-size: 0.9rem;
+}
+
+.func-signature {
+  font-family: 'Consolas', monospace;
+  background: var(--bg-code);
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+  margin: 0.5rem 0;
+  font-size: 0.9rem;
+  border-left: 3px solid var(--accent);
+}
+
+.func-params {
+  margin: 1rem 0;
+}
+
+.func-params table {
+  font-size: 0.9rem;
+}
+
+.section-anchor {
+  scroll-margin-top: 2rem;
+}
+
+.file-path {
+  font-family: monospace;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+}
+
+@media (max-width: 1024px) {
+  .doc-sidebar {
+    width: 220px;
+  }
+  .doc-content {
+    margin-left: 220px;
+  }
+}
+
+@media (max-width: 768px) {
+  .doc-layout {
+    flex-direction: column;
+  }
+  .doc-sidebar {
+    position: relative;
+    width: 100%;
+    height: auto;
+    max-height: 200px;
+  }
+  .doc-content {
+    margin-left: 0;
+  }
+}

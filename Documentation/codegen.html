@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Code Generation — EDAM Studio</title>
+  <link rel="stylesheet" href="doc-style.css">
+  <link rel="stylesheet" href="doc-nav.css">
+</head>
+<body>
+  <div class="doc-layout">
+    <aside class="doc-sidebar">
+      <nav>
+        <h3>Code Generation</h3>
+        <ul>
+          <li><a href="index.html">← Home</a></li>
+          <li><a href="#process">CodeGenerationProcess</a></li>
+          <li><a href="#base-gen">BaseCodeGenerator</a></li>
+          <li><a href="#ocaml-gen">OCamlCodeGenerator</a></li>
+          <li><a href="#contract-gen">ContractCodeGenerator</a></li>
+          <li><a href="#solidity-gen">SolidityGenerator</a></li>
+          <li><a href="#test-gen">TestGenerator</a></li>
+        </ul>
+      </nav>
+    </aside>
+    <main class="doc-content">
+      <div class="doc-header">
+        <a href="index.html">Home</a>
+        <a href="api.html">API</a>
+        <a href="codegen.html">Code Gen</a>
+        <a href="api-deep.html">Deep Dive</a>
+        <a href="frontend.html">Frontend</a>
+        <a href="ocaml.html">OCaml</a>
+      </div>
+
+      <h1>Code Generation</h1>
+      <p>Python pipeline: EDAM → OCaml → Python EDAM → Solidity → Tests → ZIP.</p>
+
+      <h2 id="process" class="section-anchor">CodeGenerationProcess</h2>
+      <p class="file-path">Studio/API/code_generation/process.py</p>
+      <p>Main orchestrator. Holds ocaml_generator and contract_generator.</p>
+
+      <h3>__init__</h3>
+      <div class="func-signature">def __init__(self, base_dir, temp_dir, output_dir, upload_dir)</div>
+      <table>
+        <thead><tr><th>Parameter</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td>base_dir</td><td>API directory path</td></tr>
+          <tr><td>temp_dir</td><td>Temporary output directory</td></tr>
+          <tr><td>output_dir</td><td>Output directory for generated code</td></tr>
+          <tr><td>upload_dir</td><td>Directory for ZIP uploads (Generated-code)</td></tr>
+        </tbody>
+      </table>
+
+      <h3>_process_models</h3>
+      <div class="func-signature">def _process_models(self, data, server_settings, with_response) → tuple</div>
+      <p>For each EDAM: (1) ocaml_generator.generate_code → Python EDAM string, (2) contract_generator.generate_code → .sol, (3) contract_generator.generate_test_code → run cmd_run.sh, (4) create_zip_file.</p>
+      <table>
+        <thead><tr><th>Parameter</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td>data</td><td>List of EDAM dicts (name, edamCode)</td></tr>
+          <tr><td>server_settings</td><td>Config: number_symbolic_traces, probability_new_participant, etc.</td></tr>
+          <tr><td>with_response</td><td>Unused in _process_models</td></tr>
+        </tbody>
+      </table>
+
+      <h2 id="base-gen" class="section-anchor">BaseCodeGenerator</h2>
+      <p class="file-path">Studio/API/code_generation/base_generator.py</p>
+      <p>Abstract base for directory creation, file copying, ZIP creation.</p>
+
+      <h3>create_directories</h3>
+      <div class="func-signature">def create_directories(self, uid: str) → Dict[str, str]</div>
+      <table>
+        <thead><tr><th>Parameter</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td>uid</td><td>Unique ID for this generation run</td></tr>
+        </tbody>
+      </table>
+      <p><strong>Returns:</strong> dirs with keys: local_temp, rep, contracts, test, migrations, src, sources, builds, uid.</p>
+
+      <h3>copy_base_files</h3>
+      <div class="func-signature">def copy_base_files(self, dirs, model="")</div>
+      <p>Copies package.json, hardhat.config.js, Move.toml, run script, and list_of_files (.ml) to output.</p>
+
+      <h3>create_zip_file</h3>
+      <div class="func-signature">def create_zip_file(self, dirs, edam_name, server_settings, diff_time) → str</div>
+      <table>
+        <thead><tr><th>Parameter</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td>dirs</td><td>Directory map from create_directories</td></tr>
+          <tr><td>edam_name</td><td>EDAM name for filename</td></tr>
+          <tr><td>server_settings</td><td>Used for number_real_traces, probability_new_participant, add_pi_to_test</td></tr>
+          <tr><td>diff_time</td><td>Elapsed time (ns) for filename</td></tr>
+        </tbody>
+      </table>
+      <p><strong>Returns:</strong> ZIP filename (stored in upload_dir).</p>
+
+      <h2 id="ocaml-gen" class="section-anchor">OCamlCodeGenerator</h2>
+      <p class="file-path">Studio/API/code_generation/ocaml/generator.py</p>
+
+      <h3>generate_code</h3>
+      <div class="func-signature">def generate_code(self, edam_instance, server_settings) → Dict</div>
+      <p><strong>Purpose:</strong> Run OCaml to convert EDAM to Python EDAM string.</p>
+      <table>
+        <thead><tr><th>Parameter</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td>edam_instance</td><td>Dict with name, edamCode (OCaml EDAM definition)</td></tr>
+          <tr><td>server_settings</td><td>Unused in generate_code</td></tr>
+        </tbody>
+      </table>
+      <p><strong>Process:</strong> Writes ocaml_base_code.ml + edam code to temp .ml file, runs <code>ocaml &lt;file&gt;.ml</code>, reads stdout as Python EDAM.</p>
+      <p><strong>Returns:</strong> {ocaml_result, dirs, uid}.</p>
+
+      <h3>generate_test_code</h3>
+      <div class="func-signature">def generate_test_code(self, edam_instance, server_settings) → Dict</div>
+      <p><strong>Purpose:</strong> Generate OCaml test file and cmd_run.sh. Replaces placeholders in ocaml_test_code.ml with EDAM code and server_settings.</p>
+      <p><strong>Returns:</strong> {dirs, uid, name, test_files: {full_trace_test, cmd_run}}.</p>
+
+      <h2 id="contract-gen" class="section-anchor">ContractCodeGenerator</h2>
+      <p class="file-path">Studio/API/code_generation/contracts/generator.py</p>
+
+      <h3>generate_code</h3>
+      <div class="func-signature">def generate_code(self, edam_instance: EDAM, server_settings) → Dict</div>
+      <p><strong>Purpose:</strong> Generate Solidity contract from Python EDAM (eval of ocaml_result).</p>
+      <table>
+        <thead><tr><th>Parameter</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td>edam_instance</td><td>EDAM object (from eval of Python EDAM string)</td></tr>
+          <tr><td>server_settings</td><td>Config dict</td></tr>
+        </tbody>
+      </table>
+      <p><strong>Returns:</strong> {sol_data: {fileContent, image_uri, empty_role_check, empty_role_check_issues}}.</p>
+
+      <h3>generate_test_code</h3>
+      <div class="func-signature">def generate_test_code(self, edam_instance, server_settings) → Dict</div>
+      <p><strong>Purpose:</strong> Call OCamlCodeGenerator.generate_test_code, copy base files, run cmd_run.sh, parse output into test .js, migration .js, symbolic_test .txt.</p>
+      <p><strong>Returns:</strong> {dirs, test_files: {test, symbolic_test, migration}}.</p>
+
+      <h3>_run_test_generation</h3>
+      <div class="func-signature">def _run_test_generation(self, dirs, file_path, server_settings) → List[str]</div>
+      <p>Runs <code>bash file_path</code> (cmd_run.sh), splits stdout by "________" into [symbolic, test_js, migration_js].</p>
+
+      <h2 id="solidity-gen" class="section-anchor">SolidityGenerator</h2>
+      <p class="file-path">Studio/API/code_generators/solidity/generator.py</p>
+      <p>Generates Solidity from EDAM. Uses type_mapper, role_handler, expression_parser, transition_processor, constructor_builder, contract_assembler.</p>
+
+      <h3>__init__</h3>
+      <div class="func-signature">def __init__(self, edam, type_mapper=..., role_handler=..., expression_parser=...)</div>
+      <table>
+        <thead><tr><th>Parameter</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td>edam</td><td>EDAM instance</td></tr>
+          <tr><td>type_mapper</td><td>Class for EDAM type → Solidity type</td></tr>
+          <tr><td>role_handler</td><td>Class for role parsing and updates</td></tr>
+          <tr><td>expression_parser</td><td>Class for expression → Solidity code</td></tr>
+        </tbody>
+      </table>
+
+      <h3>parse_tree</h3>
+      <div class="func-signature">def parse_tree(self, exp, caller="msg.sender", contract_name="address(this)") → Tuple[str, List[str]]</div>
+      <p>Parse expression to Solidity code and list of external calls.</p>
+
+      <h3>type_mapping</h3>
+      <div class="func-signature">def type_mapping(self, dvar_type, var_name, is_param=False) → Tuple[str, Dict]</div>
+      <p>Map EDAM variable type to Solidity declaration.</p>
+
+      <h3>process_deploy_transition</h3>
+      <div class="func-signature">def process_deploy_transition(self, transition, contract_name, contract_data_types=None) → Tuple[str, str]</div>
+      <p>Generate constructor code and imports from start transition.</p>
+
+      <h3>process_multiple_transitions</h3>
+      <div class="func-signature">def process_multiple_transitions(self, edam, contract_name) → str</div>
+      <p>Generate full Solidity contract: constructor, functions, state enum, role enum, math helpers.</p>
+
+      <h3>generate_contract_data</h3>
+      <p class="file-path">Studio/API/code_generators/base_generator.py</p>
+      <div class="func-signature">def generate_contract_data(self, edam_instance: EDAM) → str</div>
+      <p>Returns JSON with fileContent (Solidity), image_uri, empty_role_check, empty_role_check_issues. Calls process_multiple_transitions.</p>
+
+      <h2 id="test-gen" class="section-anchor">TestGenerator</h2>
+      <p class="file-path">Studio/API/code_generation/tests/generator.py</p>
+
+      <h3>generate_edam_test_code</h3>
+      <div class="func-signature">def generate_edam_test_code(self, edam_data: List[Dict]) → Tuple[str, str]</div>
+      <table>
+        <thead><tr><th>Parameter</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td>edam_data</td><td>List of {edamCode, name}</td></tr>
+        </tbody>
+      </table>
+      <p><strong>Returns:</strong> (OCaml code string for configurations + EDAMs + dependencies_map, edam_name).</p>
+      <p>Uses EDAM_TEMPLATE, CONFIGURATIONS_TEMPLATE, DEPENDENCIES_MAP_TEMPLATE, DEPENDENCY_ENTRY_TEMPLATE.</p>
+    </main>
+  </div>
+</body>
+</html>

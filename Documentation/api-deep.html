@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>API & Code Generation Deep Dive — EDAM Studio</title>
+  <link rel="stylesheet" href="doc-style.css">
+  <link rel="stylesheet" href="doc-nav.css">
+</head>
+<body>
+  <div class="doc-layout">
+    <aside class="doc-sidebar">
+      <nav>
+        <h3>Deep Dive</h3>
+        <ul>
+          <li><a href="index.html">← Home</a></li>
+          <li><a href="#api">API Details</a></li>
+          <li><a href="#edam-to-solidity">EDAM → Solidity</a></li>
+          <li><a href="#transitions">Transitions</a></li>
+          <li><a href="#parser">Parser & Expression</a></li>
+          <li><a href="#synthesis">Code Synthesis</a></li>
+          <li><a href="#add-language">Add New Language</a></li>
+          <li><a href="#test-gen">Test Generation</a></li>
+          <li><a href="#zip">ZIP Contents</a></li>
+        </ul>
+      </nav>
+    </aside>
+    <main class="doc-content">
+      <div class="doc-header">
+        <a href="index.html">Home</a>
+        <a href="api.html">API</a>
+        <a href="codegen.html">Code Gen</a>
+        <a href="api-deep.html">Deep Dive</a>
+        <a href="ocaml.html">OCaml</a>
+      </div>
+
+      <h1>API & Code Generation — Deep Dive</h1>
+      <p>EDAM → Solidity conversion, transitions, parsers, code synthesis, adding languages, test generation, ZIP output.</p>
+
+      <h2 id="api" class="section-anchor">API in Detail</h2>
+
+      <h3>Request/Response Flow</h3>
+      <pre><code>POST /api/convert-bulk
+Body: {
+  "models": [{ "name": "MyContract", "edamCode": "..." }],
+  "server_settings": {
+    "number_symbolic_traces": 200,
+    "number_transition_per_trace": 10,
+    "number_real_traces": 5,
+    "probability_new_participant": 0.35,
+    "probability_right_participant": 0.7,
+    "z3_check_enabled": true,
+    "add_pi_to_test": false,
+    "add_test_of_state": true,
+    "add_test_of_variables": true,
+    ...
+  },
+  "generation_mode": 1 | 2 | 3 | 4,
+  "target_language": "solidity"
+}
+
+Response: {
+  "zip_url": "ContractName_1000_0.35_no_pi_&lt;uuid&gt;_&lt;ns&gt;.zip",
+  "images": [],
+  "list_contents": ["// SPDX-License...", ...],
+  "list_empty_role_check": [["ContractName", ""]],
+  "list_empty_role_check_issues": [["ContractName", ""]]
+}</code></pre>
+
+      <h3>Other Endpoints</h3>
+      <ul>
+        <li><strong>POST /api/execute-edam-trace</strong> — Execute trace on models. Body: <code>{models, trace_text}</code>. Returns trace execution result.</li>
+        <li><strong>GET /api/download-file/&lt;filename&gt;/</strong> — Download generated ZIP.</li>
+        <li><strong>GET /api/run-test-file/&lt;filename&gt;/</strong> — Unzip (if needed), npm install, npx hardhat test. Returns test output.</li>
+      </ul>
+
+      <h2 id="edam-to-solidity" class="section-anchor">How EDAM is Converted to Solidity</h2>
+
+      <h3>Pipeline Overview</h3>
+      <pre><code>1. EDAM Input (JSON/TSX)
+   └─► modelGenerator.ts (generateEDAM) → OCaml EDAM string
+
+2. OCaml Execution
+   └─► ocaml_base_code.ml + edamCode → ocaml &lt;file&gt;.ml
+   └─► stdout = Python EDAM(...) + Transition(...) syntax
+
+3. Python EDAM Parsing
+   └─► eval(ocaml_result) → EDAM object, Transition objects
+
+4. Solidity Generation
+   └─► SolidityGenerator(edam)
+   └─► process_multiple_transitions() → full .sol
+   └─► Uses: type_mapper, role_handler, expression_parser,
+       transition_processor, constructor_builder, contract_assembler</code></pre>
+
+      <h3>EDAM Model Sources</h3>
+      <table>
+        <thead><tr><th>Source</th><th>Format</th><th>Converter</th></tr></thead>
+        <tbody>
+          <tr><td>GUI (React)</td><td>EDAMModel (JSON)</td><td>generateEDAM from modelGenerator.ts</td></tr>
+          <tr><td>CLI (predefined)</td><td>Model name (e.g. "assettransfer")</td><td>Models.js → generateEDAM</td></tr>
+          <tr><td>CLI (.edam file)</td><td>Text EDAM</td><td>edam_file_parser.js → JSON → generateEDAM</td></tr>
+        </tbody>
+      </table>
+
+      <h3>EDAM → Python EDAM (OCaml)</h3>
+      <p><code>ocaml_base_code.ml</code> defines <code>generate_python_edam(edam)</code> which outputs Python syntax:</p>
+      <pre><code>EDAM(name="...", states=[...], transitions=[...], ...)
+Transition(source_state="...", guard=..., roles=..., ...)</code></pre>
+      <p>This is <code>eval()</code>'d in Python to produce <code>EDAM</code> and <code>Transition</code> objects from <code>objects/</code>.</p>
+
+      <h2 id="transitions" class="section-anchor">Transitions</h2>
+
+      <h3>Transition Structure (Python)</h3>
+      <p class="file-path">Studio/API/objects/TransitionClass.py</p>
+      <table>
+        <thead><tr><th>Field</th><th>Type</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td>source_state</td><td>str</td><td>From state (e.g. "q1", "_" for start)</td></tr>
+          <tr><td>target_state</td><td>str</td><td>To state</td></tr>
+          <tr><td>guard</td><td>Exp</td><td>Guard condition (And, Equal, GreaterThan, etc.)</td></tr>
+          <tr><td>external_calls</td><td>list</td><td>FuncCallEdamWrite list (calls to other EDAMs)</td></tr>
+          <tr><td>roles</td><td>dict</td><td>Participant → role → mode (Top/Bottom/Unknown)</td></tr>
+          <tr><td>participants</td><td>list</td><td>Participant vars (e.g. ["user", "recipient"])</td></tr>
+          <tr><td>initiator</td><td>str</td><td>Caller (e.g. "owner")</td></tr>
+          <tr><td>operation</td><td>str</td><td>Operation name (e.g. "transfer", "start")</td></tr>
+          <tr><td>parameters</td><td>list</td><td>[(type, Dvar), ...]</td></tr>
+          <tr><td>assignments</td><td>list</td><td>[(Dvar, Exp), ...]</td></tr>
+          <tr><td>role_updates</td><td>dict</td><td>Participant → role → mode after transition</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Transition Processing</h3>
+      <p class="file-path">Studio/API/code_generators/solidity/transition_processor.py</p>
+      <ol>
+        <li><strong>Filter</strong> — Exclude deploy/start transitions.</li>
+        <li><strong>Group by operation</strong> — e.g. all "transfer" transitions.</li>
+        <li><strong>Group by (source_state, guard, roles)</strong> — Same state + guard + roles → one if-block.</li>
+        <li><strong>Build if statement</strong> — <code>_state == State.X && guard && role_checks</code>.</li>
+        <li><strong>Try-catch for external calls</strong> — FuncCallEdamWrite wrapped in try/catch.</li>
+      </ol>
+
+      <h2 id="parser" class="section-anchor">Parser & Expression Handling</h2>
+
+      <h3>Expression Types (objects/Expressions.py)</h3>
+      <table>
+        <thead><tr><th>Class</th><th>Fields</th><th>Solidity Output</th></tr></thead>
+        <tbody>
+          <tr><td>And, Or, Not</td><td>left, right / operand</td><td>&&, ||, !</td></tr>
+          <tr><td>Equal, NotEqual</td><td>left, right</td><td>==, !=</td></tr>
+          <tr><td>GreaterThan, LessThan, etc.</td><td>left, right</td><td>&gt;, &lt;, &gt;=, &lt;=</td></tr>
+          <tr><td>Plus, Minus, Times, Divide</td><td>left, right</td><td>+, -, *, /</td></tr>
+          <tr><td>Val</td><td>value</td><td>Literal</td></tr>
+          <tr><td>Dvar</td><td>var_name</td><td>Variable name</td></tr>
+          <tr><td>PtID</td><td>ptp</td><td>msg.sender or address(this)</td></tr>
+          <tr><td>MapIndex</td><td>map_var, key, default</td><td>map[key]</td></tr>
+          <tr><td>FuncCall</td><td>operation, arguments</td><td>update_map, min, max, get_amount_out, etc.</td></tr>
+          <tr><td>FuncCallEdamRead</td><td>contract, expression</td><td>External contract read</td></tr>
+          <tr><td>FuncCallEdamWrite</td><td>contract, operation, ptp_params, data_params</td><td>External contract call</td></tr>
+        </tbody>
+      </table>
+
+      <h3>SolidityExpressionParser</h3>
+      <p class="file-path">Studio/API/code_generators/solidity/expression_parser.py</p>
+      <div class="func-signature">parse_tree(exp, caller, contract_name, external_calls) → (guard_conditions, external_calls)</div>
+      <p>Recursively converts Exp to Solidity. For FuncCallEdamWrite, returns empty string and appends to external_calls. For FuncCall, handles update_map, min, max, get_amount_out, etc.</p>
+
+      <h3>SolidityTypeMapper</h3>
+      <p class="file-path">Studio/API/code_generators/solidity/type_mapper.py</p>
+      <table>
+        <thead><tr><th>EDAM Type</th><th>Solidity</th></tr></thead>
+        <tbody>
+          <tr><td>int, uint</td><td>uint</td></tr>
+          <tr><td>bool</td><td>bool</td></tr>
+          <tr><td>address, user, contract</td><td>address</td></tr>
+          <tr><td>string</td><td>string memory</td></tr>
+          <tr><td>list_int</td><td>uint[]</td></tr>
+          <tr><td>map_address_int</td><td>mapping(address => uint)</td></tr>
+          <tr><td>map_map_address_address_int</td><td>mapping(address => mapping(address => uint))</td></tr>
+        </tbody>
+      </table>
+
+      <h3>SolidityRoleHandler</h3>
+      <p class="file-path">Studio/API/code_generators/solidity/role_handler.py</p>
+      <p><code>parse_roles(rho, caller, contract)</code> → <code>require(_permissions[caller][role])</code>. <code>parse_roles_update(rho_prime, ...)</code> → role assignment code.</p>
+
+      <h2 id="synthesis" class="section-anchor">Code Synthesis</h2>
+
+      <h3>Contract Assembly</h3>
+      <p class="file-path">Studio/API/code_generators/solidity/contract_assembler.py</p>
+      <ol>
+        <li><strong>generate_state_enum</strong> — <code>enum State { q1, q2, ... }</code></li>
+        <li><strong>generate_role_enum</strong> — <code>enum Roles { O, R, ... }</code></li>
+        <li><strong>generate_function_code</strong> — One function per operation; bodies = if-else chain from transition_processor</li>
+        <li><strong>assemble_contract</strong> — Pragma, imports, contract, state vars, constructor, functions, math helpers</li>
+      </ol>
+
+      <h3>Constructor Builder</h3>
+      <p class="file-path">Studio/API/code_generators/solidity/constructor_builder.py</p>
+      <p>Processes <code>start</code> transitions: guard, role checks, assignments, external calls (try-catch), state change.</p>
+
+      <h3>Try-Catch for External Calls</h3>
+      <p class="file-path">Studio/API/code_generators/solidity/try_catch_builder.py</p>
+      <p>Wraps FuncCallEdamWrite in try/catch. On success: assignments, role updates, state change. On failure: revert.</p>
+
+      <h2 id="add-language" class="section-anchor">How to Add a New Language (e.g. Move)</h2>
+
+      <h3>1. Create Generator Package</h3>
+      <pre><code>Studio/API/code_generators/
+├── base_generator.py      # Abstract base (already exists)
+├── solidity/
+│   └── ...
+└── move/                  # NEW
+    ├── generator.py       # MoveGenerator(BaseCodeGenerator)
+    ├── type_mapper.py     # EDAM type → Move type
+    ├── expression_parser.py
+    ├── role_handler.py
+    └── templates.py</code></pre>
+
+      <h3>2. Implement BaseCodeGenerator Interface</h3>
+      <p>Your generator must implement:</p>
+      <ul>
+        <li><code>parse_tree(exp, caller, contract_name)</code> → (code, external_calls)</li>
+        <li><code>type_mapping(dvar_type, var_name, is_param)</code> → (declaration, extra)</li>
+        <li><code>parse_roles(rho, caller, contract)</code> → role check code</li>
+        <li><code>parse_roles_update(rho_prime, caller, contract)</code> → role update code</li>
+        <li><code>generate_assignments(assignment, caller, contract)</code> → assignment code</li>
+        <li><code>process_deploy_transition(transition, contract_name)</code> → (init code, imports)</li>
+        <li><code>process_multiple_transitions(edam, contract_name)</code> → full module code</li>
+        <li><code>function_snippets</code> → dict of built-in functions</li>
+      </ul>
+
+      <h3>3. Platform-Specific Expressions</h3>
+      <p>In <code>objects/Expressions.py</code>, <code>PtID.getID(caller, contract_name, plateform)</code> already supports:</p>
+      <ul>
+        <li><code>plateform="solidity"</code> → msg.sender, address(this)</li>
+        <li><code>plateform="move"</code> → _signerAddress, address(this)</li>
+      </ul>
+      <p>Pass <code>plateform</code> through your expression parser.</p>
+
+      <h3>4. Wire Into ContractCodeGenerator</h3>
+      <p>In <code>code_generation/contracts/generator.py</code>, add branch for <code>target_language</code>:</p>
+      <pre><code>if target_language == "solidity":
+    from code_generators.solidity.generator import SolidityGenerator
+    generator = SolidityGenerator(edam_instance)
+elif target_language == "move":
+    from code_generators.move.generator import MoveGenerator
+    generator = MoveGenerator(edam_instance)</code></pre>
+
+      <h3>5. Base Files</h3>
+      <p><code>base_generator.copy_base_files()</code> copies Move.toml (already present). Add Move-specific base files (e.g. module template) if needed.</p>
+
+      <h2 id="test-gen" class="section-anchor">Test Generation</h2>
+
+      <h3>Flow</h3>
+      <pre><code>1. TestGenerator.generate_edam_test_code(models)
+   → OCaml: configurations, EDAM instances, dependencies_map
+
+2. ocaml_test_code.ml template
+   → Replace {edams_code_here}, {number_symbolic_traces}, etc.
+
+3. cmd_run.sh compiles and runs:
+   ocamlfind ocamlopt ... types.ml printer.ml helper.ml z3_module.ml
+   core_functions.ml test_generation.ml {file}.ml -o generate_test{file}
+   ./generate_test{file}
+
+4. OCaml generates:
+   - Symbolic traces (random transition sequences)
+   - Real traces (Z3 or random values, evaluate_trace)
+   - Hardhat/Chai test JS (generate_hardhat_tests)
+
+5. stdout split by "________" → [symbolic_txt, test_js, migration_js]</code></pre>
+
+      <h3>Test Output Structure</h3>
+      <ul>
+        <li><strong>symbolic_test.txt</strong> — Symbolic traces (for debugging)</li>
+        <li><strong>{name}_test.js</strong> — Hardhat/Chai tests: deploy, call operations, expect success/failure</li>
+        <li><strong>1_{name}_migration.js</strong> — Deployment script</li>
+      </ul>
+
+      <h2 id="zip" class="section-anchor">ZIP Contents</h2>
+
+      <p>The generated ZIP contains:</p>
+      <pre><code>Generated-code/
+└── &lt;ModelName&gt;_&lt;n_traces&gt;_&lt;prob&gt;_&lt;pi|no_pi&gt;_&lt;uuid&gt;_&lt;time&gt;.zip
+    ├── contracts/
+    │   └── &lt;ModelName&gt;.sol          # Solidity contract
+    ├── test/
+    │   ├── &lt;ModelName&gt;_test.js       # Hardhat/Chai tests
+    │   └── &lt;ModelName&gt;_symbolic_test.txt
+    ├── migrations/
+    │   └── 1_&lt;ModelName&gt;_migration.js
+    ├── hardhat.config.js
+    ├── package.json
+    ├── Move.toml                      # Move config (placeholder)
+    └── run                            # Executable: npm install && npm run test</code></pre>
+
+      <h3>ZIP Filename</h3>
+      <p><code>{edam_name}_{n_real*n_symbolic}_{probability_new_participant}_{pi|no_pi}_{uuid}_{diff_time_ns}.zip</code></p>
+    </main>
+  </div>
+</body>
+</html>

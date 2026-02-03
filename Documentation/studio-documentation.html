@@ -1,0 +1,1947 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="author" content="Auto-generated documentation" />
+  <title>EDAM Studio Documentation</title>
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { color: #008000; } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { color: #008000; font-weight: bold; } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="doc-style.css" />
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">EDAM Studio Documentation</h1>
+<p class="author">Auto-generated documentation</p>
+<p class="date">EDAM Studio Project</p>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#edam-studio-full-documentation"
+id="toc-edam-studio-full-documentation"><span
+class="toc-section-number">1</span> EDAM Studio — Full Documentation</a>
+<ul>
+<li><a href="#table-of-contents" id="toc-table-of-contents"><span
+class="toc-section-number">1.1</span> Table of Contents</a></li>
+<li><a href="#overview" id="toc-overview"><span
+class="toc-section-number">1.2</span> Overview</a></li>
+<li><a href="#features" id="toc-features"><span
+class="toc-section-number">1.3</span> Features</a></li>
+<li><a href="#prerequisites" id="toc-prerequisites"><span
+class="toc-section-number">1.4</span> Prerequisites</a>
+<ul>
+<li><a href="#platform-specific-notes"
+id="toc-platform-specific-notes"><span
+class="toc-section-number">1.4.1</span> Platform-Specific Notes</a></li>
+</ul></li>
+<li><a href="#installation" id="toc-installation"><span
+class="toc-section-number">1.5</span> Installation</a>
+<ul>
+<li><a href="#automated-installation"
+id="toc-automated-installation"><span
+class="toc-section-number">1.5.1</span> Automated Installation</a></li>
+<li><a href="#what-the-installation-script-does"
+id="toc-what-the-installation-script-does"><span
+class="toc-section-number">1.5.2</span> What the Installation Script
+Does</a></li>
+<li><a href="#manual-installation" id="toc-manual-installation"><span
+class="toc-section-number">1.5.3</span> Manual Installation</a></li>
+</ul></li>
+<li><a href="#quick-start" id="toc-quick-start"><span
+class="toc-section-number">1.6</span> Quick Start</a>
+<ul>
+<li><a href="#generate-code-via-cli"
+id="toc-generate-code-via-cli"><span
+class="toc-section-number">1.6.1</span> Generate Code via CLI</a></li>
+<li><a href="#use-the-gui" id="toc-use-the-gui"><span
+class="toc-section-number">1.6.2</span> Use the GUI</a></li>
+</ul></li>
+<li><a href="#usage" id="toc-usage"><span
+class="toc-section-number">1.7</span> Usage</a>
+<ul>
+<li><a href="#gui-workflow" id="toc-gui-workflow"><span
+class="toc-section-number">1.7.1</span> GUI Workflow</a></li>
+<li><a href="#cli-workflow" id="toc-cli-workflow"><span
+class="toc-section-number">1.7.2</span> CLI Workflow</a></li>
+</ul></li>
+<li><a href="#api-reference" id="toc-api-reference"><span
+class="toc-section-number">1.8</span> API Reference</a>
+<ul>
+<li><a href="#base-url" id="toc-base-url"><span
+class="toc-section-number">1.8.1</span> Base URL</a></li>
+<li><a href="#endpoints" id="toc-endpoints"><span
+class="toc-section-number">1.8.2</span> Endpoints</a></li>
+<li><a href="#example-api-request" id="toc-example-api-request"><span
+class="toc-section-number">1.8.3</span> Example API Request</a></li>
+</ul></li>
+<li><a href="#cli-reference" id="toc-cli-reference"><span
+class="toc-section-number">1.9</span> CLI Reference</a>
+<ul>
+<li><a href="#command-structure" id="toc-command-structure"><span
+class="toc-section-number">1.9.1</span> Command Structure</a></li>
+<li><a href="#positional-arguments" id="toc-positional-arguments"><span
+class="toc-section-number">1.9.2</span> Positional Arguments</a></li>
+<li><a href="#required-options" id="toc-required-options"><span
+class="toc-section-number">1.9.3</span> Required Options</a></li>
+<li><a href="#configuration-options"
+id="toc-configuration-options"><span
+class="toc-section-number">1.9.4</span> Configuration Options</a></li>
+<li><a href="#examples" id="toc-examples"><span
+class="toc-section-number">1.9.5</span> Examples</a></li>
+</ul></li>
+<li><a href="#gui-components" id="toc-gui-components"><span
+class="toc-section-number">1.10</span> GUI Components</a>
+<ul>
+<li><a href="#component-structure" id="toc-component-structure"><span
+class="toc-section-number">1.10.1</span> Component Structure</a></li>
+<li><a href="#key-components" id="toc-key-components"><span
+class="toc-section-number">1.10.2</span> Key Components</a></li>
+</ul></li>
+<li><a href="#edam-models" id="toc-edam-models"><span
+class="toc-section-number">1.11</span> EDAM Models</a>
+<ul>
+<li><a href="#model-location" id="toc-model-location"><span
+class="toc-section-number">1.11.1</span> Model Location</a></li>
+<li><a href="#available-models" id="toc-available-models"><span
+class="toc-section-number">1.11.2</span> Available Models</a></li>
+</ul></li>
+<li><a href="#code-generation" id="toc-code-generation"><span
+class="toc-section-number">1.12</span> Code Generation</a>
+<ul>
+<li><a href="#generated-output-location"
+id="toc-generated-output-location"><span
+class="toc-section-number">1.12.1</span> Generated Output
+Location</a></li>
+<li><a href="#generated-structure" id="toc-generated-structure"><span
+class="toc-section-number">1.12.2</span> Generated Structure</a></li>
+<li><a href="#target-languages" id="toc-target-languages"><span
+class="toc-section-number">1.12.3</span> Target Languages</a></li>
+</ul></li>
+<li><a href="#complete-flow-edam-code-test"
+id="toc-complete-flow-edam-code-test"><span
+class="toc-section-number">1.13</span> Complete Flow: EDAM → Code →
+Test</a>
+<ul>
+<li><a href="#flow-diagram" id="toc-flow-diagram"><span
+class="toc-section-number">1.13.1</span> Flow Diagram</a></li>
+<li><a href="#step-by-step-flow" id="toc-step-by-step-flow"><span
+class="toc-section-number">1.13.2</span> Step-by-Step Flow</a></li>
+</ul></li>
+<li><a href="#ocaml-files-reference"
+id="toc-ocaml-files-reference"><span
+class="toc-section-number">1.14</span> OCaml Files Reference</a>
+<ul>
+<li><a href="#file-overview" id="toc-file-overview"><span
+class="toc-section-number">1.14.1</span> File Overview</a></li>
+<li><a href="#types.ml-type-definitions"
+id="toc-types.ml-type-definitions"><span
+class="toc-section-number">1.14.2</span> types.ml — Type
+Definitions</a></li>
+<li><a href="#helper.ml-functions" id="toc-helper.ml-functions"><span
+class="toc-section-number">1.14.3</span> helper.ml — Functions</a></li>
+<li><a href="#printer.ml-functions" id="toc-printer.ml-functions"><span
+class="toc-section-number">1.14.4</span> printer.ml — Functions</a></li>
+<li><a href="#core_functions.ml-functions"
+id="toc-core_functions.ml-functions"><span
+class="toc-section-number">1.14.5</span> core_functions.ml —
+Functions</a></li>
+<li><a href="#z3_module.ml-functions"
+id="toc-z3_module.ml-functions"><span
+class="toc-section-number">1.14.6</span> z3_module.ml —
+Functions</a></li>
+<li><a href="#test_generation.ml-functions"
+id="toc-test_generation.ml-functions"><span
+class="toc-section-number">1.14.7</span> test_generation.ml —
+Functions</a></li>
+<li><a href="#ocaml_base_code.ml-functions"
+id="toc-ocaml_base_code.ml-functions"><span
+class="toc-section-number">1.14.8</span> ocaml_base_code.ml —
+Functions</a></li>
+<li><a href="#ocaml_test_code.ml-template"
+id="toc-ocaml_test_code.ml-template"><span
+class="toc-section-number">1.14.9</span> ocaml_test_code.ml —
+Template</a></li>
+<li><a href="#ocaml_trace_test_run_base_code.ml-template"
+id="toc-ocaml_trace_test_run_base_code.ml-template"><span
+class="toc-section-number">1.14.10</span>
+ocaml_trace_test_run_base_code.ml — Template</a></li>
+</ul></li>
+<li><a href="#scripts-reference" id="toc-scripts-reference"><span
+class="toc-section-number">1.15</span> Scripts Reference</a>
+<ul>
+<li><a href="#studio-scripts" id="toc-studio-scripts"><span
+class="toc-section-number">1.15.1</span> Studio Scripts</a></li>
+<li><a href="#api-base_code-scripts"
+id="toc-api-base_code-scripts"><span
+class="toc-section-number">1.15.2</span> API base_code Scripts</a></li>
+<li><a href="#docker-scripts" id="toc-docker-scripts"><span
+class="toc-section-number">1.15.3</span> Docker Scripts</a></li>
+<li><a href="#resumo-scripts" id="toc-resumo-scripts"><span
+class="toc-section-number">1.15.4</span> ReSuMo Scripts</a></li>
+</ul></li>
+<li><a href="#configuration" id="toc-configuration"><span
+class="toc-section-number">1.16</span> Configuration</a>
+<ul>
+<li><a href="#config.json-structure"
+id="toc-config.json-structure"><span
+class="toc-section-number">1.16.1</span> config.json Structure</a></li>
+<li><a href="#configuration-options-1"
+id="toc-configuration-options-1"><span
+class="toc-section-number">1.16.2</span> Configuration Options</a></li>
+</ul></li>
+<li><a href="#project-structure" id="toc-project-structure"><span
+class="toc-section-number">1.17</span> Project Structure</a></li>
+<li><a href="#docker-deployment" id="toc-docker-deployment"><span
+class="toc-section-number">1.18</span> Docker Deployment</a>
+<ul>
+<li><a href="#quick-start-1" id="toc-quick-start-1"><span
+class="toc-section-number">1.18.1</span> Quick Start</a></li>
+<li><a href="#accessing-services" id="toc-accessing-services"><span
+class="toc-section-number">1.18.2</span> Accessing Services</a></li>
+<li><a href="#cli-in-docker" id="toc-cli-in-docker"><span
+class="toc-section-number">1.18.3</span> CLI in Docker</a></li>
+<li><a href="#pushing-image" id="toc-pushing-image"><span
+class="toc-section-number">1.18.4</span> Pushing Image</a></li>
+</ul></li>
+<li><a href="#troubleshooting" id="toc-troubleshooting"><span
+class="toc-section-number">1.19</span> Troubleshooting</a>
+<ul>
+<li><a href="#virtual-environment-issues"
+id="toc-virtual-environment-issues"><span
+class="toc-section-number">1.19.1</span> Virtual Environment
+Issues</a></li>
+<li><a href="#port-conflicts" id="toc-port-conflicts"><span
+class="toc-section-number">1.19.2</span> Port Conflicts</a></li>
+<li><a href="#opam-not-found" id="toc-opam-not-found"><span
+class="toc-section-number">1.19.3</span> opam Not Found</a></li>
+<li><a href="#missing-dependencies" id="toc-missing-dependencies"><span
+class="toc-section-number">1.19.4</span> Missing Dependencies</a></li>
+<li><a href="#permission-issues-linuxmacos"
+id="toc-permission-issues-linuxmacos"><span
+class="toc-section-number">1.19.5</span> Permission Issues
+(Linux/macOS)</a></li>
+</ul></li>
+<li><a href="#additional-resources" id="toc-additional-resources"><span
+class="toc-section-number">1.20</span> Additional Resources</a></li>
+<li><a href="#license" id="toc-license"><span
+class="toc-section-number">1.21</span> License</a></li>
+</ul></li>
+</ul>
+</nav>
+<hr />
+<h1 data-number="1" id="edam-studio-full-documentation"><span
+class="header-section-number">1</span> EDAM Studio — Full
+Documentation</h1>
+<p>A comprehensive toolchain for generating smart contract code from
+EDAM (Extended Data-Aware Machines) specifications. EDAM Studio provides
+both interactive GUI and command-line interfaces for model editing, code
+generation, and automated test generation.</p>
+<blockquote>
+<p><strong>Navigable documentation:</strong> For iterative, file-by-file
+documentation with functions and parameters, see <a
+href="index.html">index.html</a>.</p>
+</blockquote>
+<hr />
+<h2 data-number="1.1" id="table-of-contents"><span
+class="header-section-number">1.1</span> Table of Contents</h2>
+<ol type="1">
+<li><a href="#overview">Overview</a></li>
+<li><a href="#features">Features</a></li>
+<li><a href="#prerequisites">Prerequisites</a></li>
+<li><a href="#installation">Installation</a></li>
+<li><a href="#quick-start">Quick Start</a></li>
+<li><a href="#usage">Usage</a></li>
+<li><a href="#api-reference">API Reference</a></li>
+<li><a href="#cli-reference">CLI Reference</a></li>
+<li><a href="#gui-components">GUI Components</a></li>
+<li><a href="#edam-models">EDAM Models</a></li>
+<li><a href="#code-generation">Code Generation</a></li>
+<li><a href="#complete-flow-edam--code--test">Complete Flow: EDAM → Code
+→ Test</a></li>
+<li><a href="#ocaml-files-reference">OCaml Files Reference</a></li>
+<li><a href="#scripts-reference">Scripts Reference</a></li>
+<li><a href="#configuration">Configuration</a></li>
+<li><a href="#project-structure">Project Structure</a></li>
+<li><a href="#docker-deployment">Docker Deployment</a></li>
+<li><a href="#troubleshooting">Troubleshooting</a></li>
+<li><a href="#additional-resources">Additional Resources</a></li>
+</ol>
+<hr />
+<h2 data-number="1.2" id="overview"><span
+class="header-section-number">1.2</span> Overview</h2>
+<p>EDAM Studio is a multi-component system that transforms formal EDAM
+specifications into production-ready Solidity smart contracts. The
+system comprises:</p>
+<ul>
+<li><strong>API</strong> — Django backend providing REST endpoints for
+code generation</li>
+<li><strong>GUI</strong> — React/Vite frontend with visual and
+text-based model editors</li>
+<li><strong>CLI</strong> — Command-line interface for batch processing
+and automation</li>
+<li><strong>ReSuMo</strong> — Symbolic execution engine for test
+generation</li>
+<li><strong>edams-models</strong> — Library of predefined EDAM model
+templates</li>
+</ul>
+<hr />
+<h2 data-number="1.3" id="features"><span
+class="header-section-number">1.3</span> Features</h2>
+<ul>
+<li><strong>Visual Model Editor</strong>: Interactive graph-based editor
+for creating and editing EDAM models</li>
+<li><strong>Text-Based Editor</strong>: Direct EDAM specification
+editing with syntax support</li>
+<li><strong>Multi-Model Support</strong>: Process single or multiple
+EDAM models in batch</li>
+<li><strong>Smart Contract Generation</strong>: Generate
+production-ready Solidity smart contracts</li>
+<li><strong>Automated Test Generation</strong>: Symbolic execution-based
+test case generation</li>
+<li><strong>Multiple Workflows</strong>: GUI, CLI, and API interfaces
+for different use cases</li>
+<li><strong>Predefined Models</strong>: Library of example EDAM models
+for common smart contract patterns</li>
+</ul>
+<hr />
+<h2 data-number="1.4" id="prerequisites"><span
+class="header-section-number">1.4</span> Prerequisites</h2>
+<p>Before installing EDAM Studio, ensure you have the following
+installed:</p>
+<table>
+<thead>
+<tr>
+<th>Requirement</th>
+<th>Version</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Python</td>
+<td>3.10+ with pip</td>
+</tr>
+<tr>
+<td>Node.js</td>
+<td>v16 or higher</td>
+</tr>
+<tr>
+<td>npm</td>
+<td>(bundled with Node.js)</td>
+</tr>
+<tr>
+<td>OCaml</td>
+<td>with opam (package manager)</td>
+</tr>
+<tr>
+<td>Z3 solver</td>
+<td>installed via opam</td>
+</tr>
+</tbody>
+</table>
+<h3 data-number="1.4.1" id="platform-specific-notes"><span
+class="header-section-number">1.4.1</span> Platform-Specific Notes</h3>
+<ul>
+<li><strong>Linux/macOS</strong>: Full support for all features</li>
+<li><strong>Windows</strong>: opam may require WSL (Windows Subsystem
+for Linux) or Cygwin</li>
+</ul>
+<hr />
+<h2 data-number="1.5" id="installation"><span
+class="header-section-number">1.5</span> Installation</h2>
+<h3 data-number="1.5.1" id="automated-installation"><span
+class="header-section-number">1.5.1</span> Automated Installation</h3>
+<h4 data-number="1.5.1.1" id="linuxmacos"><span
+class="header-section-number">1.5.1.1</span> Linux/macOS</h4>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">chmod</span> +x Studio/install.sh</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> Studio</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="ex">./install.sh</span></span></code></pre></div>
+<h4 data-number="1.5.1.2" id="windows"><span
+class="header-section-number">1.5.1.2</span> Windows</h4>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode cmd"><code class="sourceCode dosbat"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> Studio</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>install.bat</span></code></pre></div>
+<h3 data-number="1.5.2" id="what-the-installation-script-does"><span
+class="header-section-number">1.5.2</span> What the Installation Script
+Does</h3>
+<ol type="1">
+<li>Installs root-level npm dependencies</li>
+<li>Installs GUI dependencies (<code>GUI/</code> directory)</li>
+<li>Installs ReSuMo dependencies (<code>ReSuMo/</code> directory)</li>
+<li>Creates Python virtual environment (<code>venv/</code>)</li>
+<li>Installs Python dependencies (Django and related packages)</li>
+<li>Installs OCaml packages via opam: <code>ocamlfind</code>,
+<code>z3</code>, <code>ocamlopt</code></li>
+<li>Updates <code>config.json</code> with ReSuMo absolute path</li>
+</ol>
+<h3 data-number="1.5.3" id="manual-installation"><span
+class="header-section-number">1.5.3</span> Manual Installation</h3>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Install root dependencies</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">npm</span> install</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Install GUI dependencies</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> GUI <span class="kw">&amp;&amp;</span> <span class="ex">npm</span> install <span class="kw">&amp;&amp;</span> <span class="bu">cd</span> ..</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Install ReSuMo dependencies</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ReSuMo <span class="kw">&amp;&amp;</span> <span class="ex">npm</span> install <span class="kw">&amp;&amp;</span> <span class="bu">cd</span> ..</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. Create and activate virtual environment</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="ex">python3</span> <span class="at">-m</span> venv venv</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="bu">source</span> venv/bin/activate  <span class="co"># On Windows: venv\Scripts\activate</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="co"># 5. Install Python dependencies</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install <span class="at">--upgrade</span> pip</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install <span class="at">-r</span> API/requirements.txt</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="co"># 6. Install OCaml packages</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a><span class="ex">opam</span> init <span class="at">--yes</span> <span class="at">--disable-sandboxing</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a><span class="ex">opam</span> install ocamlfind z3 ocaml-base-compiler <span class="at">--yes</span></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a><span class="bu">eval</span> <span class="va">$(</span><span class="ex">opam</span> env<span class="va">)</span></span></code></pre></div>
+<hr />
+<h2 data-number="1.6" id="quick-start"><span
+class="header-section-number">1.6</span> Quick Start</h2>
+<h3 data-number="1.6.1" id="generate-code-via-cli"><span
+class="header-section-number">1.6.1</span> Generate Code via CLI</h3>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> Studio</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="bu">source</span> venv/bin/activate  <span class="co"># On Windows: venv\Scripts\activate</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="ex">python3</span> CLI/cli.py assettransfer <span class="at">--mode</span> 2</span></code></pre></div>
+<h3 data-number="1.6.2" id="use-the-gui"><span
+class="header-section-number">1.6.2</span> Use the GUI</h3>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> Studio</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Terminal 1: Start API server</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="ex">./start_api.sh</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Terminal 2: Start GUI</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="ex">./start_gui.sh</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Open browser: http://localhost:3000</span></span></code></pre></div>
+<hr />
+<h2 data-number="1.7" id="usage"><span
+class="header-section-number">1.7</span> Usage</h2>
+<h3 data-number="1.7.1" id="gui-workflow"><span
+class="header-section-number">1.7.1</span> GUI Workflow</h3>
+<ol type="1">
+<li><strong>Start the API server</strong> (Terminal 1):
+<code>./start_api.sh [port]</code></li>
+<li><strong>Start the GUI</strong> (Terminal 2):
+<code>./start_gui.sh</code></li>
+<li><strong>Access</strong>: http://localhost:3000</li>
+<li>Select or create an EDAM model, edit, generate code, download
+ZIP</li>
+</ol>
+<h4 data-number="1.7.1.1" id="gui-features"><span
+class="header-section-number">1.7.1.1</span> GUI Features</h4>
+<ul>
+<li><strong>Visual Graph Editor</strong>: Drag-and-drop interface for
+states and transitions</li>
+<li><strong>Text Editor</strong>: Direct EDAM specification editing</li>
+<li><strong>Model Import/Export</strong>: JSON format support</li>
+<li><strong>Code Generation</strong>: One-click generation with
+downloadable results</li>
+</ul>
+<h3 data-number="1.7.2" id="cli-workflow"><span
+class="header-section-number">1.7.2</span> CLI Workflow</h3>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> Studio</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="bu">source</span> venv/bin/activate</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="ex">python3</span> CLI/cli.py <span class="op">&lt;</span>model1<span class="op">&gt;</span> <span class="op">&lt;</span>model2<span class="op">&gt;</span> ... <span class="at">--mode</span> <span class="op">&lt;</span>1<span class="kw">|</span><span class="ex">2</span><span class="kw">|</span><span class="ex">3</span><span class="kw">|</span><span class="dv">4</span><span class="op">&gt;</span> <span class="ex">[options]</span></span></code></pre></div>
+<h4 data-number="1.7.2.1" id="edam-file-format"><span
+class="header-section-number">1.7.2.1</span> .edam File Format</h4>
+<pre><code>ModelName
+Role1,Role2,Role3
+variable1:type1, variable2:type2
+[from_state] {userVar:role:mode}, guard, [external_calls] callerVar:operation(params){assignments} {user:role:mode} [to_state]</code></pre>
+<h4 data-number="1.7.2.2" id="generation-modes"><span
+class="header-section-number">1.7.2.2</span> Generation Modes</h4>
+<table>
+<thead>
+<tr>
+<th>Mode</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Basic code generation</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Enhanced generation with symbolic traces (recommended)</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Advanced generation with extended traces</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Full generation with comprehensive testing</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 data-number="1.8" id="api-reference"><span
+class="header-section-number">1.8</span> API Reference</h2>
+<h3 data-number="1.8.1" id="base-url"><span
+class="header-section-number">1.8.1</span> Base URL</h3>
+<ul>
+<li>Default: <code>http://localhost:5000</code></li>
+<li>Configurable in <code>config.json</code></li>
+</ul>
+<h3 data-number="1.8.2" id="endpoints"><span
+class="header-section-number">1.8.2</span> Endpoints</h3>
+<h4 data-number="1.8.2.1" id="post-apiconvert-bulk"><span
+class="header-section-number">1.8.2.1</span> POST
+<code>/api/convert-bulk</code></h4>
+<p>Generate code from EDAM models.</p>
+<p><strong>Request Body:</strong></p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode json"><code class="sourceCode json"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;models&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="er">...</span><span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;target_language&quot;</span><span class="fu">:</span> <span class="st">&quot;solidity&quot;</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<p><strong>Response:</strong> JSON with generation results and download
+information.</p>
+<p><strong>Errors:</strong></p>
+<ul>
+<li><code>405</code>: Only POST method allowed</li>
+<li><code>400</code>: Expected an array of EDAMs</li>
+</ul>
+<hr />
+<h4 data-number="1.8.2.2" id="post-apiexecute-edam-trace"><span
+class="header-section-number">1.8.2.2</span> POST
+<code>/api/execute-edam-trace</code></h4>
+<p>Execute EDAM trace.</p>
+<p><strong>Request Body:</strong></p>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode json"><code class="sourceCode json"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;models&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="er">...</span><span class="ot">]</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<p><strong>Response:</strong> Trace execution results.</p>
+<hr />
+<h4 data-number="1.8.2.3" id="get-apidownload-filefile_name"><span
+class="header-section-number">1.8.2.3</span> GET
+<code>/api/download-file/&lt;file_name&gt;/</code></h4>
+<p>Download a generated file (e.g., ZIP archive).</p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>file_name</code> — Name of the file to download</li>
+</ul>
+<p><strong>Response:</strong> File attachment.</p>
+<p><strong>Errors:</strong></p>
+<ul>
+<li><code>404</code>: File not found</li>
+<li><code>500</code>: Server error</li>
+</ul>
+<hr />
+<h4 data-number="1.8.2.4" id="get-apirun-test-filefile_name"><span
+class="header-section-number">1.8.2.4</span> GET
+<code>/api/run-test-file/&lt;file_name&gt;/</code></h4>
+<p>Run tests on generated code. If the folder does not exist, unzips the
+file and runs <code>./run</code> in the folder.</p>
+<p><strong>Parameters:</strong></p>
+<ul>
+<li><code>file_name</code> — Name of the generated ZIP file</li>
+</ul>
+<p><strong>Response:</strong></p>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode json"><code class="sourceCode json"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;data&quot;</span><span class="fu">:</span> <span class="st">&quot;&lt;test output&gt;&quot;</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<p><strong>Errors:</strong></p>
+<ul>
+<li><code>404</code>: File not found</li>
+<li><code>500</code>: npm install or test command failed</li>
+</ul>
+<hr />
+<h3 data-number="1.8.3" id="example-api-request"><span
+class="header-section-number">1.8.3</span> Example API Request</h3>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-X</span> POST http://localhost:5000/api/convert-bulk <span class="dt">\</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">-H</span> <span class="st">&quot;Content-Type: application/json&quot;</span> <span class="dt">\</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">-d</span> <span class="st">&#39;{</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="st">    &quot;models&quot;: [...],</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="st">    &quot;target_language&quot;: &quot;solidity&quot;</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="st">  }&#39;</span></span></code></pre></div>
+<hr />
+<h2 data-number="1.9" id="cli-reference"><span
+class="header-section-number">1.9</span> CLI Reference</h2>
+<h3 data-number="1.9.1" id="command-structure"><span
+class="header-section-number">1.9.1</span> Command Structure</h3>
+<div class="sourceCode" id="cb12"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python3</span> CLI/cli.py <span class="op">&lt;</span>MODEL<span class="op">&gt;</span> [MODEL ...] <span class="at">--mode</span> <span class="dt">{1</span><span class="op">,</span><span class="dt">2</span><span class="op">,</span><span class="dt">3</span><span class="op">,</span><span class="dt">4}</span> <span class="pp">[</span><span class="ss">options</span><span class="pp">]</span></span></code></pre></div>
+<h3 data-number="1.9.2" id="positional-arguments"><span
+class="header-section-number">1.9.2</span> Positional Arguments</h3>
+<table>
+<thead>
+<tr>
+<th>Argument</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MODEL</td>
+<td>Model name (from edams-models) or path to <code>.edam</code>
+file</td>
+</tr>
+</tbody>
+</table>
+<h3 data-number="1.9.3" id="required-options"><span
+class="header-section-number">1.9.3</span> Required Options</h3>
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Values</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--mode</code></td>
+<td>1, 2, 3, 4</td>
+<td>Generation mode</td>
+</tr>
+</tbody>
+</table>
+<h3 data-number="1.9.4" id="configuration-options"><span
+class="header-section-number">1.9.4</span> Configuration Options</h3>
+<table>
+<colgroup>
+<col style="width: 22%" />
+<col style="width: 16%" />
+<col style="width: 25%" />
+<col style="width: 36%" />
+</colgroup>
+<thead>
+<tr>
+<th>Option</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--probability_new_participant</code></td>
+<td>float</td>
+<td>0.35</td>
+<td>Probability of new participant</td>
+</tr>
+<tr>
+<td><code>--probability_right_participant</code></td>
+<td>float</td>
+<td>0.7</td>
+<td>Probability of correct participant</td>
+</tr>
+<tr>
+<td><code>--probability_true_for_bool</code></td>
+<td>float</td>
+<td>0.5</td>
+<td>Probability for boolean true</td>
+</tr>
+<tr>
+<td><code>--min_int_value</code></td>
+<td>int</td>
+<td>0</td>
+<td>Minimum integer value</td>
+</tr>
+<tr>
+<td><code>--max_int_value</code></td>
+<td>int</td>
+<td>100</td>
+<td>Maximum integer value</td>
+</tr>
+<tr>
+<td><code>--max_gen_array_size</code></td>
+<td>int</td>
+<td>10</td>
+<td>Maximum array size</td>
+</tr>
+<tr>
+<td><code>--min_gen_string_length</code></td>
+<td>int</td>
+<td>5</td>
+<td>Minimum string length</td>
+</tr>
+<tr>
+<td><code>--max_gen_string_length</code></td>
+<td>int</td>
+<td>10</td>
+<td>Maximum string length</td>
+</tr>
+<tr>
+<td><code>--z3_check_enabled</code></td>
+<td>flag</td>
+<td>True</td>
+<td>Enable Z3 solver checks</td>
+</tr>
+<tr>
+<td><code>--number_symbolic_traces</code></td>
+<td>int</td>
+<td>200</td>
+<td>Number of symbolic traces</td>
+</tr>
+<tr>
+<td><code>--number_transition_per_trace</code></td>
+<td>int</td>
+<td>10</td>
+<td>Transitions per trace</td>
+</tr>
+<tr>
+<td><code>--number_real_traces</code></td>
+<td>int</td>
+<td>5</td>
+<td>Number of real traces</td>
+</tr>
+<tr>
+<td><code>--max_fail_try</code></td>
+<td>int</td>
+<td>2</td>
+<td>Maximum retry attempts</td>
+</tr>
+<tr>
+<td><code>--add_pi_to_test</code></td>
+<td>flag</td>
+<td>False</td>
+<td>Add participant info to tests</td>
+</tr>
+<tr>
+<td><code>--add_test_of_state</code></td>
+<td>flag</td>
+<td>True</td>
+<td>Add state tests</td>
+</tr>
+<tr>
+<td><code>--add_test_of_variables</code></td>
+<td>flag</td>
+<td>True</td>
+<td>Add variable tests</td>
+</tr>
+</tbody>
+</table>
+<h3 data-number="1.9.5" id="examples"><span
+class="header-section-number">1.9.5</span> Examples</h3>
+<div class="sourceCode" id="cb13"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Single model</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="ex">python3</span> CLI/cli.py assettransfer <span class="at">--mode</span> 2</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Using .edam file</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="ex">python3</span> CLI/cli.py my_model.edam <span class="at">--mode</span> 2</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Multiple models</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="ex">python3</span> CLI/cli.py assettransfer basicprovenance my_custom.edam <span class="at">--mode</span> 2</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Custom trace generation</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a><span class="ex">python3</span> CLI/cli.py c20 amm <span class="at">--mode</span> 3 <span class="dt">\</span></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">--number_symbolic_traces</span> 1000 <span class="dt">\</span></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">--number_transition_per_trace</span> 40</span></code></pre></div>
+<hr />
+<h2 data-number="1.10" id="gui-components"><span
+class="header-section-number">1.10</span> GUI Components</h2>
+<h3 data-number="1.10.1" id="component-structure"><span
+class="header-section-number">1.10.1</span> Component Structure</h3>
+<pre><code>GUI/src/
+├── components/
+│   ├── edam/           # EDAM-specific components
+│   │   ├── EDAMEditor.tsx
+│   │   ├── EDAMGraph.tsx
+│   │   ├── EDAMGraphviz.tsx
+│   │   ├── EDAMHeader.tsx
+│   │   ├── EDAMJsonEditor.tsx
+│   │   ├── EDAMSidebar.tsx
+│   │   ├── EDAMTextEditor.tsx
+│   │   ├── CodeGenerationResults.tsx
+│   │   ├── ConfigModal.tsx
+│   │   ├── HelpModal.tsx
+│   │   ├── NewModelModal.tsx
+│   │   ├── StateModal.tsx
+│   │   ├── TraceTestModal.tsx
+│   │   ├── TransitionModal.tsx
+│   │   └── utils/
+│   └── ui/             # Reusable UI components (shadcn/ui)
+├── pages/
+│   ├── Index.tsx
+│   └── NotFound.tsx
+├── hooks/
+├── lib/
+└── main.tsx</code></pre>
+<h3 data-number="1.10.2" id="key-components"><span
+class="header-section-number">1.10.2</span> Key Components</h3>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>EDAMEditor</code></td>
+<td>Main editor container</td>
+</tr>
+<tr>
+<td><code>EDAMGraph</code></td>
+<td>Visual graph-based model editor</td>
+</tr>
+<tr>
+<td><code>EDAMTextEditor</code></td>
+<td>Text-based EDAM specification editor</td>
+</tr>
+<tr>
+<td><code>EDAMJsonEditor</code></td>
+<td>JSON representation editor</td>
+</tr>
+<tr>
+<td><code>CodeGenerationResults</code></td>
+<td>Display and download generated code</td>
+</tr>
+<tr>
+<td><code>ConfigModal</code></td>
+<td>Configuration settings</td>
+</tr>
+<tr>
+<td><code>TraceTestModal</code></td>
+<td>Trace and test execution</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 data-number="1.11" id="edam-models"><span
+class="header-section-number">1.11</span> EDAM Models</h2>
+<h3 data-number="1.11.1" id="model-location"><span
+class="header-section-number">1.11.1</span> Model Location</h3>
+<pre><code>Studio/edams-models/edam/models/</code></pre>
+<h3 data-number="1.11.2" id="available-models"><span
+class="header-section-number">1.11.2</span> Available Models</h3>
+<h4 data-number="1.11.2.1" id="smart-contract-examples"><span
+class="header-section-number">1.11.2.1</span> Smart Contract
+Examples</h4>
+<ul>
+<li><code>assettransfer</code> — Asset transfer contract</li>
+<li><code>basicprovenance</code> — Basic provenance tracking</li>
+<li><code>digitallocker</code> — Digital locker contract</li>
+<li><code>frequentflyer</code> — Frequent flyer program</li>
+<li><code>refrigeratedtransport</code> — Refrigerated transport
+tracking</li>
+<li><code>simplemarketplace</code> — Simple marketplace contract</li>
+<li><code>thermostatoperation</code> — Thermostat operation</li>
+</ul>
+<h4 data-number="1.11.2.2" id="defi-examples"><span
+class="header-section-number">1.11.2.2</span> DeFi Examples</h4>
+<ul>
+<li><code>amm</code> — Automated Market Maker</li>
+<li><code>c20</code> — ERC-20 token contract</li>
+<li><code>c20_2</code> — ERC-20 token variant</li>
+<li><code>simplewallet</code> — Simple wallet contract</li>
+</ul>
+<h4 data-number="1.11.2.3" id="research-examples"><span
+class="header-section-number">1.11.2.3</span> Research Examples</h4>
+<ul>
+<li><code>cm</code>, <code>cop</code>, <code>cpay</code> — Example
+models</li>
+<li><code>defectivecounter</code> — Defective counter example</li>
+<li><code>helloblockchain</code> — Hello blockchain example</li>
+</ul>
+<hr />
+<h2 data-number="1.12" id="code-generation"><span
+class="header-section-number">1.12</span> Code Generation</h2>
+<h3 data-number="1.12.1" id="generated-output-location"><span
+class="header-section-number">1.12.1</span> Generated Output
+Location</h3>
+<pre><code>Studio/Generated-code/</code></pre>
+<h3 data-number="1.12.2" id="generated-structure"><span
+class="header-section-number">1.12.2</span> Generated Structure</h3>
+<pre><code>Generated-code/
+└── &lt;ModelName&gt;_&lt;version&gt;_&lt;id&gt;/
+    ├── contracts/          # Smart contract source files
+    ├── test/               # Generated test files
+    ├── migrations/         # Deployment migrations
+    ├── hardhat.config.js   # Hardhat configuration
+    ├── package.json        # Node.js dependencies
+    └── run                 # Execution script</code></pre>
+<h3 data-number="1.12.3" id="target-languages"><span
+class="header-section-number">1.12.3</span> Target Languages</h3>
+<ul>
+<li><strong>Solidity</strong> (Ethereum smart contracts)</li>
+</ul>
+<hr />
+<h2 data-number="1.13" id="complete-flow-edam-code-test"><span
+class="header-section-number">1.13</span> Complete Flow: EDAM → Code →
+Test</h2>
+<p>This section describes the end-to-end pipeline from EDAM
+specification to generated Solidity contracts and automated tests.</p>
+<h3 data-number="1.13.1" id="flow-diagram"><span
+class="header-section-number">1.13.1</span> Flow Diagram</h3>
+<pre><code>┌─────────────────┐     ┌──────────────────┐     ┌─────────────────┐
+│  EDAM Input     │     │  Python/Node     │     │  OCaml Engine   │
+│  (GUI/CLI/API)  │────▶│  Payload/Process │────▶│  (base_code/)   │
+└─────────────────┘     └──────────────────┘     └────────┬────────┘
+        │                           │                      │
+        │                           │                      ▼
+        │                           │             ┌──────────────────┐
+        │                           │             │  Python EDAM       │
+        │                           │             │  (intermediate)    │
+        │                           │             └────────┬──────────┘
+        │                           │                      │
+        │                           ▼                      ▼
+        │                  ┌──────────────────┐    ┌──────────────────┐
+        │                  │  Solidity        │◀───│  Test Generation │
+        │                  │  Contract Gen    │    │  (OCaml + Z3)    │
+        │                  └────────┬────────┘    └──────────────────┘
+        │                            │
+        ▼                            ▼
+┌─────────────────────────────────────────────────────────────────────┐
+│  Output: contracts/*.sol + test/*.js + run script + ZIP             │
+└─────────────────────────────────────────────────────────────────────┘</code></pre>
+<h3 data-number="1.13.2" id="step-by-step-flow"><span
+class="header-section-number">1.13.2</span> Step-by-Step Flow</h3>
+<h4 data-number="1.13.2.1" id="step-1-edam-input"><span
+class="header-section-number">1.13.2.1</span> Step 1: EDAM Input</h4>
+<ul>
+<li><strong>GUI</strong>: User edits model in visual/text editor → JSON
+sent to API</li>
+<li><strong>CLI</strong>: <code>payload_generator.js</code> converts
+model names or <code>.edam</code> files → <code>output.json</code></li>
+<li><strong>API</strong>: Receives
+<code>{ models: [...], server_settings: {...} }</code></li>
+</ul>
+<h4 data-number="1.13.2.2"
+id="step-2-python-process-processprocess.py"><span
+class="header-section-number">1.13.2.2</span> Step 2: Python Process
+(<code>process/process.py</code>)</h4>
+<ul>
+<li><code>CodeGenerationProcess._process_models()</code> iterates over
+each EDAM</li>
+<li>For each EDAM:
+<code>ocaml_generator.generate_code(edam, server_settings)</code></li>
+<li>OCaml generator writes EDAM to OCaml file, runs
+<code>ocaml &lt;file&gt;.ml</code> → produces Python EDAM string</li>
+<li>Python EDAM is <code>eval()</code>’d and passed to
+<code>contract_generator.generate_code()</code></li>
+<li>Solidity contracts are generated</li>
+<li><code>contract_generator.generate_test_code()</code> invokes OCaml
+test generation</li>
+</ul>
+<h4 data-number="1.13.2.3"
+id="step-3-ocaml-code-generation-edam-python-edam"><span
+class="header-section-number">1.13.2.3</span> Step 3: OCaml Code
+Generation (EDAM → Python EDAM)</h4>
+<ul>
+<li><strong>File</strong>: <code>ocaml_base_code.ml</code> + EDAM code
+injected</li>
+<li><strong>Execution</strong>: <code>ocaml &lt;uid&gt;.ml</code> prints
+Python EDAM representation to stdout</li>
+<li><strong>Output</strong>: Python <code>EDAM(...)</code> and
+<code>Transition(...)</code> objects as text</li>
+<li><strong>Key function</strong>: <code>generate_python_edam</code> in
+<code>ocaml_base_code.ml</code> converts OCaml <code>edam_type</code> to
+Python syntax</li>
+</ul>
+<h4 data-number="1.13.2.4"
+id="step-4-ocaml-test-generation-symbolic-traces-hardhat-tests"><span
+class="header-section-number">1.13.2.4</span> Step 4: OCaml Test
+Generation (Symbolic Traces → Hardhat Tests)</h4>
+<ul>
+<li><strong>File</strong>: <code>ocaml_test_code.ml</code> (template
+with <code>{edams_code_here}</code> replaced)</li>
+<li><strong>Compilation</strong>: <code>cmd_run.sh</code> compiles
+<code>types.ml</code>, <code>printer.ml</code>, <code>helper.ml</code>,
+<code>z3_module.ml</code>, <code>core_functions.ml</code>,
+<code>test_generation.ml</code>, <code>{file}.ml</code></li>
+<li><strong>Execution</strong>: <code>./generate_test{file_name}</code>
+runs the compiled binary</li>
+<li><strong>Process</strong>:
+<ol type="1">
+<li><code>generate_random_trace()</code> creates symbolic traces (random
+transition sequences)</li>
+<li>For each symbolic trace,
+<code>generate_real_traces_from_symbolic()</code> instantiates with Z3
+(guard satisfiability) or random values</li>
+<li><code>evaluate_trace()</code> executes each trace and records
+success/failure</li>
+<li><code>generate_hardhat_tests()</code> emits JavaScript/Chai test
+code</li>
+</ol></li>
+<li><strong>Output</strong>: Migration code + test code printed to
+stdout, captured by Python</li>
+</ul>
+<h4 data-number="1.13.2.5"
+id="step-5-solidity-contract-generation"><span
+class="header-section-number">1.13.2.5</span> Step 5: Solidity Contract
+Generation</h4>
+<ul>
+<li>Python <code>ContractCodeGenerator</code> (in
+<code>code_generators/solidity/</code>) consumes the Python EDAM
+representation</li>
+<li>Produces <code>.sol</code> files with state machine, role checks,
+and transition logic</li>
+</ul>
+<h4 data-number="1.13.2.6" id="step-6-output-packaging"><span
+class="header-section-number">1.13.2.6</span> Step 6: Output
+Packaging</h4>
+<ul>
+<li><code>create_zip_file()</code> bundles contracts, tests, configs,
+and <code>run</code> script into a ZIP</li>
+</ul>
+<hr />
+<h2 data-number="1.14" id="ocaml-files-reference"><span
+class="header-section-number">1.14</span> OCaml Files Reference</h2>
+<p>All OCaml source files reside in <code>Studio/API/base_code/</code>.
+They form the symbolic execution and test generation engine.</p>
+<h3 data-number="1.14.1" id="file-overview"><span
+class="header-section-number">1.14.1</span> File Overview</h3>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>types.ml</code></td>
+<td>Type definitions for EDAM, transitions, configurations</td>
+</tr>
+<tr>
+<td><code>helper.ml</code></td>
+<td>Evaluation, sigma/iota, random value generation</td>
+</tr>
+<tr>
+<td><code>printer.ml</code></td>
+<td>Debug/pretty-print for traces, sigma, transitions</td>
+</tr>
+<tr>
+<td><code>core_functions.ml</code></td>
+<td>Transition checking, trace evaluation</td>
+</tr>
+<tr>
+<td><code>z3_module.ml</code></td>
+<td>Z3 SMT conversion and guard satisfiability</td>
+</tr>
+<tr>
+<td><code>test_generation.ml</code></td>
+<td>Trace generation, Hardhat test emission</td>
+</tr>
+<tr>
+<td><code>ocaml_base_code.ml</code></td>
+<td>EDAM → Python EDAM conversion</td>
+</tr>
+<tr>
+<td><code>ocaml_to_json.ml</code></td>
+<td>Alternative EDAM → JSON (standalone)</td>
+</tr>
+<tr>
+<td><code>ocaml_test_code.ml</code></td>
+<td>Template for test generation (placeholders)</td>
+</tr>
+<tr>
+<td><code>ocaml_trace_test_run_base_code.ml</code></td>
+<td>Template for trace execution</td>
+</tr>
+<tr>
+<td><code>trace_cm_c20.ml</code></td>
+<td>Example hardcoded C20 + CM trace test</td>
+</tr>
+</tbody>
+</table>
+<h3 data-number="1.14.2" id="types.ml-type-definitions"><span
+class="header-section-number">1.14.2</span> types.ml — Type
+Definitions</h3>
+<table>
+<colgroup>
+<col style="width: 31%" />
+<col style="width: 68%" />
+</colgroup>
+<thead>
+<tr>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ptp_var</code></td>
+<td>Participant variable: <code>Ptp of string</code></td>
+</tr>
+<tr>
+<td><code>participant</code></td>
+<td>Participant ID: <code>PID of string</code></td>
+</tr>
+<tr>
+<td><code>role_type</code></td>
+<td>Role: <code>Role of string</code></td>
+</tr>
+<tr>
+<td><code>role_mode</code></td>
+<td>Top | Bottom | Unknown</td>
+</tr>
+<tr>
+<td><code>operation</code></td>
+<td>Operation name: <code>Operation of string</code></td>
+</tr>
+<tr>
+<td><code>dvar</code></td>
+<td>Data variable: <code>Var of string</code></td>
+</tr>
+<tr>
+<td><code>value_type</code></td>
+<td>BoolVal, IntVal, StrVal, PtpID, ListVal, MapVal</td>
+</tr>
+<tr>
+<td><code>exp</code></td>
+<td>Expression AST (arithmetic, boolean, FuncCall,
+FuncCallEdamRead)</td>
+</tr>
+<tr>
+<td><code>funcCallEdamWrite</code></td>
+<td>External EDAM call:
+<code>FuncCallEdamWrite of string * operation * exp list * exp list</code></td>
+</tr>
+<tr>
+<td><code>z3_exp</code></td>
+<td>Z3 expression: Z_Exp, Z_Call, Z_And, Z_Eq</td>
+</tr>
+<tr>
+<td><code>guard_type</code></td>
+<td><code>exp * (funcCallEdamWrite * bool) list</code></td>
+</tr>
+<tr>
+<td><code>label_type</code></td>
+<td>guard, rho, ptp, op, ptp_list, dvar_list, assignments, rho’,
+name</td>
+</tr>
+<tr>
+<td><code>label_conf</code></td>
+<td><code>participant * operation * participant list * value_type list</code></td>
+</tr>
+<tr>
+<td><code>configuration</code></td>
+<td>state, pi, sigma</td>
+</tr>
+<tr>
+<td><code>edam_type</code></td>
+<td>name, states, transitions, final_modes, initial_state, roles_list,
+ptp_var_list, variables_list</td>
+</tr>
+<tr>
+<td><code>multi_config</code></td>
+<td>edam_map, config_map (Hashtbl)</td>
+</tr>
+<tr>
+<td><code>server_config_type</code></td>
+<td>Probabilities, bounds, Z3 flag, add_pi_to_test, etc.</td>
+</tr>
+<tr>
+<td><code>dependancy_type</code></td>
+<td>required_calls, participant_roles, can_generate_participants,
+transition_probabilities</td>
+</tr>
+</tbody>
+</table>
+<h3 data-number="1.14.3" id="helper.ml-functions"><span
+class="header-section-number">1.14.3</span> helper.ml — Functions</h3>
+<table>
+<colgroup>
+<col style="width: 43%" />
+<col style="width: 56%" />
+</colgroup>
+<thead>
+<tr>
+<th>Function</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>find_with_debug</code></td>
+<td>Safe Hashtbl lookup with error message</td>
+</tr>
+<tr>
+<td><code>copy_sigma</code></td>
+<td>Deep copy of sigma</td>
+</tr>
+<tr>
+<td><code>sort_states</code>, <code>sort_roles</code></td>
+<td>Sort state/role lists</td>
+</tr>
+<tr>
+<td><code>get_state_index</code>, <code>get_roles_index</code></td>
+<td>Index of state/role in sorted list</td>
+</tr>
+<tr>
+<td><code>generate_iota</code></td>
+<td>Build iota from ptp_list and participants</td>
+</tr>
+<tr>
+<td><code>generate_iota_from_label</code></td>
+<td>Build iota from label_conf and multi_cfg</td>
+</tr>
+<tr>
+<td><code>parse_index</code></td>
+<td>Parse “int”/“str”/“pid”/“bool” index</td>
+</tr>
+<tr>
+<td><code>initialize_sigma</code></td>
+<td>Create sigma from variable list with defaults</td>
+</tr>
+<tr>
+<td><code>copy_multi_config</code></td>
+<td>Deep copy of multi_config</td>
+</tr>
+<tr>
+<td><code>substitute_values</code></td>
+<td>Update sigma with (dvar, value) list</td>
+</tr>
+<tr>
+<td><code>update_map</code>, <code>update_nested_map</code></td>
+<td>Map update helpers</td>
+</tr>
+<tr>
+<td><code>eval</code></td>
+<td>Evaluate expression under sigma, iota, multi_cfg</td>
+</tr>
+<tr>
+<td><code>external_function_call</code></td>
+<td>Built-ins: sum, append, length, update_map, get_amount_out,
+etc.</td>
+</tr>
+<tr>
+<td><code>external_edam_read</code></td>
+<td>Read variable from another EDAM</td>
+</tr>
+<tr>
+<td><code>external_edam_write</code></td>
+<td>Call transition on another EDAM</td>
+</tr>
+<tr>
+<td><code>eval_func_write_list</code></td>
+<td>Evaluate list of FuncCallEdamWrite</td>
+</tr>
+<tr>
+<td><code>generate_random_value</code></td>
+<td>Random value by dvar_type and server_configs</td>
+</tr>
+<tr>
+<td><code>select_valid_transition</code></td>
+<td>Probabilistic transition selection</td>
+</tr>
+<tr>
+<td><code>eval_command</code></td>
+<td>Eval commands: var, sum, count, get state, countRole, etc.</td>
+</tr>
+<tr>
+<td><code>get_edam_config</code></td>
+<td>Get edam and config from multi_cfg</td>
+</tr>
+<tr>
+<td><code>remove_duplicates</code>, <code>random_select</code></td>
+<td>List utilities</td>
+</tr>
+<tr>
+<td><code>get_timestamp</code>,
+<code>count_operation_occurrences</code>,
+<code>get_operations_before</code>, etc.</td>
+<td>Log/analysis helpers</td>
+</tr>
+</tbody>
+</table>
+<h3 data-number="1.14.4" id="printer.ml-functions"><span
+class="header-section-number">1.14.4</span> printer.ml — Functions</h3>
+<table>
+<colgroup>
+<col style="width: 43%" />
+<col style="width: 56%" />
+</colgroup>
+<thead>
+<tr>
+<th>Function</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sigma_contains</code></td>
+<td>Check if variable in sigma</td>
+</tr>
+<tr>
+<td><code>string_of_value</code></td>
+<td>value_type → string</td>
+</tr>
+<tr>
+<td><code>print_participants_list</code>,
+<code>print_roles_list</code></td>
+<td>Print participants/roles</td>
+</tr>
+<tr>
+<td><code>print_participants_and_roles</code></td>
+<td>Print config pi for ptp_vars</td>
+</tr>
+<tr>
+<td><code>print_map</code>, <code>print_sigma</code></td>
+<td>Print map/sigma contents</td>
+</tr>
+<tr>
+<td><code>print_all_sigmas</code></td>
+<td>Print sigma for all EDAMs in multi_cfg</td>
+</tr>
+<tr>
+<td><code>print_transition_details</code></td>
+<td>Print transition with iota, sigma</td>
+</tr>
+<tr>
+<td><code>print_symbolic_trace</code>, <code>print_trace</code></td>
+<td>Print trace for debugging</td>
+</tr>
+</tbody>
+</table>
+<h3 data-number="1.14.5" id="core_functions.ml-functions"><span
+class="header-section-number">1.14.5</span> core_functions.ml —
+Functions</h3>
+<table>
+<colgroup>
+<col style="width: 43%" />
+<col style="width: 56%" />
+</colgroup>
+<thead>
+<tr>
+<th>Function</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>update_pi</code></td>
+<td>Update pi from rho, rho’, iota, party_list</td>
+</tr>
+<tr>
+<td><code>bowtie</code></td>
+<td>Check role mode compatibility across participants</td>
+</tr>
+<tr>
+<td><code>role_satisf</code></td>
+<td>Check pi models iota and rho</td>
+</tr>
+<tr>
+<td><code>update_iota</code></td>
+<td>Update iota with (ptp_var, participant) list</td>
+</tr>
+<tr>
+<td><code>validate_edams</code></td>
+<td>Check EDAM validity (start transition, etc.)</td>
+</tr>
+<tr>
+<td><code>check_transition</code></td>
+<td>Validate transition against config, return new config or error</td>
+</tr>
+<tr>
+<td><code>perform_transition_impl</code></td>
+<td>Execute transition, update multi_cfg, handle reentrancy</td>
+</tr>
+<tr>
+<td><code>evaluate_trace</code></td>
+<td>Run trace, return (result_trace, updated_multi_cfg)</td>
+</tr>
+<tr>
+<td><code>evaluate_trace_last</code></td>
+<td>Evaluate last segment, append to previous trace</td>
+</tr>
+</tbody>
+</table>
+<h3 data-number="1.14.6" id="z3_module.ml-functions"><span
+class="header-section-number">1.14.6</span> z3_module.ml —
+Functions</h3>
+<table>
+<colgroup>
+<col style="width: 43%" />
+<col style="width: 56%" />
+</colgroup>
+<thead>
+<tr>
+<th>Function</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>guard_to_z3_exp</code></td>
+<td>Convert guard_type to z3_exp</td>
+</tr>
+<tr>
+<td><code>build_dvar_map</code></td>
+<td>Map dvar_list to values</td>
+</tr>
+<tr>
+<td><code>substitute_params</code></td>
+<td>Substitute dvar/ptp in z3_exp</td>
+</tr>
+<tr>
+<td><code>replace_dvars</code></td>
+<td>Replace Dvar with sigma values in z3_exp</td>
+</tr>
+<tr>
+<td><code>z3_of_z3_exp</code></td>
+<td>Convert z3_exp to Z3.Expr</td>
+</tr>
+<tr>
+<td><code>z3_of_exp</code></td>
+<td>Convert exp to Z3.Expr (ints, bools, strings, arithmetic, etc.)</td>
+</tr>
+<tr>
+<td><code>z3_of_func_write</code></td>
+<td>Convert FuncCallEdamWrite to Z3 (nested calls)</td>
+</tr>
+<tr>
+<td><code>check_guard_satisfiability</code></td>
+<td>Run Z3 solver on guard, return status and model bindings</td>
+</tr>
+</tbody>
+</table>
+<h3 data-number="1.14.7" id="test_generation.ml-functions"><span
+class="header-section-number">1.14.7</span> test_generation.ml —
+Functions</h3>
+<table>
+<colgroup>
+<col style="width: 43%" />
+<col style="width: 56%" />
+</colgroup>
+<thead>
+<tr>
+<th>Function</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>update_participant_roles_in_dependancy</code></td>
+<td>Update dependency participant_roles from config</td>
+</tr>
+<tr>
+<td><code>generate_new_participant</code></td>
+<td>Create new PID for role</td>
+</tr>
+<tr>
+<td><code>select_or_generate_participant</code></td>
+<td>Choose existing or generate new by probability</td>
+</tr>
+<tr>
+<td><code>get_role</code></td>
+<td>Get role for user from rho</td>
+</tr>
+<tr>
+<td><code>getParticipantsIds</code></td>
+<td>Get participant IDs for ptp_list from dependencies</td>
+</tr>
+<tr>
+<td><code>find_participants_for_ptp</code></td>
+<td>Filter participants by rho Top/Bottom</td>
+</tr>
+<tr>
+<td><code>getOrGenParticipantsIds</code></td>
+<td>Get or generate participants for ptp_list</td>
+</tr>
+<tr>
+<td><code>generate_random_trace</code></td>
+<td>Symbolic trace + real traces via Z3/random</td>
+</tr>
+<tr>
+<td><code>generate_pi_tests</code></td>
+<td>Emit Hardhat assertions for role permissions</td>
+</tr>
+<tr>
+<td><code>get_params_str</code></td>
+<td>Format parameters for test calls</td>
+</tr>
+<tr>
+<td><code>extract_dependencies_from_transition</code></td>
+<td>Get called EDAMs from transition</td>
+</tr>
+<tr>
+<td><code>compute_edam_deployment_order</code></td>
+<td>Topological sort for deployment</td>
+</tr>
+<tr>
+<td><code>generate_deployment_logic</code></td>
+<td>Generate deployment code for trace</td>
+</tr>
+<tr>
+<td><code>generate_hardhat_tests</code></td>
+<td>Main: emit full Hardhat/Chai test suite</td>
+</tr>
+</tbody>
+</table>
+<h3 data-number="1.14.8" id="ocaml_base_code.ml-functions"><span
+class="header-section-number">1.14.8</span> ocaml_base_code.ml —
+Functions</h3>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>guard_to_z3_exp</code></td>
+<td>guard_type → z3_exp</td>
+</tr>
+<tr>
+<td><code>generate_ptp_roles_modes</code></td>
+<td>rho, ptp_vars, roles → JSON string</td>
+</tr>
+<tr>
+<td><code>value_type_to_text</code></td>
+<td>value_type → string</td>
+</tr>
+<tr>
+<td><code>exp_to_text</code>, <code>exp_to_text_helper</code></td>
+<td>exp → Python-like string</td>
+</tr>
+<tr>
+<td><code>list_calls_to_text</code></td>
+<td>list of calls → string</td>
+</tr>
+<tr>
+<td><code>generate_python_edam</code></td>
+<td>edam_type → Python EDAM(…) string</td>
+</tr>
+<tr>
+<td><code>validate_edams</code></td>
+<td>Validate EDAM structure</td>
+</tr>
+</tbody>
+</table>
+<h3 data-number="1.14.9" id="ocaml_test_code.ml-template"><span
+class="header-section-number">1.14.9</span> ocaml_test_code.ml —
+Template</h3>
+<p>Placeholders replaced by Python:</p>
+<ul>
+<li><code>{edams_code_here}</code> — EDAM instances, configurations,
+dependencies_map</li>
+<li><code>{probability_new_participant}</code>,
+<code>{number_symbolic_traces}</code>, etc. — server_settings</li>
+</ul>
+<p>Flow: <code>Random.self_init()</code> → for each trace index,
+<code>generate_random_trace</code> → <code>evaluate_trace</code> →
+<code>generate_hardhat_tests</code> → print migration and test code.</p>
+<h3 data-number="1.14.10"
+id="ocaml_trace_test_run_base_code.ml-template"><span
+class="header-section-number">1.14.10</span>
+ocaml_trace_test_run_base_code.ml — Template</h3>
+<p>Placeholders:</p>
+<ul>
+<li><code>{edams_code_here}</code> — EDAM code</li>
+<li><code>{call_list_here}</code> —
+<code>let calls_list = [ ... ]</code></li>
+</ul>
+<p>Used for trace execution (e.g. API trace test): runs
+<code>evaluate_trace</code> on given calls and prints result.</p>
+<hr />
+<h2 data-number="1.15" id="scripts-reference"><span
+class="header-section-number">1.15</span> Scripts Reference</h2>
+<h3 data-number="1.15.1" id="studio-scripts"><span
+class="header-section-number">1.15.1</span> Studio Scripts</h3>
+<table>
+<thead>
+<tr>
+<th>Script</th>
+<th>Location</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>install.sh</code></td>
+<td>Studio/</td>
+<td>Full installation (npm, venv, opam, config)</td>
+</tr>
+<tr>
+<td><code>install.bat</code></td>
+<td>Studio/</td>
+<td>Windows installation</td>
+</tr>
+<tr>
+<td><code>start_api.sh</code></td>
+<td>Studio/</td>
+<td>Start Django API server</td>
+</tr>
+<tr>
+<td><code>start_api.bat</code></td>
+<td>Studio/</td>
+<td>Windows: start API</td>
+</tr>
+<tr>
+<td><code>start_gui.sh</code></td>
+<td>Studio/</td>
+<td>Start Vite GUI</td>
+</tr>
+<tr>
+<td><code>start_gui.bat</code></td>
+<td>Studio/</td>
+<td>Windows: start GUI</td>
+</tr>
+<tr>
+<td><code>cli.sh</code></td>
+<td>Studio/CLI/</td>
+<td>CLI wrapper</td>
+</tr>
+</tbody>
+</table>
+<h3 data-number="1.15.2" id="api-base_code-scripts"><span
+class="header-section-number">1.15.2</span> API base_code Scripts</h3>
+<table>
+<colgroup>
+<col style="width: 47%" />
+<col style="width: 52%" />
+</colgroup>
+<thead>
+<tr>
+<th>Script</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>cmd_run.sh</code></td>
+<td>Compile OCaml test generator (types, printer, helper, z3_module,
+core_functions, test_generation, {file_name}) and run
+<code>./generate_test{file_name}</code></td>
+</tr>
+<tr>
+<td><code>cmd_test_run_cm_c20.sh</code></td>
+<td>Example: compile and run <code>trace_cm_c20.ml</code> for C20+CM
+trace test</td>
+</tr>
+</tbody>
+</table>
+<p>Placeholders in <code>cmd_run.sh</code>: <code>{uid}</code>,
+<code>{file_name}</code>.</p>
+<h3 data-number="1.15.3" id="docker-scripts"><span
+class="header-section-number">1.15.3</span> Docker Scripts</h3>
+<table>
+<thead>
+<tr>
+<th>Script</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>build.sh</code></td>
+<td>Build Docker image</td>
+</tr>
+<tr>
+<td><code>load-docker.sh</code></td>
+<td>Load image from tar.gz</td>
+</tr>
+<tr>
+<td><code>push-image.sh</code></td>
+<td>Push image to registry</td>
+</tr>
+</tbody>
+</table>
+<h3 data-number="1.15.4" id="resumo-scripts"><span
+class="header-section-number">1.15.4</span> ReSuMo Scripts</h3>
+<table>
+<thead>
+<tr>
+<th>Script</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>process_zip_files.sh</code></td>
+<td>Process ZIP files (batch)</td>
+</tr>
+<tr>
+<td><code>process_zip_files_1.sh</code>, <code>2.sh</code>,
+<code>3.sh</code></td>
+<td>Variants</td>
+</tr>
+<tr>
+<td><code>process_zip_files_T_AMM*.sh</code></td>
+<td>AMM-specific processing</td>
+</tr>
+<tr>
+<td><code>process_zip_files_Test_T_Token_*.sh</code></td>
+<td>Token-specific processing</td>
+</tr>
+<tr>
+<td><code>process_zip_files_move.sh</code></td>
+<td>Move/process</td>
+</tr>
+<tr>
+<td><code>runExcelMerge.sh</code></td>
+<td>Merge Excel results</td>
+</tr>
+<tr>
+<td><code>merger_to_one_excel_recap.py</code></td>
+<td>Python: merge Excel recap</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 data-number="1.16" id="configuration"><span
+class="header-section-number">1.16</span> Configuration</h2>
+<h3 data-number="1.16.1" id="config.json-structure"><span
+class="header-section-number">1.16.1</span> config.json Structure</h3>
+<div class="sourceCode" id="cb19"><pre
+class="sourceCode json"><code class="sourceCode json"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;api&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;default_port&quot;</span><span class="fu">:</span> <span class="dv">5000</span><span class="fu">,</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;host&quot;</span><span class="fu">:</span> <span class="st">&quot;127.0.0.1&quot;</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">},</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;gui&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;default_port&quot;</span><span class="fu">:</span> <span class="dv">3000</span></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">},</span></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;generated_code&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;default_directory&quot;</span><span class="fu">:</span> <span class="st">&quot;Generated-code&quot;</span></span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">},</span></span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;sumo&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;absolute_sumo_dir&quot;</span><span class="fu">:</span> <span class="st">&quot;/path/to/ReSuMo&quot;</span></span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span></span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<h3 data-number="1.16.2" id="configuration-options-1"><span
+class="header-section-number">1.16.2</span> Configuration Options</h3>
+<table>
+<colgroup>
+<col style="width: 38%" />
+<col style="width: 61%" />
+</colgroup>
+<thead>
+<tr>
+<th>Option</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>api.default_port</code></td>
+<td>Default port for API server</td>
+</tr>
+<tr>
+<td><code>api.host</code></td>
+<td>Host address for API server</td>
+</tr>
+<tr>
+<td><code>gui.default_port</code></td>
+<td>Default port for GUI</td>
+</tr>
+<tr>
+<td><code>generated_code.default_directory</code></td>
+<td>Output directory for generated code</td>
+</tr>
+<tr>
+<td><code>sumo.absolute_sumo_dir</code></td>
+<td>Absolute path to ReSuMo directory</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Note:</strong> To change the GUI port, update both
+<code>config.json</code> and <code>GUI/vite.config.ts</code>.</p>
+<hr />
+<h2 data-number="1.17" id="project-structure"><span
+class="header-section-number">1.17</span> Project Structure</h2>
+<pre><code>Studio/
+├── API/                    # Django backend
+│   ├── code_generation/    # Code generators (OCaml, Solidity)
+│   ├── code_generators/    # Language-specific generators
+│   ├── base_code/          # OCaml base templates
+│   ├── objects/            # EDAM model classes
+│   ├── process/            # Processing pipeline
+│   ├── main.py             # API endpoints
+│   └── requirements.txt
+├── GUI/                    # React frontend
+│   ├── src/
+│   │   ├── components/
+│   │   └── pages/
+│   └── package.json
+├── CLI/                    # Command-line interface
+│   ├── cli.py              # Main CLI script
+│   ├── cli_commands.py
+│   ├── edam_file_parser.js
+│   └── payload_generator.js
+├── edams-models/           # Predefined EDAM models
+├── ReSuMo/                 # ReSuMo analysis tool
+├── Generated-code/         # Output directory
+├── config.json
+├── install.sh / install.bat
+├── start_api.sh / start_api.bat
+└── start_gui.sh / start_gui.bat</code></pre>
+<hr />
+<h2 data-number="1.18" id="docker-deployment"><span
+class="header-section-number">1.18</span> Docker Deployment</h2>
+<h3 data-number="1.18.1" id="quick-start-1"><span
+class="header-section-number">1.18.1</span> Quick Start</h3>
+<div class="sourceCode" id="cb21"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> Docker</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="ex">./run-docker.sh</span></span></code></pre></div>
+<p>Or with Docker Compose:</p>
+<div class="sourceCode" id="cb22"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> Docker</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> compose up <span class="at">--build</span></span></code></pre></div>
+<h3 data-number="1.18.2" id="accessing-services"><span
+class="header-section-number">1.18.2</span> Accessing Services</h3>
+<ul>
+<li><strong>GUI</strong>: http://localhost:3000</li>
+<li><strong>API</strong>: http://localhost:5000</li>
+</ul>
+<h3 data-number="1.18.3" id="cli-in-docker"><span
+class="header-section-number">1.18.3</span> CLI in Docker</h3>
+<div class="sourceCode" id="cb23"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> exec <span class="at">-it</span> edam-studio edam-cli assettransfer <span class="at">--mode</span> 2</span></code></pre></div>
+<h3 data-number="1.18.4" id="pushing-image"><span
+class="header-section-number">1.18.4</span> Pushing Image</h3>
+<div class="sourceCode" id="cb24"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> Docker</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="ex">./push-image.sh</span> <span class="at">-r</span> docker.io <span class="at">-u</span> yourusername <span class="at">-i</span> edam-studio</span></code></pre></div>
+<hr />
+<h2 data-number="1.19" id="troubleshooting"><span
+class="header-section-number">1.19</span> Troubleshooting</h2>
+<h3 data-number="1.19.1" id="virtual-environment-issues"><span
+class="header-section-number">1.19.1</span> Virtual Environment
+Issues</h3>
+<div class="sourceCode" id="cb25"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> Studio</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="ex">./install.sh</span></span></code></pre></div>
+<h3 data-number="1.19.2" id="port-conflicts"><span
+class="header-section-number">1.19.2</span> Port Conflicts</h3>
+<div class="sourceCode" id="cb26"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="ex">./start_api.sh</span> 9000</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Update GUI port in GUI/vite.config.ts and config.json</span></span></code></pre></div>
+<h3 data-number="1.19.3" id="opam-not-found"><span
+class="header-section-number">1.19.3</span> opam Not Found</h3>
+<ul>
+<li><strong>Linux/macOS</strong>: Install from
+https://opam.ocaml.org/doc/Install.html</li>
+<li><strong>Windows</strong>: Use WSL or Cygwin</li>
+</ul>
+<h3 data-number="1.19.4" id="missing-dependencies"><span
+class="header-section-number">1.19.4</span> Missing Dependencies</h3>
+<div class="sourceCode" id="cb27"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Python</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install <span class="at">-r</span> API/requirements.txt</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Node</span></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> GUI <span class="kw">&amp;&amp;</span> <span class="ex">npm</span> install</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ../ReSuMo <span class="kw">&amp;&amp;</span> <span class="ex">npm</span> install</span></code></pre></div>
+<h3 data-number="1.19.5" id="permission-issues-linuxmacos"><span
+class="header-section-number">1.19.5</span> Permission Issues
+(Linux/macOS)</h3>
+<div class="sourceCode" id="cb28"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">chmod</span> +x Studio/<span class="pp">*</span>.sh</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="fu">chmod</span> +x Studio/CLI/<span class="pp">*</span>.sh</span></code></pre></div>
+<hr />
+<h2 data-number="1.20" id="additional-resources"><span
+class="header-section-number">1.20</span> Additional Resources</h2>
+<ul>
+<li><strong>Model definitions</strong>:
+<code>Studio/edams-models/edam/models/</code></li>
+<li><strong>API endpoints</strong>: <code>Studio/API/main.py</code> and
+<code>Studio/API/urls.py</code></li>
+<li><strong>Base code templates</strong>:
+<code>Studio/API/base_code/</code></li>
+<li><strong>CLI documentation</strong>: <code>Studio/CLI/cli.py</code>
+and <code>Studio/CLI/cli_commands.py</code></li>
+<li><strong>GUI components</strong>:
+<code>Studio/GUI/src/components/</code></li>
+</ul>
+<hr />
+<h2 data-number="1.21" id="license"><span
+class="header-section-number">1.21</span> License</h2>
+<p>See <a href="../LICENSE">LICENSE</a> file for details.</p>
+<hr />
+<p><em>This documentation was auto-generated. Last updated:
+2025.</em></p>
+</body>
+</html>

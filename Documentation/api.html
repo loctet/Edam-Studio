@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>API — EDAM Studio</title>
+  <link rel="stylesheet" href="doc-style.css">
+  <link rel="stylesheet" href="doc-nav.css">
+</head>
+<body>
+  <div class="doc-layout">
+    <aside class="doc-sidebar">
+      <nav>
+        <h3>API</h3>
+        <ul>
+          <li><a href="index.html">← Home</a></li>
+          <li><a href="api-deep.html">Deep Dive (EDAM→Solidity, Move)</a></li>
+          <li><a href="#urls">URL Routes</a></li>
+          <li><a href="#convert-bulk">convert_bulk</a></li>
+          <li><a href="#execute-edam-trace">execute_edam_trace</a></li>
+          <li><a href="#download-file">download_file</a></li>
+          <li><a href="#run-test-file">run_test_file</a></li>
+          <li><a href="#process">process.py</a></li>
+        </ul>
+      </nav>
+    </aside>
+    <main class="doc-content">
+      <div class="doc-header">
+        <a href="index.html">Home</a>
+        <a href="api.html">API</a>
+        <a href="codegen.html">Code Gen</a>
+        <a href="api-deep.html">Deep Dive</a>
+        <a href="frontend.html">Frontend</a>
+        <a href="ocaml.html">OCaml</a>
+      </div>
+
+      <h1>Python API</h1>
+      <p>Django backend: routes, request handlers, and process orchestration.</p>
+
+      <h2 id="urls" class="section-anchor">URL Routes</h2>
+      <p class="file-path">Studio/API/urls.py</p>
+      <table>
+        <thead>
+          <tr><th>Path</th><th>View</th><th>Method</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>/admin/</code></td><td>Django admin</td><td>—</td></tr>
+          <tr><td><code>/api/convert-bulk</code></td><td>convert_bulk</td><td>POST</td></tr>
+          <tr><td><code>/api/execute-edam-trace</code></td><td>execute_edam_trace</td><td>POST</td></tr>
+          <tr><td><code>/api/download-file/&lt;file_name&gt;/</code></td><td>download_file</td><td>GET</td></tr>
+          <tr><td><code>/api/run-test-file/&lt;file_name&gt;/</code></td><td>run_test_file</td><td>GET</td></tr>
+        </tbody>
+      </table>
+
+      <h2 id="convert-bulk" class="section-anchor">convert_bulk</h2>
+      <p class="file-path">Studio/API/main.py</p>
+      <div class="func-signature">def convert_bulk(request) → JsonResponse</div>
+      <p><strong>Purpose:</strong> Generate Solidity contracts and tests from EDAM models.</p>
+      <table>
+        <thead><tr><th>Parameter</th><th>Type</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td>request</td><td>HttpRequest</td><td>Django request; must be POST with JSON body</td></tr>
+        </tbody>
+      </table>
+      <p><strong>Request body:</strong></p>
+      <pre><code>{
+  "models": [...],           // Array of EDAM objects (name, edamCode)
+  "server_settings": {...},  // Generation config
+  "target_language": "solidity"  // Optional, default "solidity"
+}</code></pre>
+      <p><strong>Returns:</strong> JsonResponse with zip_url, images, list_contents, list_empty_role_check, list_empty_role_check_issues.</p>
+      <p><strong>Errors:</strong> 405 if not POST; 400 if models is not a list; 500 on exception.</p>
+
+      <h2 id="execute-edam-trace" class="section-anchor">execute_edam_trace</h2>
+      <p class="file-path">Studio/API/main.py</p>
+      <div class="func-signature">def execute_edam_trace(request) → JsonResponse</div>
+      <p><strong>Purpose:</strong> Execute a trace on EDAM models and return the result.</p>
+      <table>
+        <thead><tr><th>Parameter</th><th>Type</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td>request</td><td>HttpRequest</td><td>POST with models and trace_text</td></tr>
+        </tbody>
+      </table>
+      <p><strong>Request body:</strong> <code>{"models": [...], "trace_text": "..."}</code></p>
+      <p><strong>Returns:</strong> JsonResponse with success and result (trace execution output).</p>
+
+      <h2 id="download-file" class="section-anchor">download_file</h2>
+      <p class="file-path">Studio/API/main.py</p>
+      <div class="func-signature">def download_file(request, file_name) → FileResponse | JsonResponse</div>
+      <table>
+        <thead><tr><th>Parameter</th><th>Type</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td>request</td><td>HttpRequest</td><td>Django request</td></tr>
+          <tr><td>file_name</td><td>str</td><td>Name of file in upload_dir (e.g. generated ZIP)</td></tr>
+        </tbody>
+      </table>
+      <p><strong>Returns:</strong> FileResponse as attachment, or 404/500 JsonResponse on error.</p>
+
+      <h2 id="run-test-file" class="section-anchor">run_test_file</h2>
+      <p class="file-path">Studio/API/main.py</p>
+      <div class="func-signature">def run_test_file(request, file_name) → JsonResponse</div>
+      <p><strong>Purpose:</strong> Run Hardhat tests on generated code. Unzips if needed, runs <code>npm install</code> and <code>npx hardhat test</code>.</p>
+      <table>
+        <thead><tr><th>Parameter</th><th>Type</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td>request</td><td>HttpRequest</td><td>Django request</td></tr>
+          <tr><td>file_name</td><td>str</td><td>ZIP filename (without .zip for folder path)</td></tr>
+        </tbody>
+      </table>
+      <p><strong>Returns:</strong> JsonResponse with <code>{"data": "&lt;test output&gt;"}</code> or error.</p>
+
+      <h2 id="process" class="section-anchor">process.py</h2>
+      <p class="file-path">Studio/API/process/process.py</p>
+      <p>Orchestrates code generation and trace execution.</p>
+
+      <h3>process_models</h3>
+      <div class="func-signature">def process_models(body, with_response=True) → JsonResponse | Dict</div>
+      <table>
+        <thead><tr><th>Parameter</th><th>Type</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td>body</td><td>Dict</td><td>Request body with models, server_settings</td></tr>
+          <tr><td>with_response</td><td>bool</td><td>If True, return JsonResponse; else return dict</td></tr>
+        </tbody>
+      </table>
+
+      <h3>process_model_bulk</h3>
+      <div class="func-signature">def process_model_bulk(body, with_response=True) → JsonResponse | Dict</div>
+      <p>Processes models in bulk; supports generation_mode 1–4 for different batching strategies.</p>
+
+      <h3>process_execute_edam_trace</h3>
+      <div class="func-signature">def process_execute_edam_trace(body) → JsonResponse</div>
+      <p>Generates OCaml trace runner, executes it, returns trace output. Uses <code>ocaml_trace_test_run_base_code.ml</code> and <code>TraceParser.get_calls_list</code>.</p>
+    </main>
+  </div>
+</body>
+</html>

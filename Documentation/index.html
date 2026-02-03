@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EDAM Studio — Documentation</title>
+  <link rel="stylesheet" href="doc-style.css">
+  <link rel="stylesheet" href="doc-nav.css">
+</head>
+<body>
+  <div class="doc-layout">
+    <aside class="doc-sidebar">
+      <nav>
+        <h3>Documentation</h3>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+        </ul>
+        <h3>Python Backend</h3>
+        <ul>
+          <li><a href="api.html">API Routes & main.py</a></li>
+          <li><a href="codegen.html">Code Generation</a></li>
+          <li><a href="api-deep.html">API & Code Gen Deep Dive</a></li>
+        </ul>
+        <h3>Frontend</h3>
+        <ul>
+          <li><a href="frontend.html">GUI Components</a></li>
+        </ul>
+        <h3>OCaml Engine</h3>
+        <ul>
+          <li><a href="ocaml.html">OCaml Files & Functions</a></li>
+        </ul>
+        <h3>Flow & Scripts</h3>
+        <ul>
+          <li><a href="studio-documentation.html">Full Documentation</a></li>
+        </ul>
+      </nav>
+    </aside>
+    <main class="doc-content">
+      <div class="doc-header">
+        <a href="index.html">Home</a>
+        <a href="api.html">API</a>
+        <a href="codegen.html">Code Gen</a>
+        <a href="api-deep.html">Deep Dive</a>
+        <a href="frontend.html">Frontend</a>
+        <a href="ocaml.html">OCaml</a>
+      </div>
+      <h1>EDAM Studio — Documentation</h1>
+      <p class="subtitle">Iterative, navigable documentation for all files, functions, and scripts.</p>
+      
+      <h2>Overview</h2>
+      <p>EDAM Studio transforms EDAM (Extended Data-Aware Machines) specifications into Solidity smart contracts with automated test generation. This documentation provides:</p>
+      <ul>
+        <li><strong>Python API</strong> — Routes, request handlers, parameters</li>
+        <li><strong>Code Generation</strong> — Process flow, OCaml generator, Solidity generator, base classes</li>
+        <li><strong>Frontend</strong> — React components, props, state, functions</li>
+        <li><strong>OCaml Engine</strong> — All .ml files, types, functions with parameters</li>
+      </ul>
+
+      <h2>Quick Navigation</h2>
+      <table>
+        <thead>
+          <tr><th>Section</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><a href="api.html">API Routes</a></td>
+            <td>Django endpoints: convert-bulk, execute-edam-trace, download-file, run-test-file</td>
+          </tr>
+          <tr>
+            <td><a href="api-deep.html">API & Code Gen Deep Dive</a></td>
+            <td>EDAM→Solidity, transitions, parser, synthesis, adding Move, tests, ZIP</td>
+          </tr>
+          <tr>
+            <td><a href="codegen.html">Code Generation</a></td>
+            <td>process.py, base_generator, OCaml generator, Contract generator, Solidity generator</td>
+          </tr>
+          <tr>
+            <td><a href="frontend.html">Frontend</a></td>
+            <td>EDAMEditor, CodeGenerationResults, modals, utils, pages</td>
+          </tr>
+          <tr>
+            <td><a href="ocaml.html">OCaml</a></td>
+            <td>types.ml, helper.ml, core_functions.ml, z3_module.ml, test_generation.ml, etc.</td>
+          </tr>
+          <tr>
+            <td><a href="studio-documentation.html">Full Doc</a></td>
+            <td>Complete flow, scripts, configuration, troubleshooting</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>Flow: EDAM → Code → Test</h2>
+      <pre><code>EDAM (GUI/CLI/API) → payload_generator.js → output.json
+     → process_models() → OCamlCodeGenerator.generate_code()
+     → ocaml &lt;file&gt;.ml → Python EDAM string
+     → ContractCodeGenerator → SolidityGenerator
+     → OCamlCodeGenerator.generate_test_code() → cmd_run.sh
+     → ./generate_test → Hardhat test JS
+     → create_zip_file() → ZIP download</code></pre>
+    </main>
+  </div>
+</body>
+</html>

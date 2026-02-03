@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Frontend — EDAM Studio</title>
+  <link rel="stylesheet" href="doc-style.css">
+  <link rel="stylesheet" href="doc-nav.css">
+</head>
+<body>
+  <div class="doc-layout">
+    <aside class="doc-sidebar">
+      <nav>
+        <h3>Frontend</h3>
+        <ul>
+          <li><a href="index.html">← Home</a></li>
+          <li><a href="#pages">Pages</a></li>
+          <li><a href="#edam-editor">EDAMEditor</a></li>
+          <li><a href="#code-gen-results">CodeGenerationResults</a></li>
+          <li><a href="#config-modal">ConfigModal</a></li>
+          <li><a href="#utils">utils.ts</a></li>
+          <li><a href="#components">Other Components</a></li>
+        </ul>
+      </nav>
+    </aside>
+    <main class="doc-content">
+      <div class="doc-header">
+        <a href="index.html">Home</a>
+        <a href="api.html">API</a>
+        <a href="codegen.html">Code Gen</a>
+        <a href="api-deep.html">Deep Dive</a>
+        <a href="frontend.html">Frontend</a>
+        <a href="ocaml.html">OCaml</a>
+      </div>
+
+      <h1>Frontend (React + Vite)</h1>
+      <p>GUI components for EDAM model editing and code generation.</p>
+
+      <h2 id="pages" class="section-anchor">Pages</h2>
+      <p class="file-path">Studio/GUI/src/pages/Index.tsx</p>
+      <div class="func-signature">const Index = () => &lt;ThemeProvider&gt;&lt;EDAMEditor /&gt;&lt;/ThemeProvider&gt;</div>
+      <p>Root page: wraps EDAMEditor in ThemeProvider.</p>
+
+      <h2 id="edam-editor" class="section-anchor">EDAMEditor</h2>
+      <p class="file-path">Studio/GUI/src/components/edam/EDAMEditor.tsx</p>
+      <p>Main editor component. Manages models, selection, generation, modals.</p>
+
+      <h3>State</h3>
+      <table>
+        <thead><tr><th>State</th><th>Type</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td>allModels</td><td>EDAMModel[]</td><td>All models (premade + user)</td></tr>
+          <tr><td>selectedModel</td><td>EDAMModel | null</td><td>Currently selected model</td></tr>
+          <tr><td>edamList</td><td>EDAMModel[]</td><td>Models to send for generation</td></tr>
+          <tr><td>jsonValue</td><td>string</td><td>JSON string of selected model</td></tr>
+          <tr><td>isGenerating</td><td>boolean</td><td>Generation in progress</td></tr>
+          <tr><td>codeError</td><td>string | null</td><td>Generation error message</td></tr>
+          <tr><td>downloadLink</td><td>string | null</td><td>URL to download ZIP</td></tr>
+          <tr><td>responseImages</td><td>string[]</td><td>FSM diagram URIs</td></tr>
+          <tr><td>responseContents</td><td>string[]</td><td>Generated Solidity code</td></tr>
+          <tr><td>emptyRoleCheck</td><td>string[]</td><td>Empty role check results</td></tr>
+          <tr><td>emptyRoleCheckIssues</td><td>[string, string][]</td><td>Role check issues per model</td></tr>
+          <tr><td>testingResultData</td><td>string | null</td><td>Hardhat test output</td></tr>
+          <tr><td>activeTab</td><td>string</td><td>"force-directed" | "graphviz" | "text"</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Key Handlers</h3>
+      <div class="func-signature">handleModelSelect(model: EDAMModel)</div>
+      <p>Sets selectedModel, updates jsonValue.</p>
+      <div class="func-signature">handleCreateNewModel()</div>
+      <p>Opens NewModelModal.</p>
+      <div class="func-signature">handleNewModelSubmit(model: EDAMModel)</div>
+      <p>Adds model to allModels, deduplicates name if needed.</p>
+      <div class="func-signature">handleImportModel()</div>
+      <p>File input for .json import.</p>
+      <div class="func-signature">handleGenerateCode()</div>
+      <p>POST to /api/convert-bulk with models and server_settings. Updates downloadLink, responseContents, codeError.</p>
+      <div class="func-signature">handleDownload()</div>
+      <p>Opens download URL (api/download-file/&lt;filename&gt;).</p>
+      <div class="func-signature">handleRunTest()</div>
+      <p>GET /api/run-test-file/&lt;filename&gt;, sets testingResultData.</p>
+
+      <h2 id="code-gen-results" class="section-anchor">CodeGenerationResults</h2>
+      <p class="file-path">Studio/GUI/src/components/edam/CodeGenerationResults.tsx</p>
+      <p>Displays generation results: code, download button, test run.</p>
+
+      <h3>Props</h3>
+      <table>
+        <thead><tr><th>Prop</th><th>Type</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td>codeError</td><td>string | null</td><td>Error message to show</td></tr>
+          <tr><td>generatedCode</td><td>string[]</td><td>Solidity file contents</td></tr>
+          <tr><td>generatedImages</td><td>string[]</td><td>FSM diagram URIs</td></tr>
+          <tr><td>emptyRoleCheck</td><td>string[]</td><td>Role check results</td></tr>
+          <tr><td>emptyRoleCheckIssues</td><td>[string, string][]</td><td>Issues per model</td></tr>
+          <tr><td>testingResultData</td><td>string | null</td><td>Test output</td></tr>
+          <tr><td>downloadLink</td><td>string | null</td><td>Download URL</td></tr>
+          <tr><td>isGenerating</td><td>boolean</td><td>Loading state</td></tr>
+          <tr><td>onDownload</td><td>() => void</td><td>Download callback</td></tr>
+          <tr><td>onRunTestFile</td><td>() => void</td><td>Run test callback</td></tr>
+        </tbody>
+      </table>
+
+      <h2 id="config-modal" class="section-anchor">ConfigModal</h2>
+      <p class="file-path">Studio/GUI/src/components/edam/ConfigModal.tsx</p>
+      <p>Modal for server_settings (probability_new_participant, number_symbolic_traces, etc.). Persists to localStorage.</p>
+
+      <h3>Props</h3>
+      <table>
+        <thead><tr><th>Prop</th><th>Type</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td>open</td><td>boolean</td><td>Modal visibility</td></tr>
+          <tr><td>onOpenChange</td><td>(open: boolean) => void</td><td>Close handler</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Exports</h3>
+      <div class="func-signature">getConfigSettings() → object</div>
+      <p>Returns config from localStorage or initialConfig.</p>
+      <div class="func-signature">initialConfig</div>
+      <p>Default config object with probability_new_participant, number_symbolic_traces, etc.</p>
+
+      <h2 id="utils" class="section-anchor">utils.ts</h2>
+      <p class="file-path">Studio/GUI/src/components/edam/utils.ts</p>
+
+      <h3>validateModel</h3>
+      <div class="func-signature">validateModel(model: EDAMModel) → string[]</div>
+      <table>
+        <thead><tr><th>Parameter</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td>model</td><td>EDAM model to validate</td></tr>
+        </tbody>
+      </table>
+      <p><strong>Returns:</strong> Array of error messages; empty if valid. Checks name, roles, states, initialState ("_"), transitions (from/to states, start from "_").</p>
+
+      <h3>createEmptyModel</h3>
+      <div class="func-signature">createEmptyModel() → EDAMModel</div>
+      <p>Returns minimal valid EDAM with name, roles, states, initialState, transitions, finalStates.</p>
+
+      <h3>exportModelAsJson</h3>
+      <div class="func-signature">exportModelAsJson(model: EDAMModel)</div>
+      <p>Triggers JSON download of model.</p>
+
+      <h2 id="components" class="section-anchor">Other Components</h2>
+      <table>
+        <thead><tr><th>Component</th><th>File</th><th>Purpose</th></tr></thead>
+        <tbody>
+          <tr><td>EDAMHeader</td><td>EDAMHeader.tsx</td><td>Top bar: model selector, new, import, config, help, generate</td></tr>
+          <tr><td>EDAMSidebar</td><td>EDAMSidebar.tsx</td><td>Model list, add to generation</td></tr>
+          <tr><td>EDAMGraph</td><td>EDAMGraph.tsx</td><td>Force-directed graph editor</td></tr>
+          <tr><td>EDAMGraphviz</td><td>EDAMGraphviz.tsx</td><td>Graphviz-based visualization</td></tr>
+          <tr><td>EDAMTextEditor</td><td>EDAMTextEditor.tsx</td><td>Text-based EDAM editing</td></tr>
+          <tr><td>EDAMJsonEditor</td><td>EDAMJsonEditor.tsx</td><td>JSON editor for model</td></tr>
+          <tr><td>TransitionModal</td><td>TransitionModal.tsx</td><td>Add/edit transition</td></tr>
+          <tr><td>StateModal</td><td>StateModal.tsx</td><td>Add/edit state</td></tr>
+          <tr><td>NewModelModal</td><td>NewModelModal.tsx</td><td>Create new model</td></tr>
+          <tr><td>HelpModal</td><td>HelpModal.tsx</td><td>Help overlay</td></tr>
+          <tr><td>TraceTestModal</td><td>TraceTestModal.tsx</td><td>Execute trace via API</td></tr>
+          <tr><td>ThemeProvider</td><td>ThemeProvider.tsx</td><td>Theme context (light/dark)</td></tr>
+        </tbody>
+      </table>
+
+      <h3>utils/</h3>
+      <table>
+        <thead><tr><th>File</th><th>Purpose</th></tr></thead>
+        <tbody>
+          <tr><td>textEDAMParser.ts</td><td>Parse text EDAM format</td></tr>
+          <tr><td>expressionHelper.ts</td><td>Expression utilities</td></tr>
+          <tr><td>alloyGenerator.ts</td><td>Alloy model generation</td></tr>
+          <tr><td>index.ts</td><td>Re-exports</td></tr>
+        </tbody>
+      </table>
+    </main>
+  </div>
+</body>
+</html>

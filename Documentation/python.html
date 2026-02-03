@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Python API — EDAM Studio Docs</title>
+  <link rel="stylesheet" href="doc-style.css" />
+  <link rel="stylesheet" href="doc-nav.css" />
+</head>
+<body class="docs-layout">
+  <aside class="docs-sidebar">
+    <nav>
+      <h3>Python</h3>
+<a href="#routes" class="nav-file">API Routes</a>
+<a href="#main_py" class="nav-file">main.py</a>
+<a href="#urls" class="nav-file">urls</a>
+<a href="#process_process" class="nav-file">process.process</a>
+<a href="#code_generation_process" class="nav-file">code_generation.process</a>
+<a href="#code_generation_ocaml_generator" class="nav-file">code_generation.ocaml.generator</a>
+<a href="#code_generation_contracts_generator" class="nav-file">code_generation.contracts.generator</a>
+<a href="#code_generation_tests_generator" class="nav-file">code_generation.tests.generator</a>
+<a href="#code_generators_solidity_generator" class="nav-file">code_generators.solidity.generator</a>
+<a href="#code_generators_solidity_expression_parser" class="nav-file">code_generators.solidity.expression_parser</a>
+<a href="#code_generators_solidity_contract_assembler" class="nav-file">code_generators.solidity.contract_assembler</a>
+<a href="#code_generators_solidity_transition_processor" class="nav-file">code_generators.solidity.transition_processor</a>
+<a href="#code_generators_solidity_constructor_builder" class="nav-file">code_generators.solidity.constructor_builder</a>
+<a href="#code_generators_solidity_call_tree_builder" class="nav-file">code_generators.solidity.call_tree_builder</a>
+<a href="#code_generators_solidity_try_catch_builder" class="nav-file">code_generators.solidity.try_catch_builder</a>
+<a href="#code_generators_solidity_transition_grouping" class="nav-file">code_generators.solidity.transition_grouping</a>
+<a href="#code_generators_solidity_role_handler" class="nav-file">code_generators.solidity.role_handler</a>
+<a href="#code_generators_solidity_type_mapper" class="nav-file">code_generators.solidity.type_mapper</a>
+<a href="#code_generators_solidity_utilities" class="nav-file">code_generators.solidity.utilities</a>
+<a href="#objects_EdamClass" class="nav-file">objects.EdamClass</a>
+<a href="#objects_TransitionClass" class="nav-file">objects.TransitionClass</a>
+<a href="#objects_Expressions" class="nav-file">objects.Expressions</a>
+<h3>Other</h3>
+<a href="ocaml.html">OCaml</a>
+<a href="frontend.html">Frontend</a>
+<a href="flow.html">Flow</a>
+    </nav>
+  </aside>
+  <main class="docs-main">
+    <div class="docs-header">
+      <a href="index.html">← EDAM Studio</a>
+      <h1>Python API</h1>
+    </div>
+    
+    <section class="file-section" id="routes">
+    <h2>API Routes</h2>
+    <div class="file-path">API/urls.py</div>
+    <table>
+    <tr><th>Method</th><th>Path</th><th>Handler</th></tr>
+    <tr><td>POST</td><td>/api/convert-bulk</td><td>convert_bulk</td></tr>
+    <tr><td>POST</td><td>/api/execute-edam-trace</td><td>execute_edam_trace</td></tr>
+    <tr><td>GET</td><td>/api/download-file/&lt;file_name&gt;/</td><td>download_file</td></tr>
+    <tr><td>GET</td><td>/api/run-test-file/&lt;file_name&gt;/</td><td>run_test_file</td></tr>
+    </table>
+    </section>
+    
+<section class="file-section" id="main_py">
+<h2>main.py</h2>
+<div class="file-path">API\main.py</div>
+<ul class="func-list">
+<li><span class="func-name">def convert_bulk</span>(request)<span class="func-desc"></span></li>
+<li><span class="func-name">def execute_edam_trace</span>(request)<span class="func-desc"></span></li>
+<li><span class="func-name">def download_file</span>(request, file_name)<span class="func-desc">Route to handle file download.</span></li>
+<li><span class="func-name">def run_test_file</span>(request, file_name)<span class="func-desc">Route to handle file download.     Checks if the folder exists. If not, it unzips the file and runs the `./run` command in the folder.</span></li>
+</ul></section>
+<section class="file-section" id="urls">
+<h2>urls.py</h2>
+<div class="file-path">API\urls.py</div>
+<ul class="func-list">
+</ul></section>
+<section class="file-section" id="process_process">
+<h2>process.py</h2>
+<div class="file-path">API\process\process.py</div>
+<ul class="func-list">
+<li><span class="func-name">def process_models</span>(body, with_response=True)<span class="func-desc">Process multiple models in bulk</span></li>
+<li><span class="func-name">def process_model_bulk</span>(body, with_response=True)<span class="func-desc">Process multiple models in bulk</span></li>
+<li><span class="func-name">def process_execute_edam_trace</span>(body)<span class="func-desc"></span></li>
+</ul></section>
+<section class="file-section" id="code_generation_process">
+<h2>process.py</h2>
+<div class="file-path">API\code_generation\process.py</div>
+<ul class="func-list">
+<li><span class="func-name">class CodeGenerationProcess</span><span class="func-desc"></span></li>
+<li><span class="func-name">def __init__</span>(self, base_dir: str, temp_dir: str, output_dir: str, upload_dir: str)<span class="func-desc"></span></li>
+<li><span class="func-name">def process_models</span>(self, body: Dict, with_response: bool = True)<span class="func-desc">Process multiple models in bulk</span></li>
+<li><span class="func-name">def process_model_bulk</span>(self, body: Dict, with_response: bool = True)<span class="func-desc">Process multiple models in bulk</span></li>
+<li><span class="func-name">def worker</span>()<span class="func-desc"></span></li>
+<li><span class="func-name">def _process_models</span>(self, data: List[Dict], server_settings: Dict, with_response: bool)<span class="func-desc">Process individual models</span></li>
+</ul></section>
+<section class="file-section" id="code_generation_ocaml_generator">
+<h2>generator.py</h2>
+<div class="file-path">API\code_generation\ocaml\generator.py</div>
+<ul class="func-list">
+<li><span class="func-name">class OCamlCodeGenerator</span>(BaseCodeGenerator)<span class="func-desc"></span></li>
+<li><span class="func-name">def __init__</span>(self, base_dir: str, temp_dir: str, output_dir: str, upload_dir: str, uid_p = None)<span class="func-desc"></span></li>
+<li><span class="func-name">def generate_code</span>(self, edam_instance: Any, server_settings: Dict)<span class="func-desc">Generate OCaml code for the given EDAM instance</span></li>
+<li><span class="func-name">def generate_test_code</span>(self, edam_instance: Any, server_settings: Dict)<span class="func-desc">Generate test code for the given EDAM instance</span></li>
+</ul></section>
+<section class="file-section" id="code_generation_contracts_generator">
+<h2>generator.py</h2>
+<div class="file-path">API\code_generation\contracts\generator.py</div>
+<ul class="func-list">
+<li><span class="func-name">class ContractCodeGenerator</span>(BaseCodeGenerator)<span class="func-desc">Generate contract code for the given EDAM instance</span></li>
+<li><span class="func-name">def __init__</span>(self, base_dir: str, temp_dir: str, output_dir: str, upload_dir: str, dirs = [])<span class="func-desc">Generate contract code for the given EDAM instance</span></li>
+<li><span class="func-name">def generate_code</span>(self, edam_instance: EDAM, server_settings: Dict)<span class="func-desc">Generate contract code for the given EDAM instance</span></li>
+<li><span class="func-name">def generate_test_code</span>(self, edam_instance: Any, server_settings: Dict)<span class="func-desc">Generate test code for the given EDAM instance</span></li>
+<li><span class="func-name">def _run_test_generation</span>(self, dirs: Dict[str, str], file_path: str, server_settings: Dict)<span class="func-desc">Run test generation process</span></li>
+</ul></section>
+<section class="file-section" id="code_generation_tests_generator">
+<h2>generator.py</h2>
+<div class="file-path">API\code_generation\tests\generator.py</div>
+<ul class="func-list">
+<li><span class="func-name">class TestGenerator</span><span class="func-desc">Generates test code for EDAM instances.</span></li>
+<li><span class="func-name">def __init__</span>(self)<span class="func-desc">Initialize the test generator.</span></li>
+<li><span class="func-name">def generate_edam_test_code</span>(self, edam_data: List[Dict[str, Any]])<span class="func-desc">Generates OCaml code for multiple EDAM instances, configurations, and dependencies map.          Args:             edam_data (list of dict): Each dict</span></li>
+</ul></section>
+<section class="file-section" id="code_generators_solidity_generator">
+<h2>generator.py</h2>
+<div class="file-path">API\code_generators\solidity\generator.py</div>
+<ul class="func-list">
+<li><span class="func-name">class SolidityGenerator</span>(BaseCodeGenerator)<span class="func-desc">Generates Solidity smart contract code from a EDAM (Decentralized Abstract Finite State Machine) representation.          This class handles the trans</span></li>
+<li><span class="func-name">def __init__</span>(
+        self,
+        edam: EDAM,
+        type_mapper: Type[SolidityTypeMapper] = SolidityTypeMapper,
+        role_handler: Type[SolidityRoleHandler] = SolidityRoleHandler,
+        expression_parser: Type[SolidityExpressionParser] = SolidityExpressionParser,
+    )<span class="func-desc">Initialize the Solidity generator.                  Args:             edam: The EDAM instance to generate code from             type_mapper: Class for</span></li>
+<li><span class="func-name">def parse_tree</span>(
+        self,
+        exp: Any,
+        caller: str = DEFAULT_CALLER,
+        contract_name: str = DEFAULT_CONTRACT,
+    )<span class="func-desc"></span></li>
+<li><span class="func-name">def type_mapping</span>(
+        self, dvar_type: str, var_name: str, is_param: bool = False
+    )<span class="func-desc">Map a EDAM variable type to its Solidity equivalent.                  Args:             dvar_type: The EDAM variable type             var_name: The va</span></li>
+<li><span class="func-name">def parse_roles</span>(self, rho: Any, caller: str, contract: str)<span class="func-desc">Parse role conditions into Solidity code.                  Args:             rho: The role condition expression             caller: The caller identif</span></li>
+<li><span class="func-name">def parse_roles_update</span>(self, rho_prime: Any, caller: str, contract: str)<span class="func-desc">Parse role updates into Solidity code.                  Args:             pi_prime: The role update expression             caller: The caller identifi</span></li>
+<li><span class="func-name">def remove_all_true_in_conditions</span>(self, conditions: List[str])<span class="func-desc">Filter out standalone 'True' and 'true' values from conditions list.         Note: This should not be used for guard conditions - guards should always</span></li>
+<li><span class="func-name">def generate_assignments</span>(
+        self, assignment: Tuple[Any, Any], caller: str, contract: str
+    )<span class="func-desc">Generate Solidity assignment statements from a EDAM assignment.                  Args:             assignment: Tuple of (variable, expression)        </span></li>
+<li><span class="func-name">def _process_func_call_assignment</span>(
+        self, exp: FuncCall, dvar: Any, caller: str, contract: str
+    )<span class="func-desc">Process a function call expression for assignment generation.                  Args:             exp: The function call expression             dvar: T</span></li>
+<li><span class="func-name">def _process_update_map_assignment</span>(
+        self, exp: FuncCall, caller: str, contract: str
+    )<span class="func-desc">Process update_map operations by extracting and parsing nested calls.                  Args:             exp: The update_map function call expression </span></li>
+<li><span class="func-name">def process_deploy_transition</span>(
+        self, transition: Transition, contract_name: str, contract_data_types: List[Tuple[str, Any]] = None
+    )<span class="func-desc">Process a deploy/start transition and generate constructor code.                  Args:             transition: The deploy/start transition           </span></li>
+<li><span class="func-name">def process_multiple_transitions</span>(
+        self, edam: EDAM, contract_name: str
+    )<span class="func-desc">Process all transitions in a EDAM and generate a complete Solidity contract.                  Args:             edam: The EDAM instance to process    </span></li>
+<li><span class="func-name">def _process_constructor_transition</span>(
+        self, edam: EDAM, contract_name: str
+    )<span class="func-desc">Process constructor (deploy/start) transitions.         Handles multiple start transitions with different guard conditions by generating if-else block</span></li>
+<li><span class="func-name">def _extract_roles_list</span>(self, roles_list: List[str])<span class="func-desc">Extract and filter valid roles from the roles list.</span></li>
+<li><span class="func-name">def _check_has_role_updates</span>(self, edam: EDAM, contract_name: str)<span class="func-desc">Check if any transition in the EDAM has role updates.</span></li>
+<li><span class="func-name">def _process_assignments_and_params</span>(
+        self,
+        assignments: List[Tuple[Any, Any]],
+        data_params: List[Tuple[str, Any]],
+        caller: str,
+        contract: str,
+    )<span class="func-desc">Process assignments and data parameters.</span></li>
+<li><span class="func-name">def _generate_params</span>(
+        self, data_params: List[Tuple[str, Any]], ptp_vars: List[str]
+    )<span class="func-desc">Generate parameter list strings for function/constructor signatures.</span></li>
+<li><span class="func-name">def _build_role_assertion</span>(
+        self, role_updates: Any, caller: str, contract: str
+    )<span class="func-desc">Build role assertion require statement.</span></li>
+<li><span class="func-name">def function_snippets</span>(self)<span class="func-desc">Get function snippets dictionary for Solidity code generation.</span></li>
+</ul></section>
+<section class="file-section" id="code_generators_solidity_expression_parser">
+<h2>expression_parser.py</h2>
+<div class="file-path">API\code_generators\solidity\expression_parser.py</div>
+<ul class="func-list">
+<li><span class="func-name">class SolidityExpressionParser</span><span class="func-desc"></span></li>
+<li><span class="func-name">def __init__</span>(self, edam=None)<span class="func-desc"></span></li>
+<li><span class="func-name">def evaluate_value</span>(self, exp)<span class="func-desc">Override this method to redefine how AND expressions should be evaluated.</span></li>
+<li><span class="func-name">def evaluate_getId</span>(self, exp, caller, contract_name)<span class="func-desc">Override this method to redefine how AND expressions should be evaluated.</span></li>
+<li><span class="func-name">def evaluate_and</span>(self, exp, caller, contract_name, external_calls)<span class="func-desc">Override this method to redefine how AND expressions should be evaluated.</span></li>
+<li><span class="func-name">def evaluate_or</span>(self, exp, caller, contract_name, external_calls)<span class="func-desc">Override this method to redefine how OR expressions should be evaluated.</span></li>
+<li><span class="func-name">def evaluate_equal</span>(self, exp, caller, contract_name, external_calls)<span class="func-desc">Override this method to redefine how Equal expressions should be evaluated.</span></li>
+<li><span class="func-name">def evaluate_less_than</span>(self, exp, caller, contract_name, external_calls)<span class="func-desc">Override this method to redefine how LessThan expressions should be evaluated.</span></li>
+<li><span class="func-name">def evaluate_less_than_equal</span>(self, exp, caller, contract_name, external_calls)<span class="func-desc">Override this method to redefine how LessThanEqual expressions should be evaluated.</span></li>
+<li><span class="func-name">def evaluate_greater_than</span>(self, exp, caller, contract_name, external_calls)<span class="func-desc">Override this method to redefine how GreaterThan expressions should be evaluated.</span></li>
+<li><span class="func-name">def evaluate_greater_than_equal</span>(self, exp, caller, contract_name, external_calls)<span class="func-desc">Override this method to redefine how GreaterThanEqual expressions should be evaluated.</span></li>
+<li><span class="func-name">def evaluate_plus</span>(self, exp, caller, contract_name, external_calls)<span class="func-desc">Override this method to redefine how Plus expressions should be evaluated.</span></li>
+<li><span class="func-name">def evaluate_minus</span>(self, exp, caller, contract_name, external_calls)<span class="func-desc">Override this method to redefine how Minus expressions should be evaluated.</span></li>
+<li><span class="func-name">def evaluate_times</span>(self, exp, caller, contract_name, external_calls)<span class="func-desc">Override this method to redefine how Times expressions should be evaluated.</span></li>
+<li><span class="func-name">def evaluate_divide</span>(self, exp, caller, contract_name, external_calls)<span class="func-desc">Override this method to redefine how Divide expressions should be evaluated.</span></li>
+<li><span class="func-name">def evaluate_func_call</span>(self, exp, caller, contract_name, external_calls)<span class="func-desc">Override this method to redefine how function calls should be evaluated.</span></li>
+<li><span class="func-name">def evaluate_func_call_edam_write</span>(self, exp, caller, contract_name, external_calls)<span class="func-desc">Override this method to redefine how FuncCallEdamWrite expressions should be evaluated.</span></li>
+</ul></section>
+<section class="file-section" id="code_generators_solidity_contract_assembler">
+<h2>contract_assembler.py</h2>
+<div class="file-path">API\code_generators\solidity\contract_assembler.py</div>
+<ul class="func-list">
+<li><span class="func-name">class ContractAssembler</span><span class="func-desc">Helper class for assembling the final contract.</span></li>
+<li><span class="func-name">def __init__</span>(self, generator)<span class="func-desc">Initialize the contract assembler.                  Args:             generator: Reference to the SolidityGenerator instance</span></li>
+<li><span class="func-name">def generate_function_code</span>(
+        self, operation_map: Dict[str, Dict[str, Any]], has_external_calls: bool
+    )<span class="func-desc">Generate function code from operation map.                  Args:             operation_map: Dictionary mapping operations to their data             h</span></li>
+<li><span class="func-name">def generate_state_enum</span>(self, states: set)<span class="func-desc">Generate State enum declaration.                  Args:             states: Set of state identifiers                      Returns:             State e</span></li>
+<li><span class="func-name">def generate_role_enum</span>(self, roles_list: set)<span class="func-desc">Generate Roles enum declaration.                  Args:             roles_list: Set of role identifiers                      Returns:             Role</span></li>
+<li><span class="func-name">def assemble_contract</span>(
+        self,
+        contract_name: str,
+        imports: str,
+        enum_states: str,
+        enum_role_list: str,
+        constructor_code: str,
+        functions_code: str,
+        math_functions_code: str,
+        has_external_calls: bool,
+        has_role_updates: bool,
+    )<span class="func-desc"></span></li>
+<li><span class="func-name">def get_non_reentrancy_code</span>(self)<span class="func-desc">Get the non-reentrancy protection code.                  Returns:             Non-reentrancy modifier code string</span></li>
+</ul></section>
+<section class="file-section" id="code_generators_solidity_transition_processor">
+<h2>transition_processor.py</h2>
+<div class="file-path">API\code_generators\solidity\transition_processor.py</div>
+<ul class="func-list">
+<li><span class="func-name">class TransitionProcessor</span><span class="func-desc">Helper class for processing transitions.</span></li>
+<li><span class="func-name">def __init__</span>(self, generator)<span class="func-desc">Initialize the transition processor.                  Args:             generator: Reference to the SolidityGenerator instance</span></li>
+<li><span class="func-name">def set_try_catch_builder</span>(self, try_catch_builder)<span class="func-desc">Set the try-catch builder instance.</span></li>
+<li><span class="func-name">def process_regular_transitions</span>(
+        self, edam: EDAM, contract_name: str
+    )<span class="func-desc">Process all non-constructor transitions and group them by operation, then by (source_state, guard, roles).                  Args:             edam: Th</span></li>
+<li><span class="func-name">def build_grouped_if_statement</span>(
+        self,
+        transitions: List[Transition],
+        source_state: str,
+        guard_str: str,
+        contract_name: str,
+    )<span class="func-desc"></span></li>
+</ul></section>
+<section class="file-section" id="code_generators_solidity_constructor_builder">
+<h2>constructor_builder.py</h2>
+<div class="file-path">API\code_generators\solidity\constructor_builder.py</div>
+<ul class="func-list">
+<li><span class="func-name">class ConstructorBuilder</span><span class="func-desc">Helper class for building constructor code.</span></li>
+<li><span class="func-name">def __init__</span>(self, generator)<span class="func-desc">Initialize the constructor builder.                  Args:             generator: Reference to the SolidityGenerator instance</span></li>
+<li><span class="func-name">def process_deploy_transition</span>(
+        self, transition: Transition, contract_name: str, contract_data_types: List[Tuple[str, Any]] = None
+    )<span class="func-desc"></span></li>
+<li><span class="func-name">def _process_contract_data_types_for_variables</span>(
+        self, contract_data_types: List[Tuple[str, Any]], contract_name: str
+    )<span class="func-desc">Process contract data types from EDAM and generate contract variable declarations.                  Args:             contract_data_types: List of (ty</span></li>
+<li><span class="func-name">def process_contract_data_types</span>(
+        self, contract_data_types: List[Tuple[str, Any]]
+    )<span class="func-desc"></span></li>
+<li><span class="func-name">def build_constructor_params</span>(
+        self,
+        parameters: List[Any],
+        participants: List[str],
+        additional_params: List[str],
+    )<span class="func-desc"></span></li>
+<li><span class="func-name">def build_combined_conditions</span>(self, guard_conditions: str)<span class="func-desc">Build a list of combined conditions from guard conditions.                  Args:             guard_conditions: Guard condition string                </span></li>
+<li><span class="func-name">def build_role_assertion</span>(
+        self, role_updates: Any, caller: str, contract: str
+    )<span class="func-desc">Build role assertion require statement.                  Args:             role_updates: The role updates to check             caller: The caller iden</span></li>
+<li><span class="func-name">def build_constructor_body</span>(
+        self,
+        external_calls: List[str],
+        assignment_code: List[str],
+        solidity_assignments: List[str],
+        role_updates: List[str],
+        target_state: str,
+        role_assertion: str,
+    )<span class="func-desc"></span></li>
+<li><span class="func-name">def wrap_with_condition_check</span>(
+        self, conditions: List[str], body: str
+    )<span class="func-desc"></span></li>
+<li><span class="func-name">def process_multiple_deploy_transitions</span>(
+        self,
+        deploy_transitions: List[Transition],
+        contract_name: str,
+        contract_data_types: List[Tuple[str, Any]] = None
+    )<span class="func-desc"></span></li>
+</ul></section>
+<section class="file-section" id="code_generators_solidity_call_tree_builder">
+<h2>call_tree_builder.py</h2>
+<div class="file-path">API\code_generators\solidity\call_tree_builder.py</div>
+<ul class="func-list">
+<li><span class="func-name">class CallTreeNode</span><span class="func-desc">Represents a node in the call tree.</span></li>
+<li><span class="func-name">def __init__</span>(self, call_signature: Tuple[str, str], call_expr: Equal)<span class="func-desc">Initialize a call tree node.                  Args:             call_signature: Tuple of (contract, operation)             call_expr: The original Equ</span></li>
+<li><span class="func-name">def is_leaf</span>(self)<span class="func-desc">Check if this is a leaf node (no children).</span></li>
+<li><span class="func-name">def has_success_branch</span>(self)<span class="func-desc">Check if this node has a success branch.</span></li>
+<li><span class="func-name">def has_failure_branch</span>(self)<span class="func-desc">Check if this node has a failure branch.</span></li>
+<li><span class="func-name">class CallTreeBuilder</span><span class="func-desc">Helper class for building call trees and generating try-catch code.</span></li>
+<li><span class="func-name">def __init__</span>(self, generator)<span class="func-desc">Initialize the call tree builder.                  Args:             generator: Reference to the SolidityGenerator instance</span></li>
+<li><span class="func-name">def _get_call_signature</span>(self, call_expr: Equal)<span class="func-desc">Extract (contract, operation) signature from a call expression.                  Args:             call_expr: Equal expression with FuncCallEdamWrite </span></li>
+<li><span class="func-name">def _normalize_call_sequence</span>(self, transition: Transition)<span class="func-desc">Extract normalized call sequence (contract, operation) pairs from transition.                  Args:             transition: The transition to extract</span></li>
+<li><span class="func-name">def _can_build_tree</span>(self, transitions: List[Transition], contract_name: str)<span class="func-desc"></span></li>
+<li><span class="func-name">def build_call_tree</span>(
+        self, transitions: List[Transition], contract_name: str
+    )<span class="func-desc">Build a call tree from transitions.                  Args:             transitions: List of transitions with external calls             contract_name:</span></li>
+<li><span class="func-name">def _build_tree_recursive</span>(
+        self, transitions: List[Transition], depth: int
+    )<span class="func-desc"></span></li>
+<li><span class="func-name">def generate_try_catch_from_tree</span>(
+        self,
+        call_tree: CallTreeNode,
+        contract_name: str,
+        caller: str,
+        indent_level: int = 2
+    )<span class="func-desc">Generate Solidity try-catch code from call tree.                  Args:             call_tree: Root CallTreeNode             contract_name: Contract n</span></li>
+<li><span class="func-name">def _generate_transition_body</span>(
+        self, transition: Transition, contract_name: str, indent_level: int
+    )<span class="func-desc">Generate transition body code (assignments, role updates, state change).                  Args:             transition: The transition to generate bod</span></li>
+</ul></section>
+<section class="file-section" id="code_generators_solidity_try_catch_builder">
+<h2>try_catch_builder.py</h2>
+<div class="file-path">API\code_generators\solidity\try_catch_builder.py</div>
+<ul class="func-list">
+<li><span class="func-name">class TryCatchBuilder</span><span class="func-desc">Helper class for building try-catch blocks.</span></li>
+<li><span class="func-name">def __init__</span>(self, generator)<span class="func-desc">Initialize the try-catch builder.                  Args:             generator: Reference to the SolidityGenerator instance</span></li>
+<li><span class="func-name">def build_try_catch_for_transition</span>(
+        self, transition: Transition, contract_name: str
+    )<span class="func-desc"></span></li>
+<li><span class="func-name">def build_transition_body_only</span>(
+        self, transition: Transition, contract_name: str
+    )<span class="func-desc">Build transition body without external calls (assignments, role updates, state change).                  Args:             transition: The transition </span></li>
+<li><span class="func-name">def _generate_transition_body</span>(
+        self, transition: Transition, contract_name: str, indent_level: int
+    )<span class="func-desc"></span></li>
+</ul></section>
+<section class="file-section" id="code_generators_solidity_transition_grouping">
+<h2>transition_grouping.py</h2>
+<div class="file-path">API\code_generators\solidity\transition_grouping.py</div>
+<ul class="func-list">
+<li><span class="func-name">class TransitionGrouper</span><span class="func-desc">Helper class for grouping transitions.</span></li>
+<li><span class="func-name">def __init__</span>(self, parse_tree_func)<span class="func-desc">Initialize the transition grouper.                  Args:             parse_tree_func: Function to parse expressions (from generator)</span></li>
+<li><span class="func-name">def serialize_guard</span>(self, guard: Any, caller: str, contract_name: str)<span class="func-desc">Serialize guard expression to string for comparison.                  Args:             guard: The guard expression (without state check)             </span></li>
+<li><span class="func-name">def guards_are_equivalent</span>(
+        self, g1: Any, g2: Any, caller: str, contract_name: str
+    )<span class="func-desc">Compare two guards syntactically using string serialization.                  Args:             g1: First guard expression             g2: Second guar</span></li>
+<li><span class="func-name">def get_call_signature</span>(
+        self, call: Any, contract_name: str
+    )<span class="func-desc">Extract signature from external call for comparison.                  Args:             call: The external call (Equal expression with FuncCallEdamWri</span></li>
+<li><span class="func-name">def calls_match_by_operation</span>(
+        self, call1: Any, call2: Any, contract_name: str
+    )<span class="func-desc">Check if two external calls have the same operation (ignoring expected boolean).                  Args:             call1: First external call express</span></li>
+<li><span class="func-name">def can_group_transitions</span>(
+        self, t1: Transition, t2: Transition, contract_name: str
+    )<span class="func-desc"></span></li>
+<li><span class="func-name">def normalize_roles_structure</span>(self, transition: Transition)<span class="func-desc"></span></li>
+<li><span class="func-name">def serialize_roles_structure</span>(self, transition: Transition)<span class="func-desc"></span></li>
+<li><span class="func-name">def roles_structures_are_equivalent</span>(self, t1: Transition, t2: Transition)<span class="func-desc"></span></li>
+</ul></section>
+<section class="file-section" id="code_generators_solidity_role_handler">
+<h2>role_handler.py</h2>
+<div class="file-path">API\code_generators\solidity\role_handler.py</div>
+<ul class="func-list">
+<li><span class="func-name">class SolidityRoleHandler</span><span class="func-desc">Initialize role handler with tracking for _roles parameter counts.</span></li>
+<li><span class="func-name">def __init__</span>(self)<span class="func-desc">Initialize role handler with tracking for _roles parameter counts.</span></li>
+<li><span class="func-name">def get_participant_variable</span>(self, participant: str, caller: str, contract: str)<span class="func-desc">Get the set of parameter counts used in _roles calls.</span></li>
+<li><span class="func-name">def get_roles_parameter_counts</span>(self)<span class="func-desc">Get the set of parameter counts used in _roles calls.</span></li>
+<li><span class="func-name">def parse_roles</span>(self, rho: Dict, caller: str, contract: str)<span class="func-desc"></span></li>
+<li><span class="func-name">def parse_roles</span>(self, rho: Dict, caller: str, contract: str)<span class="func-desc">Parse Pi and return Solidity conditions for role checks using roleSatisf.</span></li>
+<li><span class="func-name">def parse_roles_update</span>(self, rho_prime: Dict, caller: str, contract: str)<span class="func-desc">Generate Solidity assignments for role updates.</span></li>
+</ul></section>
+<section class="file-section" id="code_generators_solidity_type_mapper">
+<h2>type_mapper.py</h2>
+<div class="file-path">API\code_generators\solidity\type_mapper.py</div>
+<ul class="func-list">
+<li><span class="func-name">class SolidityTypeMapper</span><span class="func-desc">Map dvar_type to Solidity type declaration or parameter.</span></li>
+<li><span class="func-name">def map_type</span>(self, dvar_type: str, var_name: str, is_param: bool = False)<span class="func-desc">Map dvar_type to Solidity type declaration or parameter.</span></li>
+</ul></section>
+<section class="file-section" id="code_generators_solidity_utilities">
+<h2>utilities.py</h2>
+<div class="file-path">API\code_generators\solidity\utilities.py</div>
+<ul class="func-list">
+<li><span class="func-name">class GeneratorUtilities</span><span class="func-desc">Utility functions for the generator.</span></li>
+<li><span class="func-name">def __init__</span>(self, generator)<span class="func-desc">Initialize the utilities.                  Args:             generator: Reference to the SolidityGenerator instance</span></li>
+<li><span class="func-name">def process_assignments_and_params</span>(
+        self,
+        assignments: List[Tuple[Any, Any]],
+        data_params: List[Tuple[str, Any]],
+        caller: str,
+        contract: str,
+    )<span class="func-desc"></span></li>
+<li><span class="func-name">def ensure_users_permissions_variable</span>(self)<span class="func-desc">Ensure users_permissions mapping is included in contract variables if not present.         Only adds it once, even if called multiple times.</span></li>
+<li><span class="func-name">def generate_params</span>(
+        self, data_params: List[Tuple[str, Any]], ptp_vars: List[str]
+    )<span class="func-desc">Generate parameter list strings for function/constructor signatures.                  Args:             data_params: List of (type, variable) tuples  </span></li>
+<li><span class="func-name">def extract_roles_list</span>(self, roles_list: List[str])<span class="func-desc">Extract and filter valid roles from the roles list.                  Args:             roles_list: List of role strings                      Returns: </span></li>
+<li><span class="func-name">def check_has_role_updates</span>(self, edam, contract_name: str)<span class="func-desc">Check if any transition in the EDAM has role updates.                  Args:             edam: The EDAM instance to check             contract_name: T</span></li>
+</ul></section>
+<section class="file-section" id="objects_EdamClass">
+<h2>EdamClass.py</h2>
+<div class="file-path">API\objects\EdamClass.py</div>
+<ul class="func-list">
+<li><span class="func-name">class RoleStatus</span>(Enum)<span class="func-desc"></span></li>
+<li><span class="func-name">class EDAM</span><span class="func-desc"></span></li>
+<li><span class="func-name">def __init__</span>(
+        self,
+        name,
+        states,
+        transitions,
+        final_states,
+        initial_state,
+        roles_list,
+        participants_list,
+        variables_list,
+        contract_data_types = None # Optional, only relevant for deploy transition  
+    )<span class="func-desc"></span></li>
+<li><span class="func-name">def to_dict</span>(self)<span class="func-desc"></span></li>
+<li><span class="func-name">def get</span>(self, key)<span class="func-desc"></span></li>
+<li><span class="func-name">def __repr__</span>(self)<span class="func-desc"></span></li>
+<li><span class="func-name">def _generate_all_paths</span>(self, transitions, source, paths=None)<span class="func-desc">Generate all paths starting from the source state by recursively removing transitions.          :param transitions: List of transitions available.    </span></li>
+<li><span class="func-name">def is_empty_role_free</span>(self)<span class="func-desc">Check if the EDAM is empty-role free.          :return: Tuple (is_empty_role_free, issues) where issues is a list of tuples (path, role) causing probl</span></li>
+</ul></section>
+<section class="file-section" id="objects_TransitionClass">
+<h2>TransitionClass.py</h2>
+<div class="file-path">API\objects\TransitionClass.py</div>
+<ul class="func-list">
+<li><span class="func-name">class Transition</span><span class="func-desc"></span></li>
+<li><span class="func-name">def __init__</span>(
+        self,
+        source_state,
+        guard,
+        external_calls,
+        roles,
+        participants,
+        initiator,
+        operation,
+        parameters,
+        assignments,
+        role_updates,
+        target_state,
+    )<span class="func-desc"></span></li>
+<li><span class="func-name">def to_dict</span>(self)<span class="func-desc">Convert the transition to a dictionary.</span></li>
+<li><span class="func-name">def __repr__</span>(self)<span class="func-desc"></span></li>
+</ul></section>
+<section class="file-section" id="objects_Expressions">
+<h2>Expressions.py</h2>
+<div class="file-path">API\objects\Expressions.py</div>
+<ul class="func-list">
+<li><span class="func-name">class Exp</span><span class="func-desc">Base class for expressions.</span></li>
+<li><span class="func-name">class Plus</span>(Exp)<span class="func-desc"></span></li>
+<li><span class="func-name">def __init__</span>(self, left, right)<span class="func-desc"></span></li>
+<li><span class="func-name">class Minus</span>(Exp)<span class="func-desc"></span></li>
+<li><span class="func-name">def __init__</span>(self, left, right)<span class="func-desc"></span></li>
+<li><span class="func-name">class Times</span>(Exp)<span class="func-desc"></span></li>
+<li><span class="func-name">def __init__</span>(self, left, right)<span class="func-desc"></span></li>
+<li><span class="func-name">class Equal</span>(Exp)<span class="func-desc"></span></li>
+<li><span class="func-name">def __init__</span>(self, left, right)<span class="func-desc"></span></li>
+<li><span class="func-name">class NotEqual</span>(Exp)<span class="func-desc"></span></li>
+<li><span class="func-name">def __init__</span>(self, left, right)<span class="func-desc"></span></li>
+<li><span class="func-name">class Divide</span>(Exp)<span class="func-desc"></span></li>
+<li><span class="func-name">def __init__</span>(self, left, right)<span class="func-desc"></span></li>
+<li><span class="func-name">class ListIndex</span>(Exp)<span class="func-desc"></span></li>
+<li><span class="func-name">def __init__</span>(self, lst, index, default)<span class="func-desc"></span></li>
+<li><span class="func-name">class MapIndex</span>(Exp)<span class="func-desc"></span></li>
+<li><span class="func-name">def __init__</span>(self, map_var, key, default)<span class="func-desc"></span></li>
+<li><span class="func-name">class And</span>(Exp)<span class="func-desc"></span></li>
+<li><span class="func-name">def __init__</span>(self, left, right)<span class="func-desc"></span></li>
+<li><span class="func-name">class Or</span>(Exp)<span class="func-desc"></span></li>
+<li><span class="func-name">def __init__</span>(self, left, right)<span class="func-desc"></span></li>
+<li><span class="func-name">class Not</span>(Exp)<span class="func-desc"></span></li>
+<li><span class="func-name">def __init__</span>(self, operand)<span class="func-desc"></span></li>
+<li><span class="func-name">class GreaterThan</span>(Exp)<span class="func-desc"></span></li>
+<li><span class="func-name">def __init__</span>(self, left, right)<span class="func-desc"></span></li>
+<li><span class="func-name">class GreaterThanEqual</span>(Exp)<span class="func-desc"></span></li>
+<li><span class="func-name">def __init__</span>(self, left, right)<span class="func-desc"></span></li>
+<li><span class="func-name">class LessThan</span>(Exp)<span class="func-desc"></span></li>
+<li><span class="func-name">def __init__</span>(self, left, right)<span class="func-desc"></span></li>
+<li><span class="func-name">class LessThanEqual</span>(Exp)<span class="func-desc"></span></li>
+<li><span class="func-name">def __init__</span>(self, left, right)<span class="func-desc"></span></li>
+<li><span class="func-name">class Val</span>(Exp)<span class="func-desc"></span></li>
+<li><span class="func-name">def __init__</span>(self, value)<span class="func-desc"></span></li>
+<li><span class="func-name">class Self</span>(Exp)<span class="func-desc"></span></li>
+<li><span class="func-name">def __init__</span>(self)<span class="func-desc"></span></li>
+<li><span class="func-name">class Ptp</span><span class="func-desc"></span></li>
+<li><span class="func-name">def __init__</span>(self, ptp)<span class="func-desc"></span></li>
+<li><span class="func-name">def __str__</span>(self)<span class="func-desc"></span></li>
+<li><span class="func-name">class Pvar_a</span>(Exp)<span class="func-desc"></span></li>
+<li><span class="func-name">def __init__</span>(self, ptp_var)<span class="func-desc"></span></li>
+<li><span class="func-name">class Dvar</span>(Exp)<span class="func-desc"></span></li>
+<li><span class="func-name">def __init__</span>(self, var_name)<span class="func-desc"></span></li>
+<li><span class="func-name">class PtID</span>(Exp)<span class="func-desc"></span></li>
+<li><span class="func-name">def __init__</span>(self, ptp_var)<span class="func-desc"></span></li>
+<li><span class="func-name">def getID</span>(self, caller, contract_name, plateform = &quot;solidity&quot;)<span class="func-desc"></span></li>
+<li><span class="func-name">class FuncCall</span>(Exp)<span class="func-desc"></span></li>
+<li><span class="func-name">def __init__</span>(self, operation, arguments)<span class="func-desc"></span></li>
+<li><span class="func-name">class FuncCallEdamRead</span>(Exp)<span class="func-desc"></span></li>
+<li><span class="func-name">def __init__</span>(self, contract, expression)<span class="func-desc"></span></li>
+<li><span class="func-name">class FuncCallEdamWrite</span>(Exp)<span class="func-desc"></span></li>
+<li><span class="func-name">def __init__</span>(self, contract, operation, ptp_params, data_params)<span class="func-desc"></span></li>
+</ul></section>
+  </main>
+</body>
+</html>

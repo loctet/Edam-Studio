@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OCaml Engine — EDAM Studio</title>
+  <link rel="stylesheet" href="doc-style.css">
+  <link rel="stylesheet" href="doc-nav.css">
+</head>
+<body>
+  <div class="doc-layout">
+    <aside class="doc-sidebar">
+      <nav>
+        <h3>OCaml</h3>
+        <ul>
+          <li><a href="index.html">← Home</a></li>
+          <li><a href="#types">types.ml</a></li>
+          <li><a href="#helper">helper.ml</a></li>
+          <li><a href="#printer">printer.ml</a></li>
+          <li><a href="#core">core_functions.ml</a></li>
+          <li><a href="#z3">z3_module.ml</a></li>
+          <li><a href="#test-gen">test_generation.ml</a></li>
+          <li><a href="#ocaml-base">ocaml_base_code.ml</a></li>
+          <li><a href="#templates">Templates</a></li>
+        </ul>
+      </nav>
+    </aside>
+    <main class="doc-content">
+      <div class="doc-header">
+        <a href="index.html">Home</a>
+        <a href="api.html">API</a>
+        <a href="codegen.html">Code Gen</a>
+        <a href="api-deep.html">Deep Dive</a>
+        <a href="frontend.html">Frontend</a>
+        <a href="ocaml.html">OCaml</a>
+      </div>
+
+      <h1>OCaml Engine</h1>
+      <p>Symbolic execution and test generation. All files in <code>Studio/API/base_code/</code>.</p>
+
+      <h2 id="types" class="section-anchor">types.ml</h2>
+      <p class="file-path">Studio/API/base_code/types.ml</p>
+      <p>Type definitions for EDAM semantics.</p>
+
+      <h3>Core Types</h3>
+      <table>
+        <thead><tr><th>Type</th><th>Definition</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td>ptp_var</td><td>Ptp of string</td><td>Participant variable</td></tr>
+          <tr><td>participant</td><td>PID of string</td><td>Participant ID</td></tr>
+          <tr><td>role_type</td><td>Role of string</td><td>Role name</td></tr>
+          <tr><td>role_mode</td><td>Top \| Bottom \| Unknown</td><td>Role mode (has/not-has/unknown)</td></tr>
+          <tr><td>operation</td><td>Operation of string</td><td>Operation name</td></tr>
+          <tr><td>dvar</td><td>Var of string</td><td>Data variable</td></tr>
+          <tr><td>value_type</td><td>BoolVal \| IntVal \| StrVal \| PtpID \| ListVal \| MapVal</td><td>Runtime value</td></tr>
+          <tr><td>exp</td><td>AST</td><td>Expression: Pvar_a, Dvar, Plus, And, FuncCall, FuncCallEdamRead, etc.</td></tr>
+          <tr><td>funcCallEdamWrite</td><td>FuncCallEdamWrite of string * operation * exp list * exp list</td><td>External EDAM call</td></tr>
+          <tr><td>guard_type</td><td>exp * (funcCallEdamWrite * bool) list</td><td>Guard + external calls</td></tr>
+          <tr><td>label_type</td><td>guard * rho * ptp * op * ptp_list * dvar_list * assignments * rho' * name</td><td>Transition label</td></tr>
+          <tr><td>label_conf</td><td>participant * operation * participant list * value_type list</td><td>Concrete label (caller, op, participants, values)</td></tr>
+          <tr><td>configuration</td><td>{state, pi, sigma}</td><td>EDAM configuration</td></tr>
+          <tr><td>edam_type</td><td>{name, states, transitions, final_modes, initial_state, roles_list, ptp_var_list, variables_list}</td><td>EDAM definition</td></tr>
+          <tr><td>multi_config</td><td>{edam_map, config_map}</td><td>Multi-EDAM state (Hashtbl)</td></tr>
+          <tr><td>server_config_type</td><td>{probability_new_participant, ...}</td><td>Generation config</td></tr>
+        </tbody>
+      </table>
+
+      <h2 id="helper" class="section-anchor">helper.ml</h2>
+      <p class="file-path">Studio/API/base_code/helper.ml</p>
+
+      <h3>Functions</h3>
+      <div class="func-signature">find_with_debug (table : ('a, 'b) Hashtbl.t) (key : 'a) : 'b</div>
+      <p>Safe Hashtbl.find; fails with debug message if key not found.</p>
+
+      <div class="func-signature">copy_sigma (sigma : sigma_type) : sigma_type</div>
+      <p>Deep copy of sigma mapping.</p>
+
+      <div class="func-signature">generate_iota (ptp_list : ptp_var list) (participants : participant list) : iota_type</div>
+      <table>
+        <thead><tr><th>Parameter</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td>ptp_list</td><td>Participant variables</td></tr>
+          <tr><td>participants</td><td>Concrete participant IDs</td></tr>
+        </tbody>
+      </table>
+
+      <div class="func-signature">generate_iota_from_label (edam_name : string) (label_conf : label_conf) (multi_cfg : multi_config) : iota_type</div>
+      <p>Build iota from label_conf by matching transition (op, participant count, value count).</p>
+
+      <div class="func-signature">initialize_sigma (list_of_vars : (dvar_type * dvar) list) : sigma_type</div>
+      <p>Create sigma with default values per type (int→0, bool→false, address→0x0, etc.).</p>
+
+      <div class="func-signature">eval (sigma : sigma_type) (iota : iota_type) (e : exp) (multi_cfg : multi_config) (called_contracts : string list) : value_type * multi_config</div>
+      <p>Evaluate expression. Handles arithmetic, boolean, FuncCall (sum, update_map, get_amount_out, etc.), FuncCallEdamRead, FuncCallEdamWrite (via external_edam_write).</p>
+
+      <div class="func-signature">external_edam_write (edam_name, op, participant_exps, values_exp, caller_id, sigma, iota, multi_cfg, called_contracts) : value_type * multi_config</div>
+      <p>Execute transition on another EDAM. Calls perform_transition, updates multi_cfg.</p>
+
+      <div class="func-signature">eval_func_write_list (origin_edam_name, func_calls, sigma, iota, multi_cfg, called_contracts) : bool * multi_config</div>
+      <p>Evaluate list of (FuncCallEdamWrite, expected_bool). Returns (true, cfg) if all match expected.</p>
+
+      <div class="func-signature">generate_random_value (dtype : dvar_type) (v : dvar) (server_configs : server_config_type) : value_type</div>
+      <p>Random value by type: bool (probability_true_for_bool), int (min/max), string (length range), list_int.</p>
+
+      <div class="func-signature">eval_command (edam, config, args, dependencie_map) : string</div>
+      <p>Eval commands: [var], [sum; var], [count; var], [get; state], [countRole; role], [var; [idx_t; idx_str]].</p>
+
+      <h2 id="printer" class="section-anchor">printer.ml</h2>
+      <p class="file-path">Studio/API/base_code/printer.ml</p>
+      <div class="func-signature">sigma_contains (sigma : sigma_type) (v : dvar) : bool</div>
+      <div class="func-signature">string_of_value (v : value_type) : string</div>
+      <div class="func-signature">print_sigma (sigma : sigma_type) (vars : dvar list) : unit</div>
+      <div class="func-signature">print_all_sigmas (multi_cfg : multi_config) : unit</div>
+      <div class="func-signature">print_transition_details (transition, iota, sigma, mark) : unit</div>
+      <div class="func-signature">print_symbolic_trace (symbolic_trace, trace_number) : unit</div>
+      <div class="func-signature">print_trace (trace) : unit</div>
+
+      <h2 id="core" class="section-anchor">core_functions.ml</h2>
+      <p class="file-path">Studio/API/base_code/core_functions.ml</p>
+
+      <div class="func-signature">update_pi (pi : pi_type) (iota : iota_type) (rho : role_a_type) (party_list : ptp_var list) (roles : role_type list) : pi_type</div>
+      <p>Update pi from rho (Top add, Bottom remove).</p>
+
+      <div class="func-signature">role_satisf (pi, iota, rho, participant_vars, roles) : bool</div>
+      <p>Check pi models iota and rho (hasrole ⊆ pi, notrole ∩ pi = ∅).</p>
+
+      <div class="func-signature">check_transition (edam_name, config, transition, label_conf, iota, roles, ptpV_list, multi_cfg, called_contracts) : (configuration option * string option * multi_config)</div>
+      <p>Validate transition: state match, op match, guard eval, external calls, participant match, role_satisf. Returns (Some new_config, None, cfg) or (None, Some reason, cfg).</p>
+
+      <div class="func-signature">perform_transition_impl (origin_edam_name, config, label_conf, edam, iota, original_multi_cfg, called_contracts) : (configuration option * edam_type option * multi_config option * transition_type option * string option) option</div>
+      <p>Execute transition. Checks reentrancy, finds matching transition, calls check_transition, updates multi_cfg.</p>
+
+      <div class="func-signature">evaluate_trace (trace : (string * label_conf) list) (configurations : multi_config) : (result_list, multi_config)</div>
+      <p>Execute trace step by step. For each (edam_name, label_conf): generate_iota_from_label, perform_transition, collect (success, reason, sigma, state, transition).</p>
+
+      <div class="func-signature">evaluate_trace_last (last_trace, previous_trace, configurations) : result_list</div>
+      <p>Evaluate last_trace, append to previous_trace.</p>
+
+      <h2 id="z3" class="section-anchor">z3_module.ml</h2>
+      <p class="file-path">Studio/API/base_code/z3_module.ml</p>
+
+      <div class="func-signature">guard_to_z3_exp (guard : guard_type) : z3_exp</div>
+      <p>Convert guard (main_exp, calls) to Z_And(Z_Exp main_exp, Z_Eq calls...).</p>
+
+      <div class="func-signature">substitute_params (exp : z3_exp) (dvar_map) (ptp_map) : z3_exp</div>
+      <p>Substitute dvar and ptp in expression.</p>
+
+      <div class="func-signature">replace_dvars (exp : z3_exp) (sigma : sigma_type) : z3_exp</div>
+      <p>Replace Dvar with Val(sigma d) where defined.</p>
+
+      <div class="func-signature">z3_of_exp (ctx, sigma, iota, multi_cfg, z3_vars, e, dvar_list, called_contracts) : Z3.Expr.expr</div>
+      <p>Convert exp to Z3: Dvar→const or sigma value, arithmetic, boolean, FuncCall (get_amount_out formula), FuncCallEdamRead (eval).</p>
+
+      <div class="func-signature">z3_of_func_write (ctx, sigma, iota, multi_cfg, z3_vars, call, dvar_list, called_contracts) : Z3.Expr.expr</div>
+      <p>Convert FuncCallEdamWrite: find transition, substitute params, recurse on guard.</p>
+
+      <div class="func-signature">check_guard_satisfiability (ctx, guard, dvar_list, sigma, iota, multi_cfg) : Z3.Solver.status * (string * Z3.Expr.expr) list</div>
+      <table>
+        <thead><tr><th>Parameter</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td>ctx</td><td>Z3 context</td></tr>
+          <tr><td>guard</td><td>Guard expression</td></tr>
+          <tr><td>dvar_list</td><td>Variables to solve for</td></tr>
+          <tr><td>sigma, iota, multi_cfg</td><td>Current state</td></tr>
+        </tbody>
+      </table>
+      <p><strong>Returns:</strong> (SATISFIABLE/UNSATISFIABLE/UNKNOWN, model bindings).</p>
+
+      <h2 id="test-gen" class="section-anchor">test_generation.ml</h2>
+      <p class="file-path">Studio/API/base_code/test_generation.ml</p>
+
+      <div class="func-signature">getOrGenParticipantsIds (server_configs, existing_participants, ptp_list, multi_cfg, for_params, current_edam_name, rho, should_only_right) : (participant list * participant list)</div>
+      <p>Get or generate participants for ptp_list. Uses probability_new_participant, probability_right_participant. Returns (selected, newly_created).</p>
+
+      <div class="func-signature">generate_random_trace (multi_cfg, dependencies_map, server_configs, max_trace_size, real_traces_per_symbolic, trace_number) : (symbolic_trace, real_traces_list)</div>
+      <table>
+        <thead><tr><th>Parameter</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td>multi_cfg</td><td>Initial multi-EDAM config</td></tr>
+          <tr><td>dependencies_map</td><td>EDAM dependencies</td></tr>
+          <tr><td>server_configs</td><td>Generation config</td></tr>
+          <tr><td>max_trace_size</td><td>Symbolic transitions per trace</td></tr>
+          <tr><td>real_traces_per_symbolic</td><td>Real traces per symbolic</td></tr>
+        </tbody>
+      </table>
+      <p>Symbolic trace: random transitions. Real trace: Z3 or random values, evaluate_trace, retry on failure (max_fail_try).</p>
+
+      <div class="func-signature">generate_hardhat_tests (multi_cfg, traces, server_configs) : (string, string)</div>
+      <p>Emit Hardhat/Chai test JS. For each trace: deploy contracts, call operations, add expect for success/failure, add_test_of_pi, add_test_of_variables, add_test_of_state.</p>
+
+      <div class="func-signature">compute_edam_deployment_order (config_map) : deployment_info list</div>
+      <p>Topological sort by extract_dependencies_from_transition (FuncCallEdamWrite targets).</p>
+
+      <h2 id="ocaml-base" class="section-anchor">ocaml_base_code.ml</h2>
+      <p class="file-path">Studio/API/base_code/ocaml_base_code.ml</p>
+
+      <div class="func-signature">guard_to_z3_exp (guard : guard_type) : z3_exp</div>
+      <div class="func-signature">generate_ptp_roles_modes (rho, ptp_vars, roles) : string</div>
+      <p>JSON string of participant → role → mode.</p>
+      <div class="func-signature">value_type_to_text (v : value_type) : string</div>
+      <div class="func-signature">exp_to_text (e : exp) : string</div>
+      <p>Python-like string for expression.</p>
+      <div class="func-signature">generate_python_edam (edam : edam_type) (contract_vars) : string</div>
+      <p>Convert edam to Python EDAM(...) and Transition(...) syntax. Validates with validate_edams.</p>
+
+      <h2 id="templates" class="section-anchor">Templates</h2>
+      <p class="file-path">ocaml_test_code.ml, ocaml_trace_test_run_base_code.ml</p>
+      <p><strong>ocaml_test_code.ml</strong>: Placeholders {edams_code_here}, {probability_new_participant}, {number_symbolic_traces}, etc. Replaced by Python. Runs generate_random_trace, evaluate_trace, generate_hardhat_tests.</p>
+      <p><strong>ocaml_trace_test_run_base_code.ml</strong>: {edams_code_here}, {call_list_here}. Used for trace execution (execute_edam_trace API).</p>
+    </main>
+  </div>
+</body>
+</html>

@@ -39,19 +39,106 @@ callerVar:operation(params){assignments} {user:role:mode} [to_state]
 
   \item \textbf{JSON Editor}: 
   The bottom panel provides a JSON editor for direct structural editing. 
-  Changes are reflected in the graph.
+  Changes are reflected in the graph 
+  (Select some examples from the available models 
+  in the \texttt{edams-models} repository to see the JSON format).
 \end{itemize}
 
-\textbf{Generating code.}
+\noindent\textbf{Generating code.}
 Add the desired model(s) to the \texttt{Generation List} via \texttt{Add to Generation List}, then click \texttt{Generate Code} in the header. After generation, the results appear with two tabs:
 \begin{itemize}
 \item \textbf{Generated Code}: View the generated Solidity contracts. Use \texttt{Download Generated ZIP} to save the code (contracts, tests, and configuration) locally.
 \item \textbf{Run Solidity Test}: Execute the generated tests on the server and view pass/fail results.
 \end{itemize}
 
-\textbf{Running a trace test.}
+\noindent\textbf{Running a trace test.}
 To verify model behavior without generating full code, click \texttt{Run A Trace Test} (bottom-right). Enter trace commands in the text area (e.g., \texttt{p1>Token1.deploy [] [10]}) and click \texttt{Test Trace} to execute. The tool simulates the trace against the model and reports the outcome.
 
+\section{CLI Usage}
+
+The EDAM Studio CLI provides two main interfaces for command-line workflows: 
+\texttt{edam-cli} for code generation, and \texttt{CLI/cli.sh} 
+for running tests, mutation analysis, and experiment data processing.
+
+\noindent\textbf{Code generation (\texttt{edam-cli}).}
+When running via Docker, use \texttt{edam-cli} to generate Solidity contracts from EDAM models:
+\begin{lstlisting}
+docker exec -it edam-studio edam-cli \
+<model1> [model2] ... --mode <3|4> [options]
+\end{lstlisting}
+Models can be predefined names (e.g., \texttt{assettransfer}, \texttt{c20}, \texttt{amm}).
+The \texttt{--mode} parameter is required: 
+1 (single trace), 2 (few traces), 3 (many traces), or 4 (all models). 
+Generated ZIP files appear in \texttt{/app/Studio/Generated-code/} inside the container. 
+See Table~\ref{tab:cli-params} for all optional parameters.
+
+\noindent\textbf{Auxiliary commands (\texttt{cli.sh}).}
+From within the container (or locally with \texttt{cd Studio}), use:
+\begin{itemize}
+  \item \texttt{.generate edams <models> --mode <3|4> [options]}: 
+    Generate code (equivalent to \texttt{edam-cli}).
+  \item \texttt{.run test <zip\_file> [test|coverage]}: 
+    Extract a generated ZIP, run \texttt{npm install}, 
+    then execute Hardhat tests or coverage.
+  \item \texttt{.run resumo <zip\_file>}: 
+    Run ReSuMo mutation testing on a generated ZIP file.
+  \item \texttt{.run experiment\_data [--mutation <zip\_file>]}: 
+    Process all ZIPs in \texttt{EXPERIMENT\_DATA/Generated Code.zip} (tests and coverage; 
+    optionally run mutation on a specific ZIP).
+\end{itemize}
+Example (inside container):
+\begin{lstlisting}
+docker exec -it edam-studio bash -c \
+"cd /app/Studio && CLI/cli.sh .run test assettransfer_0.35_1.zip test"
+\end{lstlisting}
+
+List of all models available in the \texttt{edams-models} repository:
+\begin{table}[ht]
+\centering
+\caption{List of all models available in the \texttt{edams-models} repository.}
+\label{tab:models}
+\begin{tabular}{@{}ll@{}}
+\hline
+\textbf{Model Name} & \textbf{Description} \\
+\hline
+\texttt{assettransfer} & Asset transfer contract \\
+\texttt{basicprovenance} & Basic provenance tracking \\
+\texttt{defectivecounter} & Defective counter (testing example) \\
+\texttt{digital\_locker} & Digital locker contract \\
+\texttt{frequentflyer} & Frequent flyer program \\
+\texttt{helloblockchain} & Hello blockchain example \\
+\texttt{refrigeratedtransport} & Refrigerated transport tracking \\
+\texttt{simplemarketplace} & Simple marketplace contract \\
+\texttt{thermostatoperation} & Thermostat operation \\
+\hline
+\texttt{amm} & Automated Market Maker \\
+\texttt{c20} & ERC-20 token contract \\
+\texttt{c20\_2} & ERC-20 token variant \\
+\texttt{simplewallet} & Simple wallet contract \\
+\hline
+\texttt{c1}, \texttt{c2}, \texttt{c3} & Example models in figure 1 from the paper \\
+\texttt{cop} & Example model for figure 3 from the paper \\
+\texttt{cpay} & Payment contract with C20 for figure 4 from the paper \\
+\texttt{cm} & Case study model from the paper \\
+\hline
+\end{tabular}
+\end{table}
+
+To generate code for any of the models (except AMM, COP, CPAY, CM) in the table, use the following command:
+\begin{lstlisting}
+docker exec -it edam-studio edam-cli <model_name> --mode 4 [options]
+\end{lstlisting}
+Replace \texttt{<model\_name>} with the name of the model you want to generate code for.
+The options are the same as the ones listed in Table~\ref{tab:cli-params}.
+To generate code for models AMM, COP, CPAY, CM, use the following command:
+\begin{lstlisting}
+docker exec -it edam-studio edam-cli c20 c20\_2 amm --mode 3 [options]
+\end{lstlisting}
+Here we have to pass the network of all models. In the case of AMM, 
+we have to pass the network of C20, C20\_2 and AMM. 
+Likewise, for COP, we have to pass the network of C20 and COP,
+for CPAY, we have to pass the network of C20 and CPAY,
+for CM, we have to pass the network of C20 and CM.
 
 \section{Reproduction of Experimental Claims}
 
@@ -65,19 +152,25 @@ the following commands and procedures enable reproduction:
 \noindent\textbf{Reproduction}: Using the Docker container:
 \begin{lstlisting}
 docker exec -it edam-studio edam-cli \
-  assettransfer c20 basicprovenance --mode 2
+  assettransfer c20 basicprovenance --mode 4
 \end{lstlisting}
-Generated code (a ZIP file named \texttt{<ModelName>\_<new participant probability>\_<id>.zip} containing the generated code, tests, and configuration files) appears in \texttt{/app/Studio/Generated-code/} in the Docker container. 
+Generated code (a ZIP file named 
+\texttt{<ModelName>\_<new participant probability>\_<id>.zip} 
+containing the generated code, tests, and configuration files) 
+appears in \texttt{/app/Studio/Generated-code/} in the Docker container. 
+The Zip file can be generated and downloaded from the GUI 
+by adding the model to the \texttt{Generation List} and clicking on the \texttt{Download Generated ZIP} button.
 For custom trace counts (as in the paper):
 \begin{lstlisting}
-docker exec -it edam-studio edam-cli c20 amm --mode 3 \
-  --number_symbolic_traces 1000 --number_transition_per_trace 40
+docker exec -it edam-studio edam-cli <model_name> --mode 4 \
+  --number_symbolic_traces 2000 --number_transition_per_trace 50 \
+  --max_fail_try 5 --probability_new_participant 0.1 
 \end{lstlisting}
 
 \noindent\textbf{Command template}:
 \begin{lstlisting}
 docker exec -it edam-studio edam-cli <model1> [model2] ... \
-  --mode <1|2|3|4> [options]
+  --mode <3|4> [options]
 \end{lstlisting}
 
 Table~\ref{tab:cli-params} lists all optional parameters for code generation.
@@ -90,7 +183,7 @@ Table~\ref{tab:cli-params} lists all optional parameters for code generation.
 \textbf{Parameter} & \textbf{Default} & \textbf{Description} \\
 \hline
 \multicolumn{3}{l}{\textit{Required}} \\
-\texttt{--mode} & --- & Generation mode: 1 (single trace), 2 (few traces), 3 (many traces), 4 (all models) \\
+\texttt{--mode} & --- & Generation mode: 3 (all models form one network), 4 (Each model form one network) \\
 \hline
 \multicolumn{3}{l}{\textit{Symbolic trace generation}} \\
 \texttt{--number\_symbolic\_traces} & 200 & Number of symbolic traces to generate per model \\
@@ -131,7 +224,8 @@ The archives \texttt{Generated Code.zip}, \texttt{Mutations.zip}, and \texttt{Ex
 \noindent\textbf{Running tests and mutation on pre-generated data}:
 To run tests and coverage for all pre-generated zip files in \texttt{EXPERIMENT\_DATA/Generated Code.zip}, use:
 \begin{lstlisting}
-docker exec -it edam-studio bash -c "cd /app/Studio && CLI/cli.sh .run experiment_data"
+docker exec -it edam-studio bash -c \ 
+  "cd /app/Studio && CLI/cli.sh .run experiment_data"
 \end{lstlisting}
 This command will:
 \begin{enumerate}
@@ -149,18 +243,19 @@ This command will:
 \noindent\textbf{Running mutation testing on a specific pre-generated zip}:
 To run mutation testing (ReSuMo) on a specific zip file from the pre-generated data:
 \begin{lstlisting}
-docker exec -it edam-studio bash -c "cd /app/Studio && CLI/cli.sh .run experiment_data --mutation <zip_filename>"
+docker exec -it edam-studio bash -c \ 
+  "cd /app/Studio && CLI/cli.sh .run experiment_data --mutation <zip_filename>"
 \end{lstlisting}
 Replace \texttt{<zip\_filename>} with the name of the zip file (e.g., \texttt{assettransfer\_0.35\_1.zip}). The command will copy the zip to the Generated-code directory, run ReSuMo mutation testing, and clean up afterward.
 
-\noindent\textbf{To regenerate from scratch}:
-\begin{enumerate}
-  \item Generate code for all models: 
-  \texttt{edam-cli assettransfer c20 amm basicprovenance ... --mode 3}
-  \item Run ReSuMo on each generated ZIP: 
-  \texttt{.run resumo <zip\_filename>} (via \texttt{cli\_commands.py})
-  \item Merge results using \texttt{ReSuMo/scripts/merger\_to\_one\_excel\_recap.py}
-\end{enumerate}
+For the experiments in the paper, the results are in the file 
+\texttt{EXPERIMENT\_DATA/Mutation result - Recaps.xlsx}. 
+Detailed per-operator results are in 
+\texttt{EXPERIMENT\_DATA/Excels Mutations Results.zip}. 
+
+Note that mutation testing is time consuming and can take several hours to complete 
+for some models (e.g., AMM, COP, CPAY, CM), 
+also depends on size of the test suite and the number of mutants.
 
 \subsection{Mutation Testing Results}
 
@@ -173,11 +268,8 @@ To reproduce mutation testing on a single model,
 using the Docker container:
 
 \begin{lstlisting}
-docker exec -it edam-studio bash
-source venv/bin/activate
-export OPAMROOT=/root/.opam && eval $(opam env --root=/root/.opam)
-cd /app/Studio
-python3 CLI/cli_commands.py run resumo <ModelName>_<version>_<id>.zip
+docker exec -it edam-studio bash -c \
+  "cd /app/Studio && CLI/cli.sh .run resumo <ModelName>_<version>_<id>.zip"
 \end{lstlisting}
 (Replace \texttt{<ModelName>\_<version>\_<id>.zip} 
 with an actual generated ZIP filename from \texttt{Generated-code/}.)
@@ -188,9 +280,10 @@ with an actual generated ZIP filename from \texttt{Generated-code/}.)
 
 \noindent\textbf{Reproduction}:
 \begin{lstlisting}
-docker exec -it edam-studio python3 CLI/cli_commands.py run test <zip_file> test
+docker exec -it edam-studio bash -c \
+  "cd /app/Studio && CLI/cli.sh .run test <zip_file> test"
 \end{lstlisting}
-For coverage: \texttt{run test <zip\_file> coverage}.
+For coverage: \texttt{CLI/cli.sh .run test <zip\_file> coverage}.
 
 \subsection{Timing Expectations}
 

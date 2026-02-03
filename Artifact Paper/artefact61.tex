@@ -34,7 +34,7 @@ charge on the Dagstuhl Research Online Publication Server (DROPS).}{}
 \title{Automatic Code and Test Generation of Smart Contracts from Coordination Models
 (Artifact)} %TODO: Update with title of accepted paper
 
-\titlerunning{Paper \#61: Artifact Description}
+\titlerunning{Code and Test Generation of SC from EDAM (Artifact)}
 
 % ARTIFACT: Authors may not be exactly the same as the related scholarly paper
 \author{Elvis Konjoh Selabi}{Universit\`a di Camerino and Gran Sasso Science Institute, Italy}{}{https://orcid.org/0009-0002-8372-8015}{}
@@ -149,8 +149,8 @@ The artifact package includes:
 \item \textbf{Docker configuration} (type: software; format: Dockerfile, docker-compose): 
 In \texttt{Docker/} for containerized deployment.
 
-\item \textbf{Documentation}: \texttt{README.md}, \texttt{SETUP\_README.md} and 
-\texttt{ARTIFACT\_SUBMISSION.md} with installation and usage instructions.
+\item \textbf{Documentation}: \texttt{README.md} and 
+\texttt{SETUP\_README.md} with installation and usage instructions.
 \end{itemize}
 
 \textbf{Reusability}: 
@@ -195,11 +195,10 @@ cd Docker
     \item Open \url{http://127.0.0.1:3000} and verify the GUI loads.
     \item Generate code via CLI:
       \begin{lstlisting}
-docker exec -it edam-studio edam-cli <model1> <model2> \ 
-  ... --mode <1|2|3|4> [options]
+docker exec -it edam-studio edam-cli cop 4
       \end{lstlisting}
-      Explained later in the documentation.
-  \item Check generated output in the container: \texttt{/app/Studio/Generated-code/}
+      This will generate the code of figure 3 in the paper.
+  \item Check generated output (a ZIP file) in the container: \texttt{/app/Studio/Generated-code/}
   \end{enumerate}
 \end{getting}
 
@@ -227,7 +226,7 @@ GPU: not required.
 
 \textbf{Scaled-down evaluation}: 
 For time-constrained review, 
-use \texttt{--number\_symbolic\_traces 50 --number\_transition\_per\_trace 5} 
+use \texttt{--number\_symbolic\_traces 50 --number\_transition\_per\_trace 2} 
 to reduce generation time. 
 Run mutation testing on a single model (e.g., \texttt{assettransfer}) instead of all models.
 
@@ -240,7 +239,8 @@ opam/OCaml may require WSL on Windows for native installation.
 % ARTIFACT: section specifying the license under which the artifact is
 % made available
 \license{
-  The artifact is available under the GNU General Public License v3.0 (GPL-3.0). 
+  The artifact is available under the 
+  Creative Commons Attribution 4.0 International License. 
   See the \texttt{LICENSE} file in the repository.
   The EDAM models and benchmarks are public and included in the repository.
   %The artifact can be reused to: 
@@ -261,7 +261,7 @@ opam/OCaml may require WSL on Windows for native installation.
 % to the Dagstuhl Research Online Publication Server
 \artifactsize{To be provided upon submission to DROPS.}
 
-\bibliography{darts-v2021-sample-article}
+%\bibliography{darts-v2021-sample-article}
 
 % ARTIFACT: optional appendix
 \appendix

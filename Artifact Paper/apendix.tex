@@ -132,7 +132,7 @@ Replace \texttt{<model\_name>} with the name of the model you want to generate c
 The options are the same as the ones listed in Table~\ref{tab:cli-params}.
 To generate code for models AMM, COP, CPAY, CM, use the following command:
 \begin{lstlisting}
-docker exec -it edam-studio edam-cli c20 c20\_2 amm --mode 3 [options]
+docker exec -it edam-studio edam-cli c20 c20_2 amm --mode 3 [options]
 \end{lstlisting}
 Here we have to pass the network of all models. In the case of AMM, 
 we have to pass the network of C20, C20\_2 and AMM. 
@@ -165,7 +165,7 @@ result will be the screenshot seen the case study section of the paper.
 \noindent\textbf{Reproduction}: Using the Docker container:
 \begin{lstlisting}
 docker exec -it edam-studio edam-cli \
-  assettransfer c20 basicprovenance --mode 4
+  assettransfer --mode 4
 \end{lstlisting}
 Generated code (a ZIP file named 
 \texttt{<ModelName>\_<new participant probability>\_<id>.zip} 
@@ -217,11 +217,11 @@ Table~\ref{tab:cli-params} lists all optional parameters for code generation.
 \texttt{--max\_gen\_string\_length} & 10 & Maximum length of generated strings \\
 \hline
 \multicolumn{3}{l}{\textit{Test generation options}} \\
-\texttt{--add\_pi\_to\_test} & off & Add process invariants to generated tests \\
-\texttt{--add\_test\_of\_state} & on & Include state assertions in tests \\
-\texttt{--add\_test\_of\_variables} & on & Include variable assertions in tests \\
+\texttt{--add\_pi\_to\_test} & False & Add process invariants to generated tests \\
+\texttt{--add\_test\_of\_state} & True & Include state assertions in tests \\
+\texttt{--add\_test\_of\_variables} & True & Include variable assertions in tests \\
 \hline
-\texttt{--z3\_check\_enabled} & on & Enable Z3 SMT solver checks during trace generation \\
+\texttt{--z3\_check\_enabled} & True & Enable Z3 SMT solver checks during trace generation \\
 \hline
 \end{tabular}
 \end{table}
@@ -232,7 +232,38 @@ Table~\ref{tab:cli-params} lists all optional parameters for code generation.
 corresponds to the paper's experiments.
 
 \noindent\textbf{Reproduction}: 
-The archives \texttt{Generated Code.zip}, \texttt{Mutations.zip}, and \texttt{Excels Mutations Results.zip} contain the exact outputs used in the paper. No regeneration needed for verification. 
+The archives \texttt{Generated Code.zip}, \texttt{Mutations.zip}, 
+and \texttt{Excels Mutations Results.zip} contain the exact outputs used in the paper. 
+No regeneration needed for verification. 
+
+\begin{lstlisting}
+docker exec -it edam-studio edam-cli \
+  assettransfer basicprovenance defectivecounter \
+  digital_locker frequentflyer helloblockchain \
+  refrigeratedtransport simplemarketplace \
+  thermostatoperation simplewallet  c20--probability_new_participant 0.1 \
+  --number_symbolic_traces 2000 --number_transition_per_trace 50 \
+  --max_fail_try 5 --mode 4
+\end{lstlisting}
+  The above command will generate the code for the models 
+  \texttt{assettransfer}, \texttt{basicprovenance}, \texttt{defectivecounter}, 
+  \texttt{digital\_locker}, \texttt{frequentflyer}, \texttt{helloblockchain}, 
+  \texttt{refrigeratedtransport}, \texttt{simplemarketplace}, \texttt{thermostatoperation}, 
+  \texttt{simplewallet}, and \texttt{c20}.
+  The ZIP file will be named 
+  \texttt{<ModelName>\_<new participant probability>\_<id>.zip} 
+  containing the generated code, tests, and configuration files
+  and the ZIP file will be in the \texttt{/app/Studio/Generated-code/} directory in the Docker container. 
+
+  For the models \texttt{amm}, 
+  the following command will generate the code for the models 
+  \texttt{c20}, \texttt{c20\_2}, and \texttt{amm}:
+\begin{lstlisting}
+docker exec -it edam-studio edam-cli \
+   c20 c20_2 amm --probability_new_participant 0.1 \
+  --number_symbolic_traces 2000 --number_transition_per_trace 50 \
+  --max_fail_try 5 --mode 3
+\end{lstlisting}
 
 \noindent\textbf{Running tests and mutation on pre-generated data}:
 To run tests and coverage for all pre-generated zip files in \texttt{EXPERIMENT\_DATA/Generated Code.zip}, use:

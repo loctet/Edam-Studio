@@ -170,6 +170,15 @@ The artifact can be reused to:
 \begin{getting}
   The artifact is available from two sources:
 
+  \noindent \textbf{Get image from Zenodo} (Download the zip file and load it with the load-docker.sh script)
+  \url{https://zenodo.org/record/100000000}
+  \begin{lstlisting}
+    cd Docker
+    gunzip -c edam-studio-docker-image.tar.gz | docker load
+    docker run -d -p 3000:3000 -p 5000:5000 \
+    --name edam-studio edam-studio:latest
+  \end{lstlisting}
+
  \noindent \textbf{Docker Hub} (recommended for quick evaluation):
   \begin{lstlisting}
 docker pull loctet/edam-studio:latest
@@ -255,11 +264,11 @@ opam/OCaml may require WSL on Windows for native installation.
 % uploaded to the Dagstuhl Research Online Publication Server, enabling
 % downloaders to check that the file is the expected version and suffered
 % no damage during download.
-\mdsum{To be provided upon submission to DROPS.}
+\mdsum{md5:944afe2cd1873c124bbcf01a9d073a5e}
 
 % ARTIFACT: section specifying the size of the artifact master file uploaded
 % to the Dagstuhl Research Online Publication Server
-\artifactsize{To be provided upon submission to DROPS.}
+\artifactsize{1.44 GB}
 
 %\bibliography{darts-v2021-sample-article}
 

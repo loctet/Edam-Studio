@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>How to Run — EDAM Studio</title>
+  <link rel="stylesheet" href="doc-style.css">
+  <link rel="stylesheet" href="doc-nav.css">
+</head>
+<body>
+  <div class="doc-layout">
+    <aside class="doc-sidebar">
+      <nav>
+        <h3>How to Run</h3>
+        <ul>
+          <li><a href="index.html">← Home</a></li>
+          <li><a href="#prerequisites">Prerequisites</a></li>
+          <li><a href="#installation">Installation</a></li>
+          <li><a href="#cli">Running the CLI</a></li>
+          <li><a href="#gui">Running the GUI</a></li>
+          <li><a href="#api">Running via API</a></li>
+          <li><a href="#docker">Running with Docker</a></li>
+        </ul>
+      </nav>
+    </aside>
+    <main class="doc-content">
+      <div class="doc-header">
+        <a href="index.html">Home</a>
+        <a href="how-to-run.html">How to Run</a>
+        <a href="api.html">API</a>
+        <a href="codegen.html">Code Gen</a>
+        <a href="api-deep.html">Deep Dive</a>
+        <a href="frontend.html">Frontend</a>
+        <a href="ocaml.html">OCaml</a>
+      </div>
+
+      <h1>How to Run EDAM Studio</h1>
+      <p>This page describes how to install and run EDAM Studio for each workflow: CLI, GUI, API, and Docker. All commands assume you are in the project root directory unless otherwise noted.</p>
+
+      <h2 id="prerequisites" class="section-anchor">Prerequisites</h2>
+      <p>Before installing, ensure you have:</p>
+      <table>
+        <thead><tr><th>Requirement</th><th>Version</th></tr></thead>
+        <tbody>
+          <tr><td>Python</td><td>3.10+ with pip</td></tr>
+          <tr><td>Node.js</td><td>v16 or higher</td></tr>
+          <tr><td>npm</td><td>bundled with Node.js</td></tr>
+          <tr><td>OCaml</td><td>with opam (package manager)</td></tr>
+          <tr><td>Z3 solver</td><td>installed via opam</td></tr>
+        </tbody>
+      </table>
+      <p><strong>Platform notes:</strong> Linux/macOS have full support. On Windows, opam may require WSL or Cygwin.</p>
+
+      <h2 id="installation" class="section-anchor">Installation</h2>
+      <h3>Automated Installation</h3>
+      <p><strong>Linux/macOS:</strong></p>
+      <pre><code>chmod +x Studio/install.sh
+cd Studio
+./install.sh</code></pre>
+      <p><strong>Windows:</strong></p>
+      <pre><code>cd Studio
+install.bat</code></pre>
+      <p>The script installs npm dependencies, creates the Python venv, installs Python packages, and configures OCaml/opam.</p>
+      <h3>Manual Installation</h3>
+      <pre><code># 1. Root dependencies
+npm install
+
+# 2. GUI dependencies
+cd GUI && npm install && cd ..
+
+# 3. ReSuMo dependencies
+cd ReSuMo && npm install && cd ..
+
+# 4. Python virtual environment
+python3 -m venv venv
+source venv/bin/activate   # Windows: venv\Scripts\activate
+
+# 5. Python packages
+pip install --upgrade pip
+pip install -r API/requirements.txt
+
+# 6. OCaml packages
+opam init --yes --disable-sandboxing
+opam install ocamlfind z3 ocaml-base-compiler --yes
+eval $(opam env)</code></pre>
+
+      <h2 id="cli" class="section-anchor">Running the CLI</h2>
+      <p><strong>Linux/macOS:</strong></p>
+      <pre><code>cd Studio
+source venv/bin/activate
+python3 CLI/cli.py assettransfer --mode 2</code></pre>
+      <p><strong>Windows:</strong></p>
+      <pre><code>cd Studio
+venv\Scripts\activate
+python3 CLI/cli.py assettransfer --mode 2</code></pre>
+      <p>The CLI requires the Python virtual environment to be activated. Replace <code>assettransfer</code> with any model name from <code>edams-models/</code> or a path to a <code>.edam</code> file.</p>
+
+      <h2 id="gui" class="section-anchor">Running the GUI</h2>
+      <p>The GUI requires two processes: the API server and the GUI frontend. Use two separate terminals.</p>
+      <h3>Terminal 1 — Start the API server</h3>
+      <table>
+        <thead><tr><th>Platform</th><th>Command</th></tr></thead>
+        <tbody>
+          <tr><td>Linux/macOS</td><td><code>cd Studio && ./start_api.sh [port]</code></td></tr>
+          <tr><td>Windows</td><td><code>cd Studio</code> then <code>start_api.bat</code></td></tr>
+        </tbody>
+      </table>
+      <p>Default API port: <strong>5000</strong> (configurable in <code>config.json</code>).</p>
+      <h3>Terminal 2 — Start the GUI</h3>
+      <table>
+        <thead><tr><th>Platform</th><th>Command</th></tr></thead>
+        <tbody>
+          <tr><td>Linux/macOS</td><td><code>cd Studio && ./start_gui.sh</code></td></tr>
+          <tr><td>Windows</td><td><code>cd Studio</code> then <code>start_gui.bat</code></td></tr>
+        </tbody>
+      </table>
+      <p>Default GUI port: <strong>3000</strong>.</p>
+      <p><strong>Access the GUI:</strong> Open your browser at <a href="http://localhost:3000">http://localhost:3000</a>.</p>
+
+      <h2 id="api" class="section-anchor">Running via API</h2>
+      <ol>
+        <li>Start the API server (see <a href="#gui">Running the GUI</a> — Terminal 1).</li>
+        <li>Send requests to <code>http://localhost:5000</code> (or your configured port).</li>
+      </ol>
+      <p><strong>Example:</strong></p>
+      <pre><code>curl -X POST http://localhost:5000/api/convert-bulk \
+  -H "Content-Type: application/json" \
+  -d '{"models": [...], "target_language": "solidity"}'</code></pre>
+
+      <h2 id="docker" class="section-anchor">Running with Docker</h2>
+      <pre><code>cd Docker
+docker compose up --build</code></pre>
+      <ul>
+        <li><strong>GUI:</strong> <a href="http://localhost:3000">http://localhost:3000</a></li>
+        <li><strong>API:</strong> <a href="http://localhost:5000">http://localhost:5000</a></li>
+      </ul>
+      <p><strong>CLI inside the container:</strong></p>
+      <pre><code>docker exec -it edam-studio edam-cli assettransfer --mode 2</code></pre>
+    </main>
+  </div>
+</body>
+</html>

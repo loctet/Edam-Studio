@@ -19,20 +19,21 @@ A comprehensive toolchain for generating smart contract code from EDAM (Extended
 3. [Prerequisites](#prerequisites)
 4. [Installation](#installation)
 5. [Quick Start](#quick-start)
-6. [Usage](#usage)
-7. [API Reference](#api-reference)
-8. [CLI Reference](#cli-reference)
-9. [GUI Components](#gui-components)
-10. [EDAM Models](#edam-models)
-11. [Code Generation](#code-generation)
-12. [Complete Flow: EDAM → Code → Test](#complete-flow-edam--code--test)
-13. [OCaml Files Reference](#ocaml-files-reference)
-14. [Scripts Reference](#scripts-reference)
-15. [Configuration](#configuration)
-16. [Project Structure](#project-structure)
-17. [Docker Deployment](#docker-deployment)
-18. [Troubleshooting](#troubleshooting)
-19. [Additional Resources](#additional-resources)
+6. [How to Run](#how-to-run)
+7. [Usage](#usage)
+8. [API Reference](#api-reference)
+9. [CLI Reference](#cli-reference)
+10. [GUI Components](#gui-components)
+11. [EDAM Models](#edam-models)
+12. [Code Generation](#code-generation)
+13. [Complete Flow: EDAM → Code → Test](#complete-flow-edam--code--test)
+14. [OCaml Files Reference](#ocaml-files-reference)
+15. [Scripts Reference](#scripts-reference)
+16. [Configuration](#configuration)
+17. [Project Structure](#project-structure)
+18. [Docker Deployment](#docker-deployment)
+19. [Troubleshooting](#troubleshooting)
+20. [Additional Resources](#additional-resources)
 
 ---
 
@@ -158,6 +159,85 @@ cd Studio
 ./start_gui.sh
 
 # Open browser: http://localhost:3000
+```
+
+---
+
+## How to Run
+
+This section describes how to run EDAM Studio for each workflow. All commands assume you are in the project root directory unless otherwise noted.
+
+### Running the CLI
+
+**Linux/macOS:**
+
+```bash
+cd Studio
+source venv/bin/activate
+python3 CLI/cli.py assettransfer --mode 2
+```
+
+**Windows:**
+
+```cmd
+cd Studio
+venv\Scripts\activate
+python3 CLI/cli.py assettransfer --mode 2
+```
+
+The CLI requires the Python virtual environment to be activated. Replace `assettransfer` with any model name from `edams-models/` or a path to a `.edam` file.
+
+### Running the GUI
+
+The GUI requires two processes: the API server and the GUI frontend. Use two separate terminals.
+
+**Terminal 1 — Start the API server**
+
+| Platform   | Command                    |
+|------------|----------------------------|
+| Linux/macOS| `cd Studio && ./start_api.sh [port]` |
+| Windows    | `cd Studio` then `start_api.bat`     |
+
+Default API port: **5000** (configurable in `config.json`).
+
+**Terminal 2 — Start the GUI**
+
+| Platform   | Command                    |
+|------------|----------------------------|
+| Linux/macOS| `cd Studio && ./start_gui.sh` |
+| Windows    | `cd Studio` then `start_gui.bat`   |
+
+Default GUI port: **3000**.
+
+**Access the GUI:** Open your browser at [http://localhost:3000](http://localhost:3000).
+
+### Running via API
+
+1. Start the API server (see [Running the GUI](#running-the-gui) — Terminal 1).
+2. Send requests to `http://localhost:5000` (or your configured port).
+
+Example:
+
+```bash
+curl -X POST http://localhost:5000/api/convert-bulk \
+  -H "Content-Type: application/json" \
+  -d '{"models": [...], "target_language": "solidity"}'
+```
+
+### Running with Docker
+
+```bash
+cd Docker
+docker compose up --build
+```
+
+- **GUI**: http://localhost:3000  
+- **API**: http://localhost:5000  
+
+CLI inside the container:
+
+```bash
+docker exec -it edam-studio edam-cli assettransfer --mode 2
 ```
 
 ---

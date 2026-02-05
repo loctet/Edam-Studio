@@ -44,7 +44,7 @@ class OCamlCodeGenerator(BaseCodeGenerator):
 
         # Run OCaml file
         try:
-            print(f"Running OCaml file: {ocaml_file}")
+            #print(f"Running OCaml file: {ocaml_file}")
             with open(ocaml_output_file, 'a') as output_file:
                 subprocess.run(
                     ["ocaml", ocaml_file],

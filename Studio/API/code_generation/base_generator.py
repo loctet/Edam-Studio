@@ -86,7 +86,7 @@ class BaseCodeGenerator(ABC):
                        diff_time: int) -> str:
         """Create a zip file of the generated code"""
         int_number_real_traces = int(server_settings["number_real_traces"]) * int(server_settings["number_symbolic_traces"])
-        print(f"int_number_real_traces: {int_number_real_traces} = {int(server_settings['number_real_traces'])} * {int(server_settings['number_symbolic_traces'])}")
+        #print(f"int_number_real_traces: {int_number_real_traces} = {int(server_settings['number_real_traces'])} * {int(server_settings['number_symbolic_traces'])}")
         zip_filename = f"{edam_name}_{int_number_real_traces}_{server_settings['probability_new_participant']}_{'pi' if server_settings['add_pi_to_test'] else 'no_pi'}_{str(uuid.uuid4())}_{diff_time}.zip"
         zip_filename_path = os.path.join(self.upload_dir, zip_filename)
 

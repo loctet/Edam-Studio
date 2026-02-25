@@ -1972,7 +1972,8 @@ class="header-section-number">1.19</span> Docker Deployment</h2>
 class="header-section-number">1.19.1</span> Quick Start</h3>
 <div class="sourceCode" id="cb26"><pre
 class="sourceCode bash"><code class="sourceCode bash"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> Docker</span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="ex">./run-docker.sh</span></span></code></pre></div>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="ex">./build.sh</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-d</span> <span class="at">-p</span> 3000:3000 <span class="at">-p</span> 5000:5000 <span class="at">--name</span> edam-studio edam-studio:latest</span></code></pre></div>
 <p>Or with Docker Compose:</p>
 <div class="sourceCode" id="cb27"><pre
 class="sourceCode bash"><code class="sourceCode bash"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> Docker</span>

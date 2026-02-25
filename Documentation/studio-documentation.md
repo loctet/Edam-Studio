@@ -913,7 +913,8 @@ Studio/
 
 ```bash
 cd Docker
-./run-docker.sh
+./build.sh
+docker run -d -p 3000:3000 -p 5000:5000 --name edam-studio edam-studio:latest
 ```
 
 Or with Docker Compose:

@@ -2,52 +2,31 @@
 
 This directory contains Docker configuration files to run EDAM Studio in a containerized environment.
 
-## Updating Docker to Latest Version
-
-If you need to update Docker to the latest version with Docker Compose v2 support:
-
-```bash
-cd Docker
-sudo ./update-docker.sh
-```
-
-This will:
-- Remove old docker-compose v1
-- Install Docker from Docker's official repository
-- Install Docker Compose plugin v2
-- Install Docker Buildx for advanced build features
-
-After updating, use `docker compose` (v2) instead of `docker-compose` (v1).
-
-**If Docker service fails to start after update:**
-
-```bash
-cd Docker
-sudo ./fix-docker-service.sh
-```
-
-This will reload systemd, start Docker, and enable it to start on boot.
+**Note**: Use `docker compose` (v2, built into Docker) instead of `docker-compose` (v1) when available. For Docker installation, see [https://docs.docker.com/get-docker/](https://docs.docker.com/get-docker/).
 
 ## Quick Start
 
-### Option 1: Using Docker Directly (Recommended - Avoids Compatibility Issues)
-
-If you're experiencing issues with `docker-compose`, use this script:
+### Option 1: Using the Build Script (Recommended)
 
 ```bash
 cd Docker
-./run-docker.sh
+./build.sh
 ```
 
-This script:
-- Builds the Docker image
-- Starts both the GUI (port 3000) and API (port 5000)
-- Creates a volume for generated code
-- Makes the CLI accessible
+This builds the Docker image. Then run the container:
+
+```bash
+docker run -d -p 3000:3000 -p 5000:5000 --name edam-studio edam-studio:latest
+```
+
+Or use docker compose:
+
+```bash
+cd Docker
+docker compose up
+```
 
 ### Option 2: Using Docker Compose
-
-**Note**: Use `docker compose` (v2, built into Docker) instead of `docker-compose` (v1) to avoid compatibility issues.
 
 ```bash
 cd Docker
@@ -55,6 +34,7 @@ docker compose up --build
 ```
 
 Or if you only have docker-compose v1 installed and it works:
+
 ```bash
 cd Docker
 docker-compose up --build
@@ -62,30 +42,18 @@ docker-compose up --build
 
 ### Option 3: Manual Docker Commands
 
+From the project root directory:
+
 ```bash
 # Build the image
-docker build -f Docker/Dockerfile -t edam-studio ..
+docker build -f Docker/Dockerfile -t edam-studio:latest .
 
 # Run the container
 docker run -d \
   -p 3000:3000 \
   -p 5000:5000 \
   --name edam-studio \
-  edam-studio
-```
-
-### Using Docker directly
-
-```bash
-# Build the image
-docker build -f Docker/Dockerfile -t edam-studio ..
-
-# Run the container
-docker run -d \
-  -p 3000:3000 \
-  -p 5000:5000 \
-  --name edam-studio \
-  edam-studio
+  edam-studio:latest
 ```
 
 ## Accessing Services
@@ -200,30 +168,33 @@ docker-compose up --build --force-recreate
 
 If you encounter `URLSchemeUnknown: Not supported URL scheme http+docker` error:
 
-**Option 1 (Easiest)**: Use the Docker-only script:
+**Option 1 (Easiest)**: Use the build script and run Docker directly (bypasses docker-compose):
 ```bash
 cd Docker
-./run-docker.sh
+./build.sh
+docker run -d -p 3000:3000 -p 5000:5000 --name edam-studio edam-studio:latest
 ```
 
 **Option 2**: Use Docker Compose v2 (if available):
 ```bash
+cd Docker
 docker compose up --build
 ```
 
 **Option 3**: Fix the environment variable and try docker-compose v1:
 ```bash
 unset DOCKER_HOST
+cd Docker
 docker-compose up --build
 ```
 
-**Option 4**: Use Docker directly:
+**Option 4**: Use manual Docker commands from project root:
 ```bash
-docker build -f Docker/Dockerfile -t edam-studio ..
-docker run -d -p 3000:3000 -p 5000:5000 --name edam-studio edam-studio
+docker build -f Docker/Dockerfile -t edam-studio:latest .
+docker run -d -p 3000:3000 -p 5000:5000 --name edam-studio edam-studio:latest
 ```
 
-**Note**: The `http+docker` scheme error is caused by incompatibility between docker-compose v1.29.2 and urllib3 2.x. The Docker-only script (`run-docker.sh`) completely bypasses docker-compose and avoids this issue.
+**Note**: The `http+docker` scheme error is caused by incompatibility between docker-compose v1.29.2 and urllib3 2.x. Using Docker directly (Option 1 or 4) bypasses docker-compose and avoids this issue.
 
 ## Pushing the Image to a Registry
 
@@ -263,10 +234,10 @@ cd Docker
 
 ### Manual Push Commands
 
-**For Docker Hub:**
+**For Docker Hub:** (run from project root)
 ```bash
 # Build and tag
-docker build -f Docker/Dockerfile -t yourusername/edam-studio:latest ..
+docker build -f Docker/Dockerfile -t yourusername/edam-studio:latest .
 docker tag yourusername/edam-studio:latest yourusername/edam-studio:1.0.0
 
 # Login and push
@@ -275,10 +246,10 @@ docker push yourusername/edam-studio:latest
 docker push yourusername/edam-studio:1.0.0
 ```
 
-**For GitHub Container Registry:**
+**For GitHub Container Registry:** (run from project root)
 ```bash
 # Build and tag
-docker build -f Docker/Dockerfile -t ghcr.io/yourusername/edam-studio:latest ..
+docker build -f Docker/Dockerfile -t ghcr.io/yourusername/edam-studio:latest .
 docker tag ghcr.io/yourusername/edam-studio:latest ghcr.io/yourusername/edam-studio:1.0.0
 
 # Login (use GitHub Personal Access Token as password)
@@ -287,10 +258,10 @@ docker push ghcr.io/yourusername/edam-studio:latest
 docker push ghcr.io/yourusername/edam-studio:1.0.0
 ```
 
-**For other registries:**
+**For other registries:** (run from project root)
 ```bash
 # Build and tag
-docker build -f Docker/Dockerfile -t registry.example.com/yourusername/edam-studio:latest ..
+docker build -f Docker/Dockerfile -t registry.example.com/yourusername/edam-studio:latest .
 docker tag registry.example.com/yourusername/edam-studio:latest registry.example.com/yourusername/edam-studio:1.0.0
 
 # Login and push

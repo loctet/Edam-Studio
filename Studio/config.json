@@ -1,7 +1,7 @@
 {
   "api": {
     "default_port": 5000,
-    "host": "127.0.0.1"
+    "host": "localhost"
   },
   "gui": {
     "default_port": 3000

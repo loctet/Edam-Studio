@@ -1,7 +1,10 @@
 # Multi-stage Dockerfile for EDAM Studio
 # Runs GUI, API, and exposes CLI
+#
+# Use linux/amd64 to avoid "invalid signature" GPG errors on macOS Docker Desktop (ARM).
+# See: https://superuser.com/questions/1781297/at-least-one-invalid-signature-was-encountered-in-all-ubuntu-docker-images-in
 
-FROM ubuntu:22.04
+FROM --platform=linux/amd64 ubuntu:22.04
 
 # Avoid interactive prompts during package installation
 ENV DEBIAN_FRONTEND=noninteractive
